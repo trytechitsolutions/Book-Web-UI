@@ -1,0 +1,19 @@
+.ant-form-item {
+    margin-bottom: 8px; 
+    margin-right: 10px;
+  }
+  
+  .ant-form-item-label {
+    line-height: 1.2; 
+  }
+  
+  .ant-form-item-control-input {
+    line-height: 1.2; 
+  }
+
+  .ant-form-item-label, .ant-form-item-control-input-content, .ant-card-head-title {
+    font-family: ITALIC SERIF; 
+  }
+  .btn{
+    padding: 1rem;
+  }
