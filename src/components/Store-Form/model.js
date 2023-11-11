@@ -68,7 +68,7 @@ export const storeForm = {
                 wrapperCol: "",
                 value: "",
                 }, 
-                {
+            {
                     type: "phonenumber",
                     label: "Contact Number*",
                     name: "contactNumber",
@@ -184,7 +184,7 @@ export const storeForm = {
                         name: "policies",
                         rules: [{ required: true, message: 'Please enter Policies' }],
                         placeholder: "Policies",
-                        xs: 24,
+                        xs: 24 ,
                         sm: 16,
                         md: 12,
                         lg: 12,
