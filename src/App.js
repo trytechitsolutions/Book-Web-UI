@@ -9,7 +9,6 @@ import Register from './components/RegisterF';
 import Profile from './components/profile';
 import Categories from './components/Categories';
 import KYCF from './components/KYC-Form';
-import StoreDetailsForm from './components/storeDetailsForm';
 
 // ... (your existing imports)
 
@@ -59,7 +58,6 @@ function App() {
         <Route path="profile" element={<Profile />} />
         <Route path="/category" element={<Categories/>} />
         <Route path="/kyc-d" element={<KYCF/>}   />
-        <Route path="/store" element={<StoreDetailsForm />} />
 
           {/* <Route path="/userform" element={<PrivateRoute element={<UserForm />} />} />
           <Route path="/bookslist" element={<PrivateRoute element={<BooksList />} />} /> */}
