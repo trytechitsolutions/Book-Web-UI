@@ -48,7 +48,7 @@ const InputFields = forwardRef((props, ref) => {
 
 
 
-
+console.log(props, '****props***')
   const bindValues = useCallback(() => {
     const initialValues = {};
     modaldata.fieldsArray.forEach((field) => {

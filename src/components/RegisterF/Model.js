@@ -160,9 +160,9 @@ export const registrationForm = {
     buttonSecction: {
         justify: "end",
         buttons: [
-            { colour: "primary", name: "Add", fun: "submit" },
-            { colour: "default", name: "Reset", fun: "reset" },
-            { colour: "primary", name: "Cancel", fun: "cancel" },
+            { type: "contained", colour: "primary", name: "Submit", fun: "submit" },
+            { type:"outlined", colour: "default", name: "Reset", fun: "reset" },
+            { type:"outlined", colour: "primary", name: "Cancel", fun: "cancel" },
         ]
     }
 }
