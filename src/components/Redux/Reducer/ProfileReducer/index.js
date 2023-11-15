@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    registerData: [],
+    profileData: [],
     
 };
 
@@ -16,7 +16,7 @@ const profileSlice = createSlice({
         profileSuccess: (state, action) => {
             alert(action.type)
             state.isLoading = false;
-            state.registerData = action.payload;
+            state.profileData = action.payload;
             state.error = null;
         },
         profileFail: (state, action) => {
