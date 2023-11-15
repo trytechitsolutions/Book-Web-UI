@@ -396,7 +396,7 @@ const InputFields = forwardRef((props, ref) => {
                       style={{ display: 'none' }}
                       id={`upload-button-${ele.name}`}
                       type="file"
-                    
+                      multiple={ele.multiple}
                       onChange={handleFileChange}
 
                     />
