@@ -118,6 +118,7 @@ function Books() {
         return response;
     };
 
+    
     const handleEditBook = async (dataToSend) => {
         const response = await apiRequest('api/book', 'PUT', null, dataToSend);
 
@@ -137,7 +138,7 @@ function Books() {
         for (const key in formData) {
             formDataToSend.append(key, formData[key]);
         }
-
+  
         // Check if selectedBook is not null to determine if it's an edit or add operation
         if (selectedBook) {
             formDataToSend.append('id', selectedBook.id); // Include book ID for editing

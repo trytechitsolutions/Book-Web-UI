@@ -1,9 +1,9 @@
-import { validateConfirmPassword, validatePhoneNumber } from "../ReusableComponents/CommonFunctions";
+import {  validatePhoneNumber } from "../ReusableComponents/CommonFunctions";
 
 
 
 
-export const registrationForm = {
+export const profileForm = {
     formlayout: "vertical",
     fieldsArray: [
         {
@@ -102,42 +102,6 @@ export const registrationForm = {
             { id: "Category3", value: "Category 3" },
         ], 
     },
-    {
-        type: "password",
-        label: "Password",
-        name: "password",
-        rules: [
-            { required: true, message: 'Please enter password' },
-            { min: 8, message: 'Password must be at least 8 characters long' }
-        ],
-        placeholder: "Password",
-        xs: 24,
-        sm: 16,
-        md: 12,
-        lg: 12,
-        labelCol: "",
-        wrapperCol: "",
-        value: "",
-    },
-    {
-        type: "password",
-        label: "Confirm Password",
-        name: "confirmPassword",
-        rules: [
-            { required: true, message: 'Please enter Confirm Password' },
-            // { validator: (_, value) => validateConfirmPassword(_, value, regForm.fieldsArray) },
-            { validator: validateConfirmPassword }
-
-        ],
-        placeholder: "Confirm Password",
-        xs: 24,
-        sm: 16,
-        md: 12,
-        lg: 12,
-        labelCol: "",
-        wrapperCol: "",
-        value: "",
-    },
     {   
         type: "text-area",
         label: "Address",
@@ -160,9 +124,8 @@ export const registrationForm = {
     buttonSecction: {
         justify: "end",
         buttons: [
-            { colour: "primary", name: "Add", fun: "submit" },
-            { colour: "default", name: "Reset", fun: "reset" },
-            { colour: "primary", name: "Cancel", fun: "cancel" },
+            { colour: "primary", name: "Update", fun: "submit" },
+           
         ]
     }
 }

@@ -29,8 +29,8 @@ export const kycform = {
         labelCol: "",
         wrapperCol: "",
         value: "",
-    },
-    {
+     },
+     {
         type : "file",
         label: "Company CIN",
         name: "companyCIN",

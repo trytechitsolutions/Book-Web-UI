@@ -11,6 +11,7 @@ import { Container, Grid, Typography } from '@mui/material';
 const KYCF = () => {
   const ChildRef   = useRef();
     const [formData, setFormData] = useState(kycform);
+    const [imagePreview, setImagePreview] = useState(null);
 
 
   function submitFormData(){
@@ -18,7 +19,6 @@ const KYCF = () => {
   }
 
   // function onChange(data) {
-  
   //   onChangeValueBind(formData, data);
   // }
   return (
@@ -38,5 +38,7 @@ const KYCF = () => {
     </>  
   )
 }
+
+
 
 export default KYCF;
