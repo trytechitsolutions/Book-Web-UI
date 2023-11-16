@@ -3,6 +3,8 @@ import { LoginSaga } from './LoginSaga';
 import { RegisterSaga } from './RegisterSaga';
 import { ProfileSaga } from './ProfileSaga';
 import { CategoriesSaga } from './CategoriesSaga';
+import { ComponentsSaga } from './ComponentsSaga';
+import { RolesSaga } from './RolesSaga';
 
 function* RootSaga() {
     yield all([
@@ -10,6 +12,8 @@ function* RootSaga() {
         RegisterSaga(),
         ProfileSaga(),
         CategoriesSaga(),
+        ComponentsSaga(),
+        RolesSaga(),
 
     ]);
 }

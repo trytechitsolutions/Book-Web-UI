@@ -124,7 +124,7 @@ export const profileForm = {
     buttonSecction: {
         justify: "end",
         buttons: [
-            { colour: "primary", name: "Update", fun: "submit" },
+            { type: "contained",colour: "primary", name: "Update", fun: "submit" },
            
         ]
     }

@@ -42,7 +42,7 @@ export const registrationForm = {
         placeholder: "Store Name",
         xs: 24,
         sm: 16,
-        md: 12,
+        md: 12,     
         lg: 12,
         labelCol: "",
         wrapperCol: "",
@@ -125,8 +125,8 @@ export const registrationForm = {
         name: "confirmPassword",
         rules: [
             { required: true, message: 'Please enter Confirm Password' },
-            // { validator: (_, value) => validateConfirmPassword(_, value, regForm.fieldsArray) },
-            { validator: validateConfirmPassword }
+            { validator: (_, value) => validateConfirmPassword(_, value, registrationForm.fieldsArray) },
+            // { validator: validateConfirmPassword }
 
         ],
         placeholder: "Confirm Password",

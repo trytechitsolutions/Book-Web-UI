@@ -57,7 +57,7 @@ export const preparePayLoad = (arr) => {
     arr.forEach(ele => {
         obj[ele.name] = ele.value;
         if (ele.type === "phonenumber") {
-            obj[ele.name] = ele.value.toString();
+            obj[ele.name] = ele.value?.toString();
         }
     });
 
@@ -108,3 +108,16 @@ export const upDateForm = (reset, formdata, obj) => {
     });
 }
 
+export const validateField = (value, rules) => {
+    for (const rule of rules) {
+      if (rule.required && !value) {
+        return { isValid: false, message: rule.message || 'This field is required.' };
+      }
+  
+      // Add more validation rules as needed
+      // Example: if (rule.min && value.length < rule.min) { /* return error message */ }
+      // Example: if (rule.type === 'email' && !isValidEmail(value)) { /* return error message */ }
+    }
+  
+    return { isValid: true, message: '' }; // No validation errors
+  };

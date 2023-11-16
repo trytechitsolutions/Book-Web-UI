@@ -73,9 +73,10 @@ export const loginForm = {
             value: "",
         },
     ],
-    buttonSecction: {       
+    buttonSecction: { 
+        justify: "end",      
         buttons: [
-            { type: "primary",colour: "primary", name: "LOGIN", fun: "submit" , },
+            { type: "contained",colour: "primary", name: "LOGIN", fun: "submit" , },
         ],
     
     }

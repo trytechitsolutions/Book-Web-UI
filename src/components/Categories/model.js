@@ -36,25 +36,25 @@ export const categoryForm = {
                 { id: "Category3", value: "Category 3" },
             ], 
         },
-        // {
-        //     type : "file",
-        //     label: "Upload File",
-        //     name: "uploadFile",
-        //     rules: [{ required: true, message: 'Please upload Upload File' }],
-        //     placeholder: "Upload File",
-        //     xs: 24,
-        //     sm: 16,
-        //     md: 12,
-        //     lg: 12,
-        //     labelCol: "",
-        //     wrapperCol: "",
-        //     value: "",
-        // },
+        {
+            type : "file",
+            label: "Upload File",
+            name: "uploadFile",
+            rules: [{ required: true, message: 'Please upload Upload File' }],
+            placeholder: "Upload File",
+            xs: 24,
+            sm: 16,
+            md: 12,
+            lg: 12,
+            labelCol: "",
+            wrapperCol: "",
+            value: "",
+        },
     ],
     buttonSecction: {
         justify: "end",
         buttons: [
-            { colour: "primary", name: "Add", fun: "submit" },
+            {type: "contained", colour: "primary", name: "Add", fun: "submit" },
         ]
     }
 }

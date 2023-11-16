@@ -297,7 +297,7 @@ export const storeForm = {
                         lg: 12,
                         labelCol: "",
                         wrapperCol: "",
-                        value: "", // Update with the selected value ("on" or "off")
+                        value: "", 
                         options: Days.map(day => ({ label: day, value: day })),
 
                     },

@@ -9,6 +9,8 @@ import Register from './components/RegisterF';
 import Profile from './components/profile';
 import Categories from './components/Categories';
 import KYCF from './components/KYC-Form';
+import Components from './components/Components';
+import Roles from './components/Roles';
 
 // ... (your existing imports)
 
@@ -55,10 +57,11 @@ function App() {
          {/* <Route path="/register" element={<RegistrationForm/>} /> */}
         <Route path="/loginF" element={<Login/>} />
         <Route path="/reg" element={<Register />} />
-        <Route path="profile" element={<Profile />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/category" element={<Categories/>} />
         <Route path="/kyc-d" element={<KYCF/>}   />
-
+        <Route path="/components"  element={<Components />} />
+        <Route path="/roles" element={<Roles/>} />
           {/* <Route path="/userform" element={<PrivateRoute element={<UserForm />} />} />
           <Route path="/bookslist" element={<PrivateRoute element={<BooksList />} />} /> */}
         </Routes>

@@ -17,6 +17,7 @@ import {
   Input,
   RadioGroup,
   FormLabel,
+  FormGroup,
 } from '@mui/material';
 // import {
 //   Dialog,
@@ -33,6 +34,7 @@ import {
   AccountBalance,
 } from '@mui/icons-material';
 import './index.css';
+import { validateField } from '../CommonFunctions';
 
 const InputFields = forwardRef((props, ref) => {
   const { modaldata, onChange, submitFormData, index } = props;
@@ -42,13 +44,23 @@ const InputFields = forwardRef((props, ref) => {
   const [selectedFile, setSelectedFile] = useState(null);
 
   const handleInputChange = (name, type, value) => {
-    let obj = { name, type, value };
-    onChange(obj, index);
+    const fieldRules = modaldata.fieldsArray.find(field => field.name === name).rules;
+    const validationResult = validateField(value, fieldRules);
+  
+    if (validationResult.isValid) {
+      let obj = { name, type, value };
+      onChange(obj, index);
+    } else {
+      // Handle the validation error, e.g., display a message
+      console.error(validationResult.message);
+    }
   };
 
+  
 
 
-console.log(props, '****props***')
+
+// console.log(props, '****props***')
   const bindValues = useCallback(() => {
     const initialValues = {};
     modaldata.fieldsArray.forEach((field) => {
@@ -73,50 +85,59 @@ console.log(props, '****props***')
   //   onChange(updatedFormData, index);
   // };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    // Handle the selected file, you may want to upload it to a server or process it in some way
-    setFormData({
-      ...formData,
-      logo: file,
-    });
 
-    setSelectedFile(file);
+  //file
 
-    // Create a preview URL for the selected file
-    if (file) {
-      const previewURL = URL.createObjectURL(file);
-      setImagePreview(previewURL);
-    } else {
-      // Clear the preview if no file is selected
-      setImagePreview(null)
-    }
-  }
 
-  const handleInputChang = (e, fieldName) => {
-    const file = e.target.files[0];
+  // const handleFileChange = (e) => {
+  //   const file = e.target.files[0];
+  //   // Handle the selected file, you may want to upload it to a server or process it in some way
+  //   setFormData({
+  //     ...formData,
+  //     uploadFile: file,
+  //   });
 
-    // Handle the selected file, you may want to upload it to a server or process it in some way
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [fieldName]: file,
-    }));
 
-    // Create a preview URL for the selected file
-    if (file) {
-      const previewURL = URL.createObjectURL(file);
-      setImagePreview((prevImagePreview) => ({
-        ...prevImagePreview,
-        [fieldName]: previewURL,
-      }));
-    } else {
-      // Clear the preview if no file is selected
-      setImagePreview((prevImagePreview) => ({
-        ...prevImagePreview,
-        [fieldName]: null,
-      }));
-    }
-  };
+  //   setSelectedFile(file);
+
+  //   // Create a preview URL for the selected file
+  //   if (file) {
+  //     const previewURL = URL.createObjectURL(file);
+  //     setImagePreview(previewURL);
+  //   } else {
+  //     // Clear the preview if no file is selected
+  //     setImagePreview(null)
+  //   }
+  // }
+
+  // const handleInputChang = (e, fieldName) => {
+  //   const file = e.target.files[0];
+
+
+  //file ||
+
+
+  //   // Handle the selected file, you may want to upload it to a server or process it in some way
+  //   setFormData((prevFormData) => ({
+  //     ...prevFormData,
+  //     [fieldName]: file,
+  //   }));
+
+  //   // Create a preview URL for the selected file
+  //   if (file) {
+  //     const previewURL = URL.createObjectURL(file);
+  //     setImagePreview((prevImagePreview) => ({
+  //       ...prevImagePreview,
+  //       [fieldName]: previewURL,
+  //     }));
+  //   } else {
+  //     // Clear the preview if no file is selected
+  //     setImagePreview((prevImagePreview) => ({
+  //       ...prevImagePreview,
+  //       [fieldName]: null,
+  //     }));
+  //   }
+  // };
 
 
   const validateForm = () => {
@@ -135,21 +156,21 @@ console.log(props, '****props***')
 
   //checkbox
 
-  // const handleCheckboxChange = (name, optionValue, checked) => {
-  //   // If formData[name] doesn't exist, create it as an empty array
-  //   formData[name] = formData[name] || [];
+  const handleCheckboxChange = (name, optionValue, checked) => {
+    // If formData[name] doesn't exist, create it as an empty array
+    formData[name] = formData[name] || [];
 
-  //   if (checked) {
-  //     // Add the checked option to the array
-  //     formData[name].push(optionValue);
-  //   } else {
-  //     // Remove the unchecked option from the array
-  //     formData[name] = formData[name].filter((value) => value !== optionValue);
-  //   }
+    if (checked) {
+      // Add the checked option to the array
+      formData[name].push(optionValue);
+    } else {
+      // Remove the unchecked option from the array
+      formData[name] = formData[name].filter((value) => value !== optionValue);
+    }
 
-  //   // Call your general handleInputChange function
-  //   // handleInputChange(name, formData[name]);
-  // };
+    // Call your general handleInputChange function
+    // handleInputChange(name, formData[name]);
+  };
 
   //checkbox
 
@@ -174,6 +195,7 @@ console.log(props, '****props***')
                     // placeholder={ele.placeholder}
                     value={formData[ele.value]}
                     onChange={(e) => handleInputChange(ele.name, ele.type, e.target.value)}
+                    required={ele.required}
                   />
                 )}
                 {ele.type === 'text-area' && (
@@ -182,7 +204,7 @@ console.log(props, '****props***')
                     maxRows={8}
                     variant='outlined'
                     placeholder={ele.placeholder}
-                    value={formData[ele.value]}
+                    value={formData[ele.value] }
                     onChange={(e) => handleInputChange(ele.name, ele.type, e.target.value)}
                     style={{ width: '100%' }}
                   />
@@ -218,6 +240,7 @@ console.log(props, '****props***')
                     }}
                     value={formData[ele.value]}
                     onChange={(e) => handleInputChange(ele.name, e.target.value)}
+                    required={ele.required}
                   />
                 )}
                 {ele.type === 'number' && (
@@ -228,6 +251,7 @@ console.log(props, '****props***')
                     placeholder={ele.placeholder}
                     value={formData[ele.name] || ''}
                     onChange={(e) => handleInputChange(ele.name, e.target.value)}
+                    required={ele.required}
                   />
                 )}
                 {/* {ele.type === 'button' && (
@@ -254,6 +278,7 @@ console.log(props, '****props***')
                     }}
                     value={formData[ele.value]}
                     onChange={(e) => handleInputChange(ele.name, e.target.value)}
+                    required={ele.required}
                   />
                 )}
                 {ele.type === 'accountnumber' && (
@@ -271,6 +296,7 @@ console.log(props, '****props***')
                     }}
                     value={formData[ele.name] || ''}
                     onChange={(e) => handleInputChange(ele.name, e.target.value)}
+                    required={ele.required}
                   />
                 )}
                 {ele.type === 'date' && (
@@ -280,6 +306,7 @@ console.log(props, '****props***')
                     type="date"
                     value={formData[ele.name] || ''}
                     onChange={(e) => handleInputChange(ele.name, e.target.value)}
+                    required={ele.required}
                   />
                 )}
                 {/* {ele.type === 'checkbox' && (
@@ -296,7 +323,7 @@ console.log(props, '****props***')
                     />
                   </FormControl>
                 )} */}
-                {/* {ele.type === 'checkbox' && (
+                {ele.type === 'checkbox' && (
                   <FormControl>
                     <InputLabel>
                       {ele.label}
@@ -317,7 +344,7 @@ console.log(props, '****props***')
                       />
                     ))}
                   </FormControl>
-                )} */}
+                )}
                 {ele.type === 'dropdown' && (
                   <FormControl fullWidth>
                     <InputLabel>{ele.label}</InputLabel>
@@ -342,6 +369,7 @@ console.log(props, '****props***')
                       native
                       value={formData[ele.name] || ''}
                       onChange={(e) => handleInputChange(ele.name, e.target.value)}
+                      required={ele.required}
                     >
                       <option value=""></option>
                       {ele.options.map((option, j) => (
@@ -388,8 +416,27 @@ console.log(props, '****props***')
                     </RadioGroup>
                   </FormControl>
                 )}
+               {/* {ele.type === 'checkbox' && (
+                <FormControl component="fieldset">
+                 <FormLabel component="legend">{ele.label}</FormLabel>
+                <FormGroup>
+                  {ele.options.map((option, j) => (
+                    <FormControlLabel
+                    key={j}
+                  control={
+                  <Checkbox
+                checked={formData[ele.name] && formData[ele.name].includes(option.value)}
+              onChange={(e) => handleCheckboxChange(ele.name, option.value, e.target.checked)}
+            />
+          }
+          label={option.label}
+        />
+      ))}
+    </FormGroup>
+  </FormControl>
+)} */}
 
-                {ele.type === 'file' && (
+                {/* {ele.type === 'file' && (
                   <FormControl fullWidth  >
                     <Input
                       accept=".jpg, .jpeg, .png, .pdf"
@@ -419,7 +466,7 @@ console.log(props, '****props***')
 
                     )}
                   </FormControl>
-                )}
+                )} */}
                 {/* <FormControl fullWidth>
       <InputLabel id={`${ele.name}-label`}>{ele.label}</InputLabel>
       <Select
@@ -450,6 +497,7 @@ console.log(props, '****props***')
                 variant={ele.type}
                 disabled={ele.loading}
                 onClick={() => handlButton(ele.fun)}
+                style={ele.style}
               >
                 {ele.name}
               </Button>
