@@ -50,7 +50,7 @@ export const componentsForm = {
 
     ],
     buttonSecction: {
-        justify: "end",
+        justify: "center",
    
         buttons: [
             {type: "contained", colour: "primary", name: "Add", fun: "submit" ,
