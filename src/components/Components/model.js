@@ -5,10 +5,10 @@ export const componentsForm = {
     fieldsArray: [ 
         {
             type: "text",
-            label: "Components Title",
-            name: "componentsTitle",
+            label: "Title",
+            name: "title",
             rules: [{ required: true, message: 'Please enter Components Title' }],
-            placeholder: "Components Title",
+            placeholder: "Title",
             xs: 24,
             sm: 16,
             md: 12,
@@ -19,10 +19,10 @@ export const componentsForm = {
         }, 
         {
             type: "text",
-            label: "Component Path",
+            label: "Path",
             name: "path",
             rules: [{ required: true, message: 'Component path Rqurire' },],
-            placeholder: "Component Path",
+            placeholder: "Path",
             xs: 24,
             sm: 16,
             md: 12,
@@ -34,7 +34,7 @@ export const componentsForm = {
                    {
                         type: "checkbox",
                         // label: "Active",
-                        name: "active",
+                        name: "is_active",
                         rules: [{ required: true, message: 'Please choose Active!' }],
                         xs: 12, // Adjust the xs, sm, md, lg values as needed
                         sm: 12,
@@ -42,9 +42,9 @@ export const componentsForm = {
                         lg: 12,
                         labelCol: "",
                         wrapperCol: "",
-                        value: "", // Update with the selected value ("on" or "off")
+                        value: false, // Update with the selected value ("on" or "off")
                         options: [
-                            { value: "active", label: "Active" },
+                            { value: "is_active", label: "Active" },
                         ],
                      },
 
@@ -53,7 +53,7 @@ export const componentsForm = {
         justify: "center",
    
         buttons: [
-            {type: "contained", colour: "primary", name: "Add", fun: "submit" ,
+            {type: "contained", colour: "primary", name: "Submit", fun: "submit" ,
             style: { marginTop: '20px' } }
            
         ]

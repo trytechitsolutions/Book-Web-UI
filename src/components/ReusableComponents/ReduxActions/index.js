@@ -1,6 +1,6 @@
-
 import { useSelector } from 'react-redux';
 
-export const GetStoreData = (reducerName) => {
-    return useSelector((state) => state[reducerName]);
-};
+export const GetStoreData = (sliceName) => {
+    const data = useSelector((state) => state[sliceName]);
+    return data;
+  };
