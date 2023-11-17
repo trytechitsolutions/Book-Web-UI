@@ -225,24 +225,18 @@ const InputFields = forwardRef((props, ref) => {
                     onChange={(e) => handleInputChange(ele.name, e.target.value)}
                   />
                 )}
-                {ele.type === 'password' && (
-                  <TextField
-                    label={ele.label}
-                    fullWidth
-                    type="password"
-                    placeholder={ele.placeholder}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <Lock />
-                        </InputAdornment>
-                      ),
-                    }}
-                    value={formData[ele.value]}
-                    onChange={(e) => handleInputChange(ele.name, e.target.value)}
-                    required={ele.required}
-                  />
-                )}
+                  {ele.type === 'password' && (
+              <TextField
+                label={ele.label}
+                 name={ele.name}
+                     fullWidth
+                variant='outlined'
+                 type='password'
+               value={formData[ele.value]}
+                onChange={(e) => handleInputChange(ele.name, ele.type, e.target.value)}
+               required={ele.required}
+               />
+                   )}
                 {ele.type === 'number' && (
                   <TextField
                     label={ele.label}

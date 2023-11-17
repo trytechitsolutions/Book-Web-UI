@@ -9,22 +9,22 @@ const categoriesSlice = createSlice({
     name: "categories",
     initialState,
     reducers: {
-        categoriesRequest: (state) => {
+        CategoriesRequest: (state) => {
             alert("reducer called");
             state.isLoading = true;
         },
-        categoriesSuccess: (state, action) => {
+        CategoriesSuccess: (state, action) => {
             alert(action.type)
             state.isLoading = false;
             state.categoriesData = [...state.categoriesData,action.payload];
             state.error = null;
         },
-        categoriesFail: (state, action) => {
+        CategoriesFail: (state, action) => {
             state.isLoading = false;
             state.error = action.payload;
         },
     },
 });
 
-export const { categoriesRequest, categoriesSuccess, categoriesFail } = categoriesSlice.actions;
+export const { CategoriesRequest, CategoriesSuccess, CategoriesFail } = categoriesSlice.actions;
 export default categoriesSlice.reducer;

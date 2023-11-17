@@ -1,5 +1,5 @@
 import { takeEvery, put, call } from 'redux-saga/effects';
-import { categoriesRequest, categoriesSuccess } from '../../Reducer/CategoriesReducer';
+import { CategoriesRequest, CategoriesSuccess } from '../../Reducer/CategoriesReducer';
 
 function* categoriesForm(action) {
 //   try {
@@ -13,10 +13,10 @@ function* categoriesForm(action) {
 alert(action.payload);
 console.log(action.payload);
 const response = action.payload;
-yield put(categoriesSuccess(response));
+yield put(CategoriesSuccess(response));
 }
 
 export function* CategoriesSaga() {
-  yield takeEvery(categoriesRequest.type, categoriesForm);
+  yield takeEvery(CategoriesRequest.type, categoriesForm);
 }
 

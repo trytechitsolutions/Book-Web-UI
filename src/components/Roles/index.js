@@ -1,84 +1,91 @@
-import React, { useRef, useState } from 'react'
-import { roleForm } from './model';
-import { useDispatch } from 'react-redux';
-import { RolesRequest } from '../Redux/Reducer/RolesReducer';
-import { onChangeValueBind, preparePayLoad } from '../ReusableComponents/CommonFunctions'
-import { GetStoreData } from '../ReusableComponents/ReduxActions'
-import { Container, Grid, Typography } from '@mui/material';
+import React, { useState, useEffect, useRef } from 'react';
+import { Container, Grid, Typography, Button } from '@mui/material';
 import InputFields from '../ReusableComponents/InputFields';
-import styled from 'styled-components';
-import {  TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import { onChangeValueBind, preparePayLoad } from '../ReusableComponents/CommonFunctions';
+import { useDispatch } from 'react-redux';
+import { GetStoreData } from '../ReusableComponents/ReduxActions';
+import GenericTable from '../common/GenericDataTable';
+import { RolesRequest } from '../Redux/Reducer/RolesReducer';
+import { rolesForm } from './model';
 
+const Components = () => {
+  const ChildRef = useRef();
+  const [showForm, setShowForm] = useState(false);
+  const [formData, setFormData] = useState(rolesForm);
+  const [editItem, setEditItem] = useState(null);
+  const dispatch = useDispatch();
+  const [data, setData] = useState([]);
 
+  const columns = [
+    { id: 'role', label: 'Role' },
+  ];
 
+  const rolesData = GetStoreData('RolesReducer')?.rolesData;
 
-const Table = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-  th, td {
-    border: 1px solid #ddd;
-    text-align: left;
+  // const handleEdit = (item) => {
+  //   if (editItem) {
+  //     // Edit existing item
+  //     const updatedData = data.map((existingItem) => (existingItem.id === editItem.id ? item : existingItem));
+  //     setData(updatedData);
+  //     setEditItem(null); // Reset editItem after editing
+  //   } else {
+  //     // Add new item
+  //     setData([...data, item]);
+  //   }
+  // };
+const onEdit = (data) =>{
+  console.log(data)
+}
+
+  useEffect(() => {
+    // Fetch data from the Redux store once when the component mounts
+    setData(rolesData);
+  }, [rolesData]);
+
+  function submitFormData() {
+    const payload = preparePayLoad(formData.fieldsArray);
+
+    setFormData({ ...formData });
+    dispatch(RolesRequest(payload));
+    setShowForm(false); // Hide the form after submission
   }
-  th {
-    background-color: #f2f2f2;
+
+  function onChange(data) {
+    onChangeValueBind(formData, data);
   }
-`;
 
+  const handleAddNewItem = () => {
+    setShowForm(true);
+  };
 
-const Roles = () => {
-    const ChildRef   = useRef();
-    const [formData, setFormData] = useState(roleForm);
-    const dispatch = useDispatch();
+  return (
+    <Container>
+      <div>
+        <Typography variant="h4" align="center" style={{ marginTop: '20px' }} gutterBottom>
+        Role
+        </Typography>
+        {!showForm && (
+          <Grid item xs={24} sm={16} md={12} lg={13} style={{ marginTop: '20px', marginBottom:'2rem', float:'right' }}>
+            <Button variant="contained" onClick={handleAddNewItem}>
+              Add New Item
+            </Button>
+          </Grid>
+        )}
+        {showForm && (
+          <Grid item xs={24} sm={16} md={12} lg={13} style={{ marginTop: '20px' }}>
+            <InputFields ref={ChildRef} modaldata={formData} onChange={onChange} submitFormData={submitFormData} />
+          </Grid>
+        )}
+      </div>
+      {data?.length > 0 ? (
+          <GenericTable data={data} columns={columns} onEdit={onEdit} onDelete={null} />
+        ) : (
+          <Typography variant="h6" align="center" style={{ marginTop: '10rem' }}>
+            No data available. Please add new items.
+          </Typography>
+        )}
+    </Container>
+  );
+};
 
-    const RolesData = GetStoreData('CategoriesReducer');
-    console.log(RolesData, "rolesData");
-    const getRolesData = RolesData.rolesData;
-    console.log(getRolesData);
-    
-function submitFormData(){
-  const payload = preparePayLoad(formData.fieldsArray);
-  alert("called");
-  setFormData({ ...formData })
-  dispatch(RolesRequest(payload));
-
-}
-function onChange(data){
-  onChangeValueBind(formData, data);   
-}
-
-
-return (
-    <>
-    <Container maxWidth="sm" >  
-         <div >
-         <Typography variant="h4" align="center" style={{ marginTop: "20px" }} gutterBottom>
-              Roles
-            </Typography>
-            <Grid item xs={24} sm={16} md={12} lg={13} style={{ marginTop: "20px" }} >
-            
-         <InputFields ref={ChildRef} modaldata={formData} onChange={onChange} submitFormData={submitFormData} />
-        </Grid>
-        </div>
-
-        <TableContainer >
-      <Table>
-        <TableHead>
-          <TableRow>
-          
-            <TableCell>Roles</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          <TableRow>
-            <TableCell>{RolesData.role}</TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
-    </TableContainer>
-        </Container>
-    </>
-  )
-}
-
-export default Roles ;
+export default Components;

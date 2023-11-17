@@ -1,11 +1,11 @@
 
-export const categoryForm = {
+export const categoriesForm = {
     formlayout: "vertical",
     fieldsArray: [ 
         {
             type: "text",
             label: "Category Title",
-            name: "categoryTitle",
+            name: "title",
             rules: [{ required: true, message: 'Please enter Category Title' }],
             placeholder: "Category Title",
             xs: 24,
@@ -21,7 +21,7 @@ export const categoryForm = {
             label: "Parent Category",
             name: "parentCategory",
             rules: [
-                { message: 'Please choose Parent Category!' },
+                { required: true,  message: 'Please choose Parent Category!' },
             ],
             xs: 24,
             sm: 16,
@@ -36,20 +36,20 @@ export const categoryForm = {
                 { id: "Category3", value: "Category 3" },
             ], 
         },
-        {
-            type : "file",
-            label: "Upload File",
-            name: "uploadFile",
-            rules: [{ required: true, message: 'Please upload Upload File' }],
-            placeholder: "Upload File",
-            xs: 24,
-            sm: 16,
-            md: 12,
-            lg: 12,
-            labelCol: "",
-            wrapperCol: "",
-            value: "",
-        },
+        // {
+        //     type : "file",
+        //     label: "Upload File",
+        //     name: "uploadFile",
+        //     rules: [{ required: true, message: 'Please upload Upload File' }],
+        //     placeholder: "Upload File",
+        //     xs: 24,
+        //     sm: 16,
+        //     md: 12,
+        //     lg: 12,
+        //     labelCol: "",
+        //     wrapperCol: "",
+        //     value: "",
+        // },
     ],
     buttonSecction: {
         justify: "end",

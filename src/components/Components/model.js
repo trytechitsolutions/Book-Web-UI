@@ -21,7 +21,7 @@ export const componentsForm = {
             type: "text",
             label: "Path",
             name: "path",
-            rules: [{ required: true, message: 'Component path Rqurire' },],
+            rules: [{ message: 'Component path Rqurire' },],
             placeholder: "Path",
             xs: 24,
             sm: 16,

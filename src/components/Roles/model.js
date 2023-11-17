@@ -1,5 +1,5 @@
 
-export const roleForm = {
+export const rolesForm = {
     formlayout: "vertical",
     fieldsArray: [ 
         {
