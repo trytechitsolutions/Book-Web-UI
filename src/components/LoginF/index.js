@@ -17,30 +17,35 @@ const Login = () => {
       const [data, setData] = useState([]);
       const navigate = useNavigate();
 
+      const registerData = GetStoreData('RegisterReducer')?.registerData;
 
 
-      const loginData = GetStoreData('LoginReducer')?.loginData;
+     
 
 
-      const registerPassword = formData.registerData.password;
-  const loginPassword = loginData.password;
-
-      useEffect(() => {
-        // Fetch data from the Redux store once when the component mounts
-        setData(loginData);
-      }, [loginData]);
+      // const registerPassword = registerData[0].password;
+     
+      // useEffect(() => {
+      //   // Fetch data from the Redux store once when the component mounts
+      //   setData(loginData);
+      // }, [loginData]);
       
 
     
       function submitFormData() {
+        console.log('in submit', formData)
+        // const loginPassword = loginData?.password;
+      console.log(registerData[0].password)
+      const registerPassword = registerData[0]?.password;
         const payload = preparePayLoad(formData.fieldsArray);
-      
+      const loginPassword = formData.fieldsArray[1].value;
         // Dispatch the login request
-        dispatch(loginRequest(payload));
       
         // Check if the registration password matches the login password
   if (registerPassword === loginPassword) {          // Passwords match, open the profile page (replace 'profile-page.html' with your actual page)
-          navigate('/profile '); 
+    
+    dispatch(loginRequest(payload));      
+    navigate('/profile '); 
         } else {
           alert('Passwords do not match. Please try again.');
         }

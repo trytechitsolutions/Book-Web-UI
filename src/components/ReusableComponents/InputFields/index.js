@@ -42,20 +42,23 @@ const InputFields = forwardRef((props, ref) => {
   const [formData, setFormData] = useState({});
   const [imagePreview, setImagePreview] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [validationMessages, setValidationMessages] = useState({});
 
   const handleInputChange = (name, type, value) => {
-    const fieldRules = modaldata.fieldsArray.find(field => field.name === name).rules;
-    const validationResult = validateField(value, fieldRules);
-  
-    if (validationResult.isValid) {
-      let obj = { name, type, value };
-      onChange(obj, index);
-    } else {
-      // Handle the validation error, e.g., display a message
-      console.error(validationResult.message);
-    }
-  };
+    // Update the form data without immediate validation
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
 
+    // Clear the validation message for the current field
+    setValidationMessages((prevMessages) => ({
+      ...prevMessages,
+      [name]: '',
+    }));
+    let obj = { name, type, value };
+    onChange(obj, index);
+  };
   
 
 
@@ -89,59 +92,56 @@ const InputFields = forwardRef((props, ref) => {
   //file
 
 
-  // const handleFileChange = (e) => {
-  //   const file = e.target.files[0];
-  //   // Handle the selected file, you may want to upload it to a server or process it in some way
-  //   setFormData({
-  //     ...formData,
-  //     uploadFile: file,
-  //   });
-
-
-  //   setSelectedFile(file);
-
-  //   // Create a preview URL for the selected file
-  //   if (file) {
-  //     const previewURL = URL.createObjectURL(file);
-  //     setImagePreview(previewURL);
-  //   } else {
-  //     // Clear the preview if no file is selected
-  //     setImagePreview(null)
-  //   }
-  // }
-
-  // const handleInputChang = (e, fieldName) => {
-  //   const file = e.target.files[0];
-
-
-  //file ||
-
-
-  //   // Handle the selected file, you may want to upload it to a server or process it in some way
-  //   setFormData((prevFormData) => ({
-  //     ...prevFormData,
-  //     [fieldName]: file,
-  //   }));
-
-  //   // Create a preview URL for the selected file
-  //   if (file) {
-  //     const previewURL = URL.createObjectURL(file);
-  //     setImagePreview((prevImagePreview) => ({
-  //       ...prevImagePreview,
-  //       [fieldName]: previewURL,
-  //     }));
-  //   } else {
-  //     // Clear the preview if no file is selected
-  //     setImagePreview((prevImagePreview) => ({
-  //       ...prevImagePreview,
-  //       [fieldName]: null,
-  //     }));
-  //   }
-  // };
-
+  const handleFileChange = (name, type, e) => {
+    const file = e.target.files[0];
+    // Handle the selected file, you may want to upload it to a server or process it in some way
+    setFormData({
+      ...formData,
+      [name]: file, // Update the form data with the selected file
+    });
+  
+    setSelectedFile(file);
+  
+    // Create a preview URL for the selected file
+    if (file) {
+      const previewURL = URL.createObjectURL(file);
+      setImagePreview(previewURL);
+    } else {
+      // Clear the preview if no file is selected
+      setImagePreview(null);
+    }
+    setValidationMessages((prevMessages) => ({
+      ...prevMessages,
+      [name]: '', // Clear the validation message for the current field
+    }));
+    // Pass the correct values to the onChange function
+    let obj = { name, type, value: file }; // Pass 'file' as the value
+    onChange(obj, index);
+  };
+  
 
   const validateForm = () => {
-    submitFormData(formData);
+    // Iterate through form data and perform validation
+    const updatedFormData = { ...formData };
+    const updatedValidationMessages = {};
+
+    modaldata.fieldsArray.forEach((field) => {
+      const fieldRules = field.rules || [];
+      const validationResult = validateField(updatedFormData[field.name], fieldRules);
+
+      if (!validationResult.isValid) {
+        // Set the validation message for the current field
+        updatedValidationMessages[field.name] = validationResult.message;
+      }
+    });
+
+    if (Object.keys(updatedValidationMessages).length === 0) {
+      // If there are no validation messages, the form is valid
+      submitFormData(updatedFormData);
+    } else {
+      // If there are validation messages, update the state to display them
+      setValidationMessages(updatedValidationMessages);
+    }
   };
 
   const handlButton = (name) => {
@@ -187,17 +187,23 @@ const InputFields = forwardRef((props, ref) => {
               <Grid item xs={ele.xs} sm={ele.sm} md={ele.md} lg={ele.lg} key={i}>
                 {/* <Grid item xs={12} sm={6} md={4} lg={3} key={i}> */}
                 {ele.type === 'text' && (
+                <div>
                   <TextField
                     label={ele.label}
                     name={ele.name}
                     fullWidth
                     variant='outlined'
-                    // placeholder={ele.placeholder}
-                    value={formData[ele.value]}
+                    value={formData[ele.name] || ''}
                     onChange={(e) => handleInputChange(ele.name, ele.type, e.target.value)}
                     required={ele.required}
                   />
-                )}
+                  {validationMessages[ele.name] && (
+                    <Typography variant="caption" color="error">
+                      {validationMessages[ele.name]}
+                    </Typography>
+                  )}
+                </div>
+              )}
                 {ele.type === 'text-area' && (
                   <TextareaAutosize
                     minRows={4}
@@ -430,7 +436,7 @@ const InputFields = forwardRef((props, ref) => {
   </FormControl>
 )} */}
 
-                {/* {ele.type === 'file' && (
+                {ele.type === 'file' && (
                   <FormControl fullWidth  >
                     <Input
                       accept=".jpg, .jpeg, .png, .pdf"
@@ -438,9 +444,14 @@ const InputFields = forwardRef((props, ref) => {
                       id={`upload-button-${ele.name}`}
                       type="file"
                       multiple={ele.multiple}
-                      onChange={handleFileChange}
+                      onChange={(e)=>handleFileChange(ele.name, ele.type, e)}
 
                     />
+                    {validationMessages[ele.name] && (
+                    <Typography variant="caption" color="error">
+                      {validationMessages[ele.name]}
+                    </Typography>
+                  )}
                     <label htmlFor={`upload-button-${ele.name}`}>
                       <Button
                         variant="contained"
@@ -460,7 +471,7 @@ const InputFields = forwardRef((props, ref) => {
 
                     )}
                   </FormControl>
-                )} */}
+                )}
                 {/* <FormControl fullWidth>
       <InputLabel id={`${ele.name}-label`}>{ele.label}</InputLabel>
       <Select

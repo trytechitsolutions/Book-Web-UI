@@ -42,6 +42,8 @@ const Components = () => {
   const handleAddNewItem = () => {
     setShowForm(true);
   };
+  const onEdit=(id)=>{
+  }
 
   return (
     <Container>
@@ -63,7 +65,7 @@ const Components = () => {
         )}
       </div>
       {data?.length > 0 ? (
-          <GenericTable data={data} columns={columns} onEdit={null} onDelete={null} />
+          <GenericTable data={data} columns={columns} onEdit={onEdit} onDelete={null} />
         ) : (
           <Typography variant="h6" align="center" style={{ marginTop: '10rem' }}>
             No data available. Please add new items.
