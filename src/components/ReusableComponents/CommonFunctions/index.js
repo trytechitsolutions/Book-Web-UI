@@ -54,30 +54,29 @@ export const onChangeValueBind = (formdata, data) => {
 
 export const preparePayLoad = (arr) => {
     let obj = {};
-    arr.forEach(ele => {
+    // let formData = new FormData();
+  
+    arr.forEach((ele) => {
+      if (ele.type !== "file") {
+    //     if (ele.value && ele.value.length > 0) {
+    //       ele.value.forEach((file) => {
+    //         formData.append(ele.name, file.originFileObj);
+    //       });
+    //     }
+    //   } else {
         obj[ele.name] = ele.value;
         if (ele.type === "phonenumber") {
-            obj[ele.name] = ele.value?.toString();
-        }
-    });
-
-    // File data append
-    const fileobj = arr.find(x => x.type === "file");
-    if (fileobj) {
-        const formData = new FormData();
-        fileobj.value.forEach((file) => {
-            formData.append('files', file.originFileObj);
-        });
-        delete obj[fileobj.name];
-        formData.append('payload', obj);
-        return formData;
+          obj[ele.name] = ele.value?.toString();
+        // }
+        // formData.append(ele.name, ele.value);
+      }
     }
+    });
+    // formData.append('payload', JSON.stringify(obj));
+    // return {obj: obj, formData: formData};
     return obj;
-}
-
-
-
-
+  };
+  
 export const getErrorMsg = (res) => {
     if (typeof res.response.data.error == "string") {
         return res.response.data.error;

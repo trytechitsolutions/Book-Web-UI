@@ -30,7 +30,11 @@ const Components = () => {
 
   function submitFormData() {
     const payload = preparePayLoad(formData.fieldsArray);
+    const isFileExist = formData.fieldsArray.filter((f)=> f.type==="file");
+    if(isFileExist){
+    payload.file = isFileExist[0].value;
     setFormData({ ...formData });
+    }
     dispatch(ComponentsRequest(payload));
     setShowForm(false); // Hide the form after submission
   }
