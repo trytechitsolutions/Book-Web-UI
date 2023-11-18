@@ -68,7 +68,7 @@ const Components = () => {
           <GenericTable data={data} columns={columns} onEdit={onEdit} onDelete={null} />
         ) : (
           <Typography variant="h6" align="center" style={{ marginTop: '10rem' }}>
-            No data available. Please add new items.
+            No data available. Please add new Component.
           </Typography>
         )}
     </Container>
