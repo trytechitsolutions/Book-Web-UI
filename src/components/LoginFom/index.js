@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { loginForm } from './model';
 import InputFields from '../ReusableComponents/InputFields';
 import { Button, Container, Grid, Typography } from '@mui/material';
@@ -32,7 +32,7 @@ const Login = () => {
           message: "Logged in sucessfully!....",
           open: true
         }
-        navigate('/kyc-form')
+        navigate('/kyc_form')
 
         setSnackBarData(data);
       } else {
@@ -62,6 +62,16 @@ const Login = () => {
   const closeSnakBar = () => {
     setOpenSnackBar(false)
   }
+
+  useEffect(() => {
+    if (page === 'Login') {
+      // Redirect to the login page
+      navigate('/login');
+    } else if (page === 'Register') {
+      // Redirect to the registration page
+      navigate('/register');  // Replace '/register' with the desired path for registration
+    }
+  }, [page]);
 
   return (
     <>

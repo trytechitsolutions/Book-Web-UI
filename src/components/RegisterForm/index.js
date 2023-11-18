@@ -73,6 +73,17 @@ const RegisterForm = () => {
   function onChange(data) {
     onChangeValueBind(formData, data);
   }
+  
+  useEffect(() => {
+    if (page === 'Login') {
+      // Redirect to the login page
+      navigate('/login');
+    } else if (page === 'Register') {
+      // Redirect to the registration page
+      navigate('/register');  // Replace '/register' with the desired path for registration
+    }
+  }, [page]);
+
   return (
 
     <>
