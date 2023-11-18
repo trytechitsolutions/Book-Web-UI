@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { profileForm } from './model';
 import { useDispatch } from 'react-redux';
 import { onChangeValueBind, preparePayLoad } from '../ReusableComponents/CommonFunctions';
@@ -13,18 +13,23 @@ const Profile = () => {
   const ChildRef   = useRef();
       const [formData, setFormData] = useState(profileForm);
       const dispatch = useDispatch();
+      const [data, setData] = useState([]);
+      const [showForm, setShowForm] = useState(false);
 
-      const ProfileData = GetStoreData('ProfileReducer');
-      console.log(ProfileData, "profileData");
-      const getProfileData = ProfileData.profileData;
-      console.log(getProfileData);
-    
+      const profileData = GetStoreData('ProfileReducer')?.profileData;
+
+      useEffect(() => {
+        // Fetch data from the Redux store once when the component mounts
+        setData(profileData);
+      }, [profileData]);
+
       function submitFormData() {
         const payload = preparePayLoad(formData.fieldsArray);
-        alert("called");
-        setFormData({ ...formData })
+        setFormData({ ...formData });
         dispatch(profileRequest(payload));
+        setShowForm(false); // Hide the form after submission
       }
+   
     
       function onChange(data) {
         onChangeValueBind(formData, data);
@@ -48,4 +53,4 @@ const Profile = () => {
   )
 }
 
-export default Profile
+export default Profile ;

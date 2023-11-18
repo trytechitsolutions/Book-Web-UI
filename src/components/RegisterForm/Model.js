@@ -163,6 +163,7 @@ export const registrationForm = {
             { type: "contained", colour: "primary", name: "Submit", fun: "submit" },
             { type:"outlined", colour: "default", name: "Reset", fun: "reset" },
             { type:"outlined", colour: "primary", name: "Cancel", fun: "cancel" },
-        ]
+        ],
+        style: { marginTop: '30px' },
     }
 }

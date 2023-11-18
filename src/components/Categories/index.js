@@ -8,7 +8,7 @@ import { GetStoreData } from '../ReusableComponents/ReduxActions';
 import GenericTable from '../common/GenericDataTable';
 import { CategoriesRequest } from '../Redux/Reducer/CategoriesReducer';
 
-const Components = () => {
+const Categories = () => {
   const ChildRef = useRef();
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState(categoriesForm);
@@ -18,6 +18,7 @@ const Components = () => {
   const columns = [
     { id: 'title', label: 'Title' },
     { id: 'parentCategory', label: 'Parent Category' },
+    { id: 'uploadFile', label: 'Files' },
 
   ];
 
@@ -30,7 +31,11 @@ const Components = () => {
 
   function submitFormData() {
     const payload = preparePayLoad(formData.fieldsArray);
+    const isFileExist = formData.fieldsArray.filter((f)=> f.type==="file");
+    if(isFileExist){
+    payload.file = isFileExist[0]?.value;
     setFormData({ ...formData });
+    }
     dispatch(CategoriesRequest(payload));
     setShowForm(false); // Hide the form after submission
   }
@@ -73,4 +78,4 @@ const Components = () => {
   );
 };
 
-export default Components;
+export default Categories;

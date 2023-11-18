@@ -12,7 +12,7 @@ export const validatePhoneNumber = (_, value) => {
 
 //account
 export const validateAccountNumber = (_, value) => {
-    // Define the regular expression or rules for valid account numbers
+
     // Replace the regular expression or rules with the specific format and rules for your account numbers.
     const accountNumberPattern = /^\d{14}$/; // Example: Assumes an 8-digit account number
 

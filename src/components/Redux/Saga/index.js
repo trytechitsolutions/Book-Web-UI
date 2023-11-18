@@ -5,6 +5,7 @@ import { ProfileSaga } from './ProfileSaga';
 import { CategoriesSaga } from './CategoriesSaga';
 import { ComponentsSaga } from './ComponentsSaga';
 import { RolesSaga } from './RolesSaga';
+import { KycSaga } from './KycSaga';
 
 function* RootSaga() {
     yield all([
@@ -14,7 +15,7 @@ function* RootSaga() {
         CategoriesSaga(),
         ComponentsSaga(),
         RolesSaga(),
-
+        KycSaga(),
     ]);
 }
 

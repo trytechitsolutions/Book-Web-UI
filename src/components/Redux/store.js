@@ -7,6 +7,7 @@ import ProfileReducer from "./Reducer/ProfileReducer";
 import CategoriesReducer from "./Reducer/CategoriesReducer";
 import ComponentsReducer from "./Reducer/ComponentsReducer";
 import RolesReducer from "./Reducer/RolesReducer";
+import KycReducer from "./Reducer/KycReducer";
 
 
 
@@ -22,6 +23,7 @@ const store = configureStore({
     CategoriesReducer : CategoriesReducer, 
     ComponentsReducer : ComponentsReducer,
     RolesReducer : RolesReducer,
+    KycReducer : KycReducer,
 
   },
   middleware: [...getDefaultMiddleware({ thunk: false }), sagaMiddleware],

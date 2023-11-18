@@ -84,6 +84,3 @@ buttonSecction: {
     ]
 }
 }
-// type="file"
-// accept=".jpg, .jpeg, .png, .pdf"
-// name="gst"

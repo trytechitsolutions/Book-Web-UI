@@ -5,13 +5,16 @@ import { Provider } from 'react-redux'; // Import Provider
 import Header from './components/common/Header';
 import Login from './components/LoginF';
 import store from './components/Redux/store';
-import Register from './components/RegisterF';
 import Profile from './components/profile';
 import Categories from './components/Categories';
-import KYCF from './components/KYC-Form';
 import Components from './components/Components';
 import Roles from './components/Roles';
 import StoreFrom from './components/Store-Form';
+import BookList from './components/BookList';
+import Books from './components/Books';
+import PublisherComponent from './components/publisher';
+import KycForm from './components/KYC-Form';
+import RegisterForm from './components/RegisterForm';
 
 // ... (your existing imports)
 
@@ -47,25 +50,18 @@ function App() {
       <BrowserRouter>
         {checkAuthentication() && <Header items={menuItems} />}
         <Routes>
-        {/*
-        <Route path="/kyc" element={<KYCForm />} />
-        <Route path="/login" element={<LoginForm />} />
-        <Route path="/userform" element={<PrivateRoute element={<UserForm />} />} />
-        <Route path="/bookslist" element={<PrivateRoute element={<BooksList />} />} />
-        <Route path="/books" element={<PrivateRoute element={<Books />} />} />
-        <Route path="/publisher" element={<PrivateRoute element={<PublisherComponent />} />} />
-        <Route path="/store-form" element={<StoreFrom />} /> */}
-         {/* <Route path="/register" element={<RegistrationForm/>} /> */}
+
         <Route path="/loginF" element={<Login/>} />
-        <Route path="/reg" element={<Register />} />
+        <Route path="/register" element={<RegisterForm />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/category" element={<Categories/>} />
-        <Route path="/kyc-d" element={<KYCF/>}   />
+        <Route path="/kyc-form" element={<KycForm/>}   />
         <Route path="/components"  element={<Components />} />
         <Route path="/roles" element={<Roles/>} />
         <Route path="/store-form" element={<StoreFrom />} />
-          {/* <Route path="/userform" element={<PrivateRoute element={<UserForm />} />} />
-          <Route path="/bookslist" element={<PrivateRoute element={<BooksList />} />} /> */}
+          {/* <Route path="/bookslist"  element={<BookList />}  />
+          <Route path="/books"  element={<Books />}  />
+          <Route path="/publisher" element={<PrivateRoute element={<PublisherComponent />} />} /> */}
         </Routes>
       </BrowserRouter>
     </Provider>

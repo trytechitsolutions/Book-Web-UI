@@ -42,6 +42,9 @@ const BookList = () => {
       }
     }
 
+
+
+
     fetchBooks(); // Call the function to fetch books
   }, []); // Empty dependency array means it runs once on mount
   const headers = ['Title', 'Category', 'Publisher', 'Author', 'Price', 'Medium'];
@@ -62,7 +65,7 @@ const BookList = () => {
 
   return (
     <div style={{paddingLeft:"10%", paddingRigt:"10%"}}>
-      <h2>Book List</h2>
+      <h2>Book List :</h2>
       <DataTable data ={books}  headers={headers} actions={actions } />
       {/* <Table style={{paddingTop:"5%"}}>
         <thead>

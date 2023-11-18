@@ -20,17 +20,6 @@ const Login = () => {
       const registerData = GetStoreData('RegisterReducer')?.registerData;
 
 
-     
-
-
-      // const registerPassword = registerData[0].password;
-     
-      // useEffect(() => {
-      //   // Fetch data from the Redux store once when the component mounts
-      //   setData(loginData);
-      // }, [loginData]);
-      
-
     
       function submitFormData() {
         console.log('in submit', formData)
@@ -42,7 +31,7 @@ const Login = () => {
         // Dispatch the login request
       
         // Check if the registration password matches the login password
-  if (registerPassword === loginPassword) {          // Passwords match, open the profile page (replace 'profile-page.html' with your actual page)
+  if (registerPassword === loginPassword) {         
     
     dispatch(loginRequest(payload));      
     navigate('/profile '); 
@@ -84,10 +73,6 @@ const Login = () => {
               </Button>
           </Typography>
         </Grid> 
-        {/* {
-            showAlert &&
-            <AlertMessage data={alertData} />
-          } */}
         </div>
         </Container>
     </>  

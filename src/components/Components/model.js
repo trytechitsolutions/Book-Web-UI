@@ -47,23 +47,7 @@ export const componentsForm = {
                 { value: "is_active", label: "Active" },
             ],
         },
-        // {
-        //     type: "file",
-        //     label: "File Upload",
-        //     name: "file",
-        //     multiple: true,
-        //     showUploadList: true,
-        //     rules: [
-        //         { required: true, message: 'Please choose file!' },
-        //     ],
-        //     xs: 24,
-        //     sm: 16,
-        //     md: 12,
-        //     lg: 12,
-        //     labelCol: "",
-        //     wrapperCol: "",
-        //     value: "",
-        // }
+    
     ],
     buttonSecction: {
         justify: "center",

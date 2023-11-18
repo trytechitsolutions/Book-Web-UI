@@ -81,10 +81,7 @@ function submit() {
 
    }
   
-  // function onChange(data) {
 
-  //   onChangeValueBind(formData, data);
-  // }
   return (
 
     <>
@@ -106,9 +103,6 @@ function submit() {
           </Typography>
         </AccordionDetails>
       </Accordion>
-      {/* <Button variant="contained" color="primary" onClick={openDialogHandler}>
-        Open Dialog
-      </Button> */} 
       <Grid item xs={9}  align="end" style={{ marginTop: "20px" }}>
       <button type="primary" onClick={submit} style={{ marginRight:"10px" , marginBottom:"90px" }}>Add</button>
       <button type="primary" onClick={resetForm}>Clear </button>

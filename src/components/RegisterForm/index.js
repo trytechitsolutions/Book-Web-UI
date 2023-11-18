@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from 'react';
-// import { Col, Row, Button, Card } from 'antd';
 import { registrationForm } from './Model';
 import InputFields from '../ReusableComponents/InputFields';
 import { Container, Grid, Typography } from '@mui/material';
@@ -7,10 +6,10 @@ import { onChangeValueBind, preparePayLoad } from '../ReusableComponents/CommonF
 import { useDispatch } from 'react-redux';
 import { registerRequest } from '../Redux/Reducer/RegisterReducer';
 import { GetStoreData } from '../ReusableComponents/ReduxActions';
-// import { onChangeValueBind, preparePayLoad, getErrorMsg, upDateForm } from '../ReusableComponents/CoomonFunctions';
 import { useNavigate } from 'react-router-dom';
 
-const Register = () => {
+const RegisterForm = () => {
+  
   const ChildRef = useRef();
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState(registrationForm);
@@ -19,35 +18,7 @@ const Register = () => {
   const navigate = useNavigate();
 
 
-  // const RegisterData = GetStoreData('RegisterReducer');
-  // console.log(RegisterData, "registerData");
-  // const getRegisterData = RegisterData.registerData;
-  // console.log(getRegisterData);
-
-  // function submitFormData() {
-  //   const payload = preparePayLoad(formData.fieldsArray);
-  
-  //   if (RegisterData.password !==
-  //     RegisterData.confirmPassword) {
-  //     // Handle password mismatch error
-  //     alert('Password and Confirm Password do not match');
-  //     return;
-  //   }
-  
-  //   // Passwords match, proceed with the form submission
-  //   const emptyFieldsArray = formData.fieldsArray.map(field => ({ ...field, value: '' }));
-  //   setFormData({ ...formData, fieldsArray: emptyFieldsArray });
-  //   dispatch(registerRequest(payload));
-  
-  //   // Redirect to login page
-  //   window.location.href = '/loginF';
-  // }
-
-
-
-
-
-  const registerData = GetStoreData('ComponentsReducer')?.registerData;
+  const registerData = GetStoreData('RegisterReducer')?.registerData;
 
   useEffect(() => {
     // Fetch data from the Redux store once when the component mounts
@@ -73,7 +44,8 @@ const Register = () => {
     dispatch(registerRequest(payload));
   
     // Redirect to login page 
-    navigate('/loginF');  }
+    navigate('/loginF'); 
+   }
 
   function onChange(data) {
     onChangeValueBind(formData, data);
@@ -97,4 +69,4 @@ const Register = () => {
   )
 }
 
-export default Register
+export default RegisterForm ;

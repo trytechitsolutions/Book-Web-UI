@@ -16,7 +16,7 @@ const categoriesSlice = createSlice({
         CategoriesSuccess: (state, action) => {
             alert(action.type)
             state.isLoading = false;
-            state.categoriesData = [...state.categoriesData,action.payload];
+            state.categoriesData = [...state.categoriesData, action.payload];
             state.error = null;
         },
         CategoriesFail: (state, action) => {

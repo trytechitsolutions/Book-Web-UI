@@ -19,12 +19,9 @@ import {
   FormLabel,
   FormGroup,
 } from '@mui/material';
-// import {
-//   Dialog,
-//   DialogTitle,
-//   DialogContent,
-//   DialogActions,
-// } from '@material-ui/core';
+  
+
+
 
 import {
   AccountCircle,
@@ -82,14 +79,6 @@ const InputFields = forwardRef((props, ref) => {
     setFormData(initialValues);
   };
 
-  // const handleInputChange = (name, value) => {
-  //   const updatedFormData = { ...formData, [name]: value };
-  //   setFormData(updatedFormData);
-  //   onChange(updatedFormData, index);
-  // };
-
-
-  //file
 
 
   const handleFileChange = (name, type, e) => {
@@ -186,7 +175,7 @@ const InputFields = forwardRef((props, ref) => {
             {modaldata.fieldsArray.map((ele, i) => (
               <Grid item xs={ele.xs} sm={ele.sm} md={ele.md} lg={ele.lg} key={i}>
                 {/* <Grid item xs={12} sm={6} md={4} lg={3} key={i}> */}
-                {ele.type === 'text' && (
+             {ele.type === 'text' && (
                 <div>
                   <TextField
                     label={ele.label}
@@ -204,83 +193,116 @@ const InputFields = forwardRef((props, ref) => {
                   )}
                 </div>
               )}
-                {ele.type === 'text-area' && (
-                  <TextareaAutosize
-                    minRows={4}
-                    maxRows={8}
-                    variant='outlined'
-                    placeholder={ele.placeholder}
-                    value={formData[ele.value] }
-                    onChange={(e) => handleInputChange(ele.name, ele.type, e.target.value)}
-                    style={{ width: '100%' }}
-                  />
-                )}
-                {ele.type === 'email' && (
-                  <TextField
-                    label={ele.label}
-                    fullWidth
-                    placeholder={ele.placeholder}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <AccountCircle />
-                        </InputAdornment>
-                      ),
-                    }}
-                    value={formData[ele.value]}
-                    onChange={(e) => handleInputChange(ele.name, e.target.value)}
-                  />
-                )}
-                  {ele.type === 'password' && (
+ 
+             {ele.type === 'text-area' && (
+              <div>
               <TextField
-                label={ele.label}
+                 label={ele.label}
                  name={ele.name}
-                     fullWidth
-                variant='outlined'
-                 type='password'
-               value={formData[ele.value]}
-                onChange={(e) => handleInputChange(ele.name, ele.type, e.target.value)}
-               required={ele.required}
-               />
+                 fullWidth
+                 variant='outlined'
+                 multiline
+                 minRows={2}
+                //  maxRows={8}
+                 placeholder={ele.label}
+                 value={formData[ele.name] || ''}
+                 onChange={(e) => handleInputChange(ele.name, ele.type, e.target.value)}
+                 required={ele.required}
+              />
+              {validationMessages[ele.name] && (
+              <Typography variant="caption" color="error">
+               {validationMessages[ele.name]}
+              </Typography>
+                 )}
+               </div>
+               )}
+                {ele.type === 'email' && (
+                 <div>
+               <TextField
+              label={ele.label}
+              fullWidth
+              variant='outlined'
+               placeholder={ele.placeholder}
+                InputProps={{
+                 startAdornment: (
+                 <InputAdornment position="start">
+                 <AccountCircle />
+                </InputAdornment>
+                ),
+                }}
+                 value={formData[ele.name] || ''}
+                  onChange={(e) => handleInputChange(ele.name, ele.type, e.target.value)}
+                 required={ele.required}
+                  />
+                  {validationMessages[ele.name] && (
+                   <Typography variant="caption" color="error">
+                    {validationMessages[ele.name]}
+                  </Typography>
                    )}
-                {ele.type === 'number' && (
-                  <TextField
-                    label={ele.label}
-                    fullWidth
-                    type="number"
-                    placeholder={ele.placeholder}
-                    value={formData[ele.name] || ''}
-                    onChange={(e) => handleInputChange(ele.name, e.target.value)}
-                    required={ele.required}
-                  />
+                </div>
+                    )}
+          {ele.type === 'password' && (
+            <div>
+               <TextField
+               label={ele.label}
+               name={ele.name}
+               fullWidth
+               variant='outlined'
+               type='password'
+               value={formData[ele.name] || ''}
+               onChange={(e) => handleInputChange(ele.name, ele.type, e.target.value)}
+               required={ele.required}
+             />
+             {validationMessages[ele.name] && (
+             <Typography variant="caption" color="error">
+              {validationMessages[ele.name]}
+             </Typography>
                 )}
-                {/* {ele.type === 'button' && (
-                  <Button
-                        variant="contained"
-                        color={ele.colour || "default"}
-                        onClick={() => handleButtonClick(ele.fun)}
-                      >
-                       {ele.label}
-                    </Button>
-                    )} */}
+               </div>
+               )}
+              {ele.type === 'number' && (
+               <div>
+                <TextField
+                  label={ele.label}
+                  fullWidth
+                  type="number"
+                  placeholder={ele.placeholder}
+                  value={formData[ele.name] || ''}
+                 onChange={(e) => handleInputChange(ele.name, ele.type, e.target.value)}
+                  required={ele.required}
+                  />
+                {validationMessages[ele.name] && (
+                 <Typography variant="caption" color="error">
+                    {validationMessages[ele.name]}
+                 </Typography>
+                  )}
+                </div>
+                 )}
                 {ele.type === 'phonenumber' && (
-                  <TextField
-                    label={ele.label}
-                    fullWidth
-                    type="number"
-                    placeholder={ele.placeholder}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <Phone />
-                        </InputAdornment>
-                      ),
-                    }}
-                    value={formData[ele.value]}
-                    onChange={(e) => handleInputChange(ele.name, e.target.value)}
-                    required={ele.required}
-                  />
+                <div>
+                 <TextField
+                  label={ele.label}
+                   fullWidth
+                   type="number" // 'tel' type is often used for phone numbers
+                   placeholder={ele.placeholder}
+                   InputProps={{
+                   startAdornment: (
+                 <InputAdornment position="start">
+                    <Phone />
+                 </InputAdornment>
+                   ),
+                }}
+                 value={formData[ele.name] || ''}
+                 onChange={(e) => handleInputChange(ele.name, ele.type, e.target.value)}
+                 required={ele.required}
+                 />
+                 {validationMessages[ele.name] && (
+                 <Typography variant="caption" color="error">
+                  {validationMessages[ele.name]}
+                 </Typography>
                 )}
+               </div>
+               )}
                 {ele.type === 'accountnumber' && (
                   <TextField
                     label={ele.label}
@@ -309,20 +331,6 @@ const InputFields = forwardRef((props, ref) => {
                     required={ele.required}
                   />
                 )}
-                {/* {ele.type === 'checkbox' && (
-                  <FormControl>
-                    <InputLabel>
-                      {ele.label}
-                      {ele.rules[0].required && (
-                        <span style={{ color: 'red' }}>*</span>
-                      )}
-                    </InputLabel>
-                    <Checkbox
-                      checked={formData[ele.name] || false}
-                      onChange={(e) => handleInputChange(ele.name, e.target.checked)}
-                    />
-                  </FormControl>
-                )} */}
                 {ele.type === 'checkbox' && (
                   <FormControl>
                     <InputLabel>
@@ -345,23 +353,32 @@ const InputFields = forwardRef((props, ref) => {
                     ))}
                   </FormControl>
                 )}
-                {ele.type === 'dropdown' && (
-                  <FormControl fullWidth>
-                    <InputLabel>{ele.label}</InputLabel>
-                    <Select
-                      native
-                      value={formData[ele.value]}
-                      onChange={(e) => handleInputChange(ele.name, e.target.value)}
-                    >
-                      <option value=""></option>
-                      {ele.options.map((option, j) => (
-                        <option key={j} value={option.id}>
-                          {option.value}
-                        </option>
-                      ))}
-                    </Select>
-                  </FormControl>
-                )}
+               {ele.type === 'dropdown' && (
+                 <div>
+                 <FormControl fullWidth variant='outlined'>
+                 <InputLabel>{ele.label}</InputLabel>
+                     <Select
+                       native
+                       value={formData[ele.name] || ''}
+                       onChange={(e) => handleInputChange(ele.name, ele.type, e.target.value)}
+                       label={ele.label}
+                      >
+                  <option value=""></option>
+                   {ele.options.map((option, j) => (
+                  <option key={j} value={option.id}>
+                   {option.value}
+                  </option>
+                 ))}
+                  </Select>
+                  {validationMessages[ele.name] && (
+                    <Typography variant="caption" color="error">
+                       {validationMessages[ele.name]}
+                    </Typography>
+                   )}
+                 </FormControl>
+                    </div>
+                 )}
+
                 {ele.type === 'day' && (
                   <FormControl fullWidth>
                     <InputLabel>{ele.label}</InputLabel>
@@ -472,22 +489,7 @@ const InputFields = forwardRef((props, ref) => {
                     )}
                   </FormControl>
                 )}
-                {/* <FormControl fullWidth>
-      <InputLabel id={`${ele.name}-label`}>{ele.label}</InputLabel>
-      <Select
-        labelId={`${ele.name}-label`}
-        id={`${ele.name}-select`}
-        label={ele.label}
-        value={formData[ele.name] || ''}
-        onChange={(e) => handleInputChange(ele.name, e.target.value)}
-      >
-        {days.map((day) => (
-          <MenuItem key={day} value={day}>
-            {day}
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl> */}
+               
               </Grid>
             ))}
           </Grid>

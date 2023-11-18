@@ -16,6 +16,22 @@ export const rolesForm = {
             wrapperCol: "",
             value: "",
         }, 
+        {
+            type: "checkbox",
+            // label: "Active",
+            name: "is_active",
+            rules: [{ required: false, message: 'Please choose Active!' }],
+            xs: 12, // Adjust the xs, sm, md, lg values as needed
+            sm: 12,
+            md: 12,
+            lg: 12,
+            labelCol: "",
+            wrapperCol: "",
+            value: false, // Update with the selected value ("on" or "off")
+            options: [
+                { value: "is_active", label: "Active" },
+            ],
+        },
        
     ],
     buttonSecction: {

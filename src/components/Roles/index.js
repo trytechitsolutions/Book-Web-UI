@@ -8,31 +8,21 @@ import GenericTable from '../common/GenericDataTable';
 import { RolesRequest } from '../Redux/Reducer/RolesReducer';
 import { rolesForm } from './model';
 
-const Components = () => {
+const Roles = () => {
   const ChildRef = useRef();
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState(rolesForm);
-  const [editItem, setEditItem] = useState(null);
   const dispatch = useDispatch();
   const [data, setData] = useState([]);
 
   const columns = [
     { id: 'role', label: 'Role' },
+    { id :'is_active', label:'Status'}
   ];
 
-  const rolesData = GetStoreData('RolesReducer')?.rolesData;
+const rolesData = GetStoreData('RolesReducer')?.rolesData;
 
-  // const handleEdit = (item) => {
-  //   if (editItem) {
-  //     // Edit existing item
-  //     const updatedData = data.map((existingItem) => (existingItem.id === editItem.id ? item : existingItem));
-  //     setData(updatedData);
-  //     setEditItem(null); // Reset editItem after editing
-  //   } else {
-  //     // Add new item
-  //     setData([...data, item]);
-  //   }
-  // };
+
 const onEdit = (data) =>{
   console.log(data)
 }
@@ -44,7 +34,6 @@ const onEdit = (data) =>{
 
   function submitFormData() {
     const payload = preparePayLoad(formData.fieldsArray);
-
     setFormData({ ...formData });
     dispatch(RolesRequest(payload));
     setShowForm(false); // Hide the form after submission
@@ -88,4 +77,4 @@ const onEdit = (data) =>{
   );
 };
 
-export default Components;
+export default Roles;
