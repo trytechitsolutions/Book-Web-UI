@@ -4,19 +4,25 @@ import InputFields from '../ReusableComponents/InputFields';
 import { Container, Grid, Typography } from '@mui/material';
 import { onChangeValueBind, preparePayLoad } from '../ReusableComponents/CommonFunctions';
 import { useDispatch } from 'react-redux';
-import { registerRequest } from '../Redux/Reducer/RegisterReducer';
 import { GetStoreData } from '../ReusableComponents/ReduxActions';
 import { useNavigate } from 'react-router-dom';
+import * as securedLocalStorage from '../../services/secureLocalStorage';
+import { apiRequest } from '../../services/api';
+import Loader from '../common/Loader';
+import SnackbarView from '../common/SnackBar';
 
 const RegisterForm = () => {
   
   const ChildRef = useRef();
-  const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState(registrationForm);
   const dispatch = useDispatch();
   const [data, setData] = useState([]);
   const navigate = useNavigate();
 
+  const serverUrl = securedLocalStorage.baseUrl;
+  const [openSnackBar, setOpenSnackBar] = React.useState(false);
+  const [snackBarData, setSnackBarData] = React.useState();
+  const [showLoader, setShowLoader] = React.useState(false);
 
   const registerData = GetStoreData('RegisterReducer')?.registerData;
 
@@ -25,28 +31,44 @@ const RegisterForm = () => {
     setData(registerData);
   }, [registerData]);
 
-  function submitFormData() {
-    const payload = preparePayLoad(formData.fieldsArray);
-    setFormData({ ...formData });
-    dispatch(registerRequest(payload));
-    setShowForm(false); // Hide the form after submission
+  const submitFormData = async () => {
+    try {
+      let paylaod = preparePayLoad(formData.fieldsArray)
+      setShowLoader(true);
+      paylaod.role = 1;
+      const resp = await apiRequest(paylaod, serverUrl + "/auth/register/admin ", 'post');
+      setShowLoader(false);
+      if (resp?.data?.data) {
+        setOpenSnackBar(true);
+        const data = {
+          type: "success",
+          message: "Registered sucessfully!...."
+        }
 
-    if (formData.fieldsArray.find(field => field.name === 'password').value !==
-    formData.fieldsArray.find(field => field.name === 'confirmPassword').value){
-      // Handle password mismatch error
-      alert('Password and Confirm Password do not match');
-      return;
+        setSnackBarData(data);
+      } else {
+        setOpenSnackBar(true);
+        const data = {
+          type: "error",
+          message: 'Registration failed.',
+          open:true
+        }
+        setSnackBarData(data);
+      }
+    } catch (err) {
+      setOpenSnackBar(true);
+      const data = {
+        type: "error",
+        message: 'Registration failed.',
+        open: true,
+      }
+      setSnackBarData(data);
     }
-  
-    // Passwords match, proceed with the form submission
-    const emptyFieldsArray = formData.fieldsArray.map(field => ({ ...field, value: '' }));
-    setFormData({ ...formData, fieldsArray: emptyFieldsArray });
-    dispatch(registerRequest(payload));
-  
-    // Redirect to login page 
-    navigate('/loginF'); 
-   }
+  };
 
+  const closeSnakBar = () => {
+    setOpenSnackBar(false)
+  }
   function onChange(data) {
     onChangeValueBind(formData, data);
   }
@@ -63,7 +85,10 @@ const RegisterForm = () => {
           </Grid>
 
         </div>
-
+        {openSnackBar && <SnackbarView {...snackBarData} onClose={closeSnakBar}/> }
+        {showLoader &&
+          <Loader />
+        }
       </Container>
     </>
   )

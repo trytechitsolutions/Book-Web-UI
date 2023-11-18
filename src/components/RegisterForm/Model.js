@@ -9,7 +9,7 @@ export const registrationForm = {
         {
         type: "text",
         label: "Full Name",
-        name: "fullName",
+        name: "full_name",
         rules: [{ required: true, message: 'Please enter full name' }],
         placeholder: "Full Name",
         xs: 24,
@@ -23,7 +23,7 @@ export const registrationForm = {
     {
         type: "text",
         label: "Company Name",
-        name: "companyName",
+        name: "company_name",
         rules: [{ required: true, message: 'Please enter Company name' }],
         placeholder: "Company Name",
         xs: 24,
@@ -37,7 +37,7 @@ export const registrationForm = {
     {
         type: "text",
         label: "Store Name",
-        name: "storeName",
+        name: "store_name",
         rules: [{ required: true, message: 'Please enter Store name' }],
         placeholder: "Store Name",
         xs: 24,
@@ -51,7 +51,7 @@ export const registrationForm = {
     {
         type: "phonenumber",
         label: "Contact Number*",
-        name: "contactNumber",
+        name: "contact_number",
         rules: [
             { required: true, message: 'Please enter contact number' },
             { validator: validatePhoneNumber }
@@ -85,7 +85,7 @@ export const registrationForm = {
        {
         type: "dropdown",
         label: "Business Category",
-        name: "businessCategory",
+        name: "business_category",
         rules: [
             { required: true, message: 'Please choose Business Category!' },
         ],
@@ -122,7 +122,7 @@ export const registrationForm = {
     {
         type: "password",
         label: "Confirm Password",
-        name: "confirmPassword",
+        name: "confirm_password",
         rules: [
             { required: true, message: 'Please enter Confirm Password' },
             { validator: (_, value) => validateConfirmPassword(_, value, registrationForm.fieldsArray) },
