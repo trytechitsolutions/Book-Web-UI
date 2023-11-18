@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { registrationForm } from './Model';
 import InputFields from '../ReusableComponents/InputFields';
-import { Container, Grid, Typography } from '@mui/material';
+import { Button, Container, Grid, Typography } from '@mui/material';
 import { onChangeValueBind, preparePayLoad } from '../ReusableComponents/CommonFunctions';
 import { useDispatch } from 'react-redux';
 import { registerRequest } from '../Redux/Reducer/RegisterReducer';
@@ -16,6 +16,7 @@ const RegisterForm = () => {
   const dispatch = useDispatch();
   const [data, setData] = useState([]);
   const navigate = useNavigate();
+  const [page, setPage] = useState("Register");
 
 
   const registerData = GetStoreData('RegisterReducer')?.registerData;
@@ -44,8 +45,17 @@ const RegisterForm = () => {
     dispatch(registerRequest(payload));
   
     // Redirect to login page 
-    navigate('/loginF'); 
+    navigate('/login'); 
    }
+
+
+   useEffect(() => {
+    if (page === 'Login') {
+      navigate('/login');
+    } else if (page === 'Register') {
+      navigate('/register');  
+    }
+  }, [page]);
 
   function onChange(data) {
     onChangeValueBind(formData, data);
@@ -60,6 +70,11 @@ const RegisterForm = () => {
           </Typography>
           <Grid item xs={24} sm={16} md={12} lg={13} style={{ marginTop: "20px" }}>
             <InputFields ref={ChildRef} modaldata={formData}  onChange={onChange} submitFormData={submitFormData} />
+            <Typography variant="h6" align="center" style={{ marginTop: '5rem' }}>
+            Clik here<Button type="link" onClick={() => setPage(page === "Login" ? "Register" : "Login")} >
+                {page === "Login" ? "Register" : "Login"}
+              </Button>
+          </Typography>
           </Grid>
 
         </div>

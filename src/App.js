@@ -3,7 +3,6 @@ import React, { lazy } from 'react';
 import { Routes, Route, Navigate, BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux'; // Import Provider
 import Header from './components/common/Header';
-import Login from './components/LoginF';
 import store from './components/Redux/store';
 import Profile from './components/profile';
 import Categories from './components/Categories';
@@ -15,6 +14,7 @@ import Books from './components/Books';
 import PublisherComponent from './components/publisher';
 import KycForm from './components/KYC-Form';
 import RegisterForm from './components/RegisterForm';
+import Login from './components/LoginFom';
 
 // ... (your existing imports)
 
@@ -51,11 +51,11 @@ function App() {
         {checkAuthentication() && <Header items={menuItems} />}
         <Routes>
 
-        <Route path="/loginF" element={<Login/>} />
+        <Route path="/login" element={<Login/>} />
         <Route path="/register" element={<RegisterForm />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/category" element={<Categories/>} />
-        <Route path="/kyc-form" element={<KycForm/>}   />
+        <Route path="/kyc_form" element={<KycForm/>}   />
         <Route path="/components"  element={<Components />} />
         <Route path="/roles" element={<Roles/>} />
         <Route path="/store-form" element={<StoreFrom />} />

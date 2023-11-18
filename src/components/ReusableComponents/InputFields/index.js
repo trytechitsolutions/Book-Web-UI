@@ -433,26 +433,6 @@ const InputFields = forwardRef((props, ref) => {
                     </RadioGroup>
                   </FormControl>
                 )}
-               {/* {ele.type === 'checkbox' && (
-                <FormControl component="fieldset">
-                 <FormLabel component="legend">{ele.label}</FormLabel>
-                <FormGroup>
-                  {ele.options.map((option, j) => (
-                    <FormControlLabel
-                    key={j}
-                  control={
-                  <Checkbox
-                checked={formData[ele.name] && formData[ele.name].includes(option.value)}
-              onChange={(e) => handleCheckboxChange(ele.name, option.value, e.target.checked)}
-            />
-          }
-          label={option.label}
-        />
-      ))}
-    </FormGroup>
-  </FormControl>
-)} */}
-
                 {ele.type === 'file' && (
                   <FormControl fullWidth  >
                     <Input
@@ -504,8 +484,11 @@ const InputFields = forwardRef((props, ref) => {
                 variant={ele.type}
                 disabled={ele.loading}
                 onClick={() => handlButton(ele.fun)}
-                style={ele.style}
+                style={{ marginTop: '10px', ...ele.style }} 
+                className={ele.style}
               >
+                
+              
                 {ele.name}
               </Button>
             </Grid>

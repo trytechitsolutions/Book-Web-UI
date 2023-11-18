@@ -28,26 +28,28 @@ const Login = () => {
       const registerPassword = registerData[0]?.password;
         const payload = preparePayLoad(formData.fieldsArray);
       const loginPassword = formData.fieldsArray[1].value;
-        // Dispatch the login request
+      
       
         // Check if the registration password matches the login password
-  if (registerPassword === loginPassword) {         
+  if (loginPassword !== registerPassword ) {         
     
-    dispatch(loginRequest(payload));      
-    navigate('/profile '); 
+    alert('Passwords do not match. Please try again.');
+
         } else {
-          alert('Passwords do not match. Please try again.');
+          dispatch(loginRequest(payload));      
+          navigate('/profile '); 
         }
       }
       
-      // useEffect(() => {
-      //   // Assuming you have a route for '/profile'
-      //   if (page !== 'Login') {
-      //     // Redirect to a different page (replace '/profile' with the desired path)
-      //     navigate('/loginF');  
-      //   }
-      // }, [page]);
-
+      useEffect(() => {
+        if (page === 'Login') {
+          // Redirect to the login page
+          navigate('/login');
+        } else if (page === 'Register') {
+          // Redirect to the registration page
+          navigate('/register');  // Replace '/register' with the desired path for registration
+        }
+      }, [page]);
 
 
     
@@ -67,7 +69,7 @@ const Login = () => {
             <Grid item xs={24} sm={16} md={12} lg={13} style={{ marginTop: "20px" }} >
             
          <InputFields ref={ChildRef} modaldata={formData} onChange={onChange} submitFormData={submitFormData} />
-         <Typography variant="h6" align="center" style={{ marginTop: '10rem' }}>
+         <Typography variant="h6" align="center" style={{ marginTop: '3rem' }}>
          Clik here<Button type="link" onClick={() => setPage(page === "Login" ? "Register" : "Login")} >
                 {page === "Login" ? "Register" : "Login"}
               </Button>
@@ -78,5 +80,7 @@ const Login = () => {
     </>  
   )
 }
+
+
 
 export default Login ; 
