@@ -1,29 +1,29 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    kycData: [],
+    brandsData: [],
 };
 
-const kycSlice = createSlice({
-    name: "kyc",
+const brandsSlice = createSlice({
+    name: "brands",
     initialState,
     reducers: {
-        KycRequest: (state) => {
+        BrandsRequest: (state) => {
             alert("reducer called");
             state.isLoading = true;
         },
-        KycSuccess: (state, action) => {
+        BrandsSuccess: (state, action) => {
             alert(action.type)
             state.isLoading = false;
-            state.kycData =[ ...state.kycData, action.payload];
+            state.brandsData =[ ...state.brandsData, action.payload];
             state.error = null;
         },
-        KycFail: (state, action) => {
+        BrandsFail: (state, action) => {
             state.isLoading = false;
             state.error = action.payload;
         },
     },
 });
 
-export const { KycRequest, KycSuccess, KycFail } = kycSlice.actions;
-export default kycSlice.reducer;
+export const { BrandsRequest, BrandsSuccess, BrandsFail } = brandsSlice.actions;
+export default brandsSlice.reducer;

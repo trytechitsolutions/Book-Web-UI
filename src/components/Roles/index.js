@@ -56,7 +56,7 @@ const onEdit = (data) =>{
         {!showForm && (
           <Grid item xs={24} sm={16} md={12} lg={13} style={{ marginTop: '20px', marginBottom:'2rem', float:'right' }}>
             <Button variant="contained" onClick={handleAddNewItem}>
-              Add New Item
+              Add New  Role
             </Button>
           </Grid>
         )}
@@ -70,7 +70,7 @@ const onEdit = (data) =>{
           <GenericTable data={data} columns={columns} onEdit={onEdit} onDelete={null} />
         ) : (
           <Typography variant="h6" align="center" style={{ marginTop: '10rem' }}>
-            No data available. Please add new items.
+            No data available. Please add new  Role.
           </Typography>
         )}
     </Container>

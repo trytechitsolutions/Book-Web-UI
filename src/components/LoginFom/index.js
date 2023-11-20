@@ -69,7 +69,7 @@ const Login = () => {
       navigate('/login');
     } else if (page === 'Register') {
       // Redirect to the registration page
-      navigate('/register');  // Replace '/register' with the desired path for registration
+      navigate('/register');  
     }
   }, [page]);
 
