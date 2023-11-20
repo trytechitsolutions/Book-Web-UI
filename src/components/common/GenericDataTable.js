@@ -36,7 +36,17 @@ const GenericTable = ({ data, columns, onEdit, onDelete }) => {
         setSelectedItemId(null);
         setDeleteDialogOpen(false);
     };
-
+    const renderTableCell = (row, columnId) => {
+        if (columnId === "file") {
+          // Assuming row.file contains the file path or URL
+          return <img style={{height:'5rem'}} src={row.file} alt="File" />;
+        } else if(typeof row[columnId] === 'boolean'){
+         return row[columnId] ? 'Active' : 'Inactive';
+        } else {
+          return row[columnId];
+        }
+      };
+      
     return (
         <div>
             <TableContainer component={Paper}>
@@ -53,9 +63,8 @@ const GenericTable = ({ data, columns, onEdit, onDelete }) => {
                         {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
                             <TableRow key={row.id}>
                                 {columns.map((column) => (
-                                    <TableCell key={column.id}>{typeof row[column.id] === 'boolean'
-                                        ? row[column.id] ? 'Active' : 'Inactive'
-                                        : row[column.id]}</TableCell>
+                                    <TableCell  key={column.id}>{renderTableCell(row, column.id)}</TableCell>
+
                                 ))}
                                 <TableCell>
                                     <IconButton color="primary" onClick={() => handleEdit(row.id)}>

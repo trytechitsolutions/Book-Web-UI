@@ -9,15 +9,18 @@ import {brandsForm} from './model';
 import { BrandsRequest } from '../Redux/Reducer/BrandsReducer';
 import { apiRequest } from '../../services/api';
 import * as securedLocalStorage from '../../services/secureLocalStorage';
+import Loader from '../common/Loader';
+import SnackbarView from '../common/SnackBar';
 
 
 
 
 const columns = [
-    { id: 'brand', label: 'Brand' },
-    { id : 'uploadFile' , label : 'Brand Logo' },
-    { id :'is_active', label:'Status'}
-  ];
+  { id: 'id', label: 'ID' },
+  { id: 'name', label: 'Brand Name' },
+  { id: 'file', label: 'Brand Logo' },
+  { id: 'is_active', label: 'Status' }
+];
 
 const Brands = () => {
     const ChildRef = useRef();
@@ -37,9 +40,17 @@ const Brands = () => {
 
     useEffect(() => {
       // Fetch data from the Redux store once when the component mounts
-      setData(brandsData);
-    }, [brandsData]);
+      async function  fetchData(){
+      const resp = await apiRequest(null, serverUrl + "/preference/brand ", 'get');
+      setShowLoader(false);
+      if (resp?.data?.data) {
+      setData(resp.data.data);
 
+       }
+      }
+      fetchData()
+    }, [brandsData]);
+  
     
   
     const submitFormData = async () => {
@@ -65,9 +76,12 @@ console.log("formDataToSend,", formDataToSend)
           type: "success",
           message: "Brand added  sucessfully!....",
           open: true
+          
         }
 
         setSnackBarData(data);
+        setShowForm(false); // Hide the form after submission
+
       } else {
         setOpenSnackBar(true);
         const data = {
@@ -78,7 +92,6 @@ console.log("formDataToSend,", formDataToSend)
         setSnackBarData(data);
       }
     
-      setShowForm(false); // Hide the form after submission
     }
   
     function onChange(data) {
@@ -89,6 +102,13 @@ console.log("formDataToSend,", formDataToSend)
       setShowForm(true);
     };
     const onEdit=(id)=>{
+console.log(id,'***Id****')
+const selectedRecord = data.find((d)=>d.id===id);
+setFormData(selectedRecord)
+setShowForm(true);
+    }
+    const closeSnakBar = () => {
+      setOpenSnackBar(false)
     }
   
     return (
@@ -117,6 +137,10 @@ console.log("formDataToSend,", formDataToSend)
               No data available. Please add new Brand.
             </Typography>
           )}
+           {openSnackBar && <SnackbarView {...snackBarData} onClose={closeSnakBar}/> }
+        {showLoader &&
+          <Loader />
+        }
       </Container>
     );
 }
