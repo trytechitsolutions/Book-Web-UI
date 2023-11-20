@@ -4,8 +4,8 @@ export const brandsForm = {
     fieldsArray: [ 
         {
             type: "text",
-            label: "Brand",
-            name: "brand",
+            label: "Brand Name",
+            name: "name",
             rules: [{ required: true, message: 'Please enter Brand' }],
             placeholder: "Brand",
             xs: 24,
@@ -20,7 +20,7 @@ export const brandsForm = {
             type : "file",
             label: "Upload File",
             name: "uploadFile",
-            rules: [{  message: 'Please upload Upload File' }],
+            rules: [{required: true,   message: 'Please upload Upload File' }],
             placeholder: "Upload File",
             xs: 24,
             sm: 16,

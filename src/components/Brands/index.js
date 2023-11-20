@@ -7,6 +7,9 @@ import { GetStoreData } from '../ReusableComponents/ReduxActions';
 import GenericTable from '../common/GenericDataTable';
 import {brandsForm} from './model';
 import { BrandsRequest } from '../Redux/Reducer/BrandsReducer';
+import { apiRequest } from '../../services/api';
+import * as securedLocalStorage from '../../services/secureLocalStorage';
+
 
 
 
@@ -23,6 +26,12 @@ const Brands = () => {
     const dispatch = useDispatch();
     const [data, setData] = useState([])
 
+
+    const serverUrl = securedLocalStorage.baseUrl;
+  const [openSnackBar, setOpenSnackBar] = React.useState(false);
+  const [snackBarData, setSnackBarData] = React.useState();
+  const [showLoader, setShowLoader] = React.useState(false);
+
     const brandsData = GetStoreData('BrandsReducer')?.brandsData;
 
 
@@ -30,15 +39,45 @@ const Brands = () => {
       // Fetch data from the Redux store once when the component mounts
       setData(brandsData);
     }, [brandsData]);
+
+    
   
-    function submitFormData() {
+    const submitFormData = async () => {
       const payload = preparePayLoad(formData.fieldsArray);
       const isFileExist = formData.fieldsArray.filter((f)=> f.type==="file");
+      console.log('payload', payload);
+      console.log('fileexist', isFileExist);
       if(isFileExist){
-      payload.file = isFileExist[0].value;
+      payload.logo = isFileExist[0].value;
       setFormData({ ...formData });
       }
-      dispatch(BrandsRequest(payload));
+      let formDataToSend = new FormData();
+      for (const key in payload) {
+          formDataToSend.append(key, payload[key]);
+      }
+console.log("formDataToSend,", formDataToSend)
+      // dispatch(BrandsRequest(payload));
+      const resp = await apiRequest(formDataToSend, serverUrl + "/preference/brand ", 'post');
+      setShowLoader(false);
+      if (resp?.data?.data) {
+        setOpenSnackBar(true);
+        const data = {
+          type: "success",
+          message: "Brand added  sucessfully!....",
+          open: true
+        }
+
+        setSnackBarData(data);
+      } else {
+        setOpenSnackBar(true);
+        const data = {
+          type: "error",
+          message: 'Brand added failed.',
+          open:true
+        }
+        setSnackBarData(data);
+      }
+    
       setShowForm(false); // Hide the form after submission
     }
   
