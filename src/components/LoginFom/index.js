@@ -22,10 +22,12 @@ const Login = () => {
   const submitFormData = async () => {
     try {
       setShowLoader(true);
-      let paylaod = preparePayLoad(formData.fieldsArray)
-      const resp = await apiRequest(paylaod, serverUrl + "/auth/signin/admin ", 'post');
+      let paylaod = preparePayLoad(formData.fieldsArray);
+      securedLocalStorage.remove('token');
+      const resp = await apiRequest(paylaod, serverUrl + "/auth/signin/admin", 'post');
       setShowLoader(false);
       if (resp?.data?.data) {
+        securedLocalStorage.set('token', resp?.data?.data.token)
         setOpenSnackBar(true);
         const data = {
           type: "success",
