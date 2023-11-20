@@ -27,7 +27,7 @@ const Brands = () => {
     const [data, setData] = useState([])
 
 
-    const serverUrl = securedLocalStorage.baseUrl;
+  const serverUrl = securedLocalStorage.baseUrl;
   const [openSnackBar, setOpenSnackBar] = React.useState(false);
   const [snackBarData, setSnackBarData] = React.useState();
   const [showLoader, setShowLoader] = React.useState(false);

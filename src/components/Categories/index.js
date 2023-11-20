@@ -6,7 +6,9 @@ import { onChangeValueBind, preparePayLoad } from '../ReusableComponents/CommonF
 import { useDispatch } from 'react-redux';
 import { GetStoreData } from '../ReusableComponents/ReduxActions';
 import GenericTable from '../common/GenericDataTable';
-import { CategoriesRequest } from '../Redux/Reducer/CategoriesReducer';
+import { apiRequest } from '../../services/api';
+import * as securedLocalStorage from '../../services/secureLocalStorage';
+
 
 const Categories = () => {
   const ChildRef = useRef();
@@ -15,10 +17,15 @@ const Categories = () => {
   const dispatch = useDispatch();
   const [data, setData] = useState([]);
 
+  const serverUrl = securedLocalStorage.baseUrl;
+  const [openSnackBar, setOpenSnackBar] = React.useState(false);
+  const [snackBarData, setSnackBarData] = React.useState();
+  const [showLoader, setShowLoader] = React.useState(false);
+
   const columns = [
     { id: 'title', label: 'Title' },
-    { id: 'parentCategory', label: 'Parent Category' },
-    { id: 'uploadFile', label: 'Files' },
+    { id: 'parent_category', label: 'Parent Category' },
+    { id: 'upload_file', label: 'Files' },
 
   ];
 
@@ -29,14 +36,42 @@ const Categories = () => {
     setData(categoriesData);
   }, [categoriesData]);
 
-  function submitFormData() {
+  const submitFormData = async () => {
     const payload = preparePayLoad(formData.fieldsArray);
     const isFileExist = formData.fieldsArray.filter((f)=> f.type==="file");
+    console.log('payload', payload);
+    console.log('fileexist', isFileExist);
     if(isFileExist){
-    payload.file = isFileExist[0]?.value;
+    payload.logo = isFileExist[0].value;
     setFormData({ ...formData });
     }
-    dispatch(CategoriesRequest(payload));
+    let formDataToSend = new FormData();
+    for (const key in payload) {
+        formDataToSend.append(key, payload[key]);
+    }
+console.log("formDataToSend,", formDataToSend)
+    // dispatch(BrandsRequest(payload));
+    const resp = await apiRequest(formDataToSend, serverUrl + "/preference/categories ", 'post');
+    setShowLoader(false);
+    if (resp?.data?.data) {
+      setOpenSnackBar(true);
+      const data = {
+        type: "success",
+        message: "Categories added  sucessfully!....",
+        open: true
+      }
+
+      setSnackBarData(data);
+    } else {
+      setOpenSnackBar(true);
+      const data = {
+        type: "error",
+        message: 'Categories added failed.',
+        open:true
+      }
+      setSnackBarData(data);
+    }
+  
     setShowForm(false); // Hide the form after submission
   }
 

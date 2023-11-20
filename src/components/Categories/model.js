@@ -19,7 +19,7 @@ export const categoriesForm = {
         {
             type: "dropdown",
             label: "Parent Category",
-            name: "parentCategory",
+            name: "parent_category",
             rules: [
                 { required: true,  message: 'Please choose Parent Category!' },
             ],
@@ -39,7 +39,7 @@ export const categoriesForm = {
         {
             type : "file",
             label: "Upload File",
-            name: "uploadFile",
+            name: "upload_file",
             rules: [{ required: true, message: 'Please upload Upload File' }],
             placeholder: "Upload File",
             xs: 24,
