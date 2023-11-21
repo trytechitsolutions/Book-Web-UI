@@ -5,7 +5,7 @@ export const categoriesForm = {
         {
             type: "text",
             label: "Category Title",
-            name: "title",
+            name: "name",
             rules: [{ required: true, message: 'Please enter Category Title' }],
             placeholder: "Category Title",
             xs: 24,
@@ -19,7 +19,7 @@ export const categoriesForm = {
         {
             type: "dropdown",
             label: "Parent Category",
-            name: "parent_category",
+            name: "parent_id",
             rules: [
                 { required: true,  message: 'Please choose Parent Category!' },
             ],
@@ -49,6 +49,22 @@ export const categoriesForm = {
             labelCol: "",
             wrapperCol: "",
             value: "",
+        },
+        {
+            type: "checkbox",
+            // label: "Active",
+            name: "is_active",
+            rules: [{ required: false, message: 'Please choose Active!' }],
+            xs: 12, // Adjust the xs, sm, md, lg values as needed
+            sm: 12,
+            md: 12,
+            lg: 12,
+            labelCol: "",
+            wrapperCol: "",
+            value: false, // Update with the selected value ("on" or "off")
+            options: [
+                { value: "is_active", label: "Active" },
+            ],
         },
     ],
     buttonSecction: {

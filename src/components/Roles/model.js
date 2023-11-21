@@ -4,8 +4,8 @@ export const rolesForm = {
     fieldsArray: [ 
         {
             type: "text",
-            label: "Role",
-            name: "role",
+            label: "name",
+            name: "name",
             rules: [{ required: true, message: 'Please enter Role' }],
             placeholder: "Role",
             xs: 24,

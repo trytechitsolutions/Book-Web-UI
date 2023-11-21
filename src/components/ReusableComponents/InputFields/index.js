@@ -356,17 +356,17 @@ const InputFields = forwardRef((props, ref) => {
                {ele.type === 'dropdown' && (
                  <div>
                  <FormControl fullWidth variant='outlined'>
-                 <InputLabel>{ele.label}</InputLabel>
+                 <InputLabel>{ele.name}</InputLabel>
                      <Select
                        native
                        value={formData[ele.name] || ''}
                        onChange={(e) => handleInputChange(ele.name, ele.type, e.target.value)}
-                       label={ele.label}
+                       label={ele.name}
                       >
                   <option value=""></option>
                    {ele.options.map((option, j) => (
                   <option key={j} value={option.id}>
-                   {option.value}
+                   {option.name}
                   </option>
                  ))}
                   </Select>

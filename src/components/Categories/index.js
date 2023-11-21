@@ -23,9 +23,10 @@ const Categories = () => {
   const [showLoader, setShowLoader] = React.useState(false);
 
   const columns = [
-    { id: 'title', label: 'Title' },
-    { id: 'parent_category', label: 'Parent Category' },
-    { id: 'upload_file', label: 'Files' },
+    { id: 'name', label: 'Title' },
+    { id: 'parent_id', label: 'Parent Category' },
+    { id: 'file', label: 'Files' },
+    { id :'is_active', label:'Status'}
 
   ];
 
@@ -33,9 +34,22 @@ const Categories = () => {
 
   useEffect(() => {
     // Fetch data from the Redux store once when the component mounts
-    setData(categoriesData);
-  }, [categoriesData]);
-
+    async function  fetchData(){
+      const resp = await apiRequest(null, serverUrl + "preference/category", 'get');
+      setShowLoader(false);
+      if (resp?.data?.data) {
+      setData(resp.data.data);
+formData.fieldsArray.map( (f)=>{
+    if (f.name === "parent_id" ) {
+      f.options=resp.data.data    
+    }
+})
+   setFormData(formData)
+       }
+      }
+      fetchData()
+  },[showForm] );
+console.log(formData)
   const submitFormData = async () => {
     const payload = preparePayLoad(formData.fieldsArray);
     const isFileExist = formData.fieldsArray.filter((f)=> f.type==="file");
@@ -51,7 +65,7 @@ const Categories = () => {
     }
 console.log("formDataToSend,", formDataToSend)
     // dispatch(BrandsRequest(payload));
-    const resp = await apiRequest(formDataToSend, serverUrl + "/preference/categories ", 'post');
+    const resp = await apiRequest(formDataToSend, serverUrl + "preference/category ", 'post');
     setShowLoader(false);
     if (resp?.data?.data) {
       setOpenSnackBar(true);

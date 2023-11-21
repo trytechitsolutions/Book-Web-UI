@@ -5,8 +5,12 @@ import { onChangeValueBind, preparePayLoad } from '../ReusableComponents/CommonF
 import { useDispatch } from 'react-redux';
 import { GetStoreData } from '../ReusableComponents/ReduxActions';
 import GenericTable from '../common/GenericDataTable';
-import { RolesRequest } from '../Redux/Reducer/RolesReducer';
 import { rolesForm } from './model';
+import { apiRequest } from '../../services/api';
+import * as securedLocalStorage from '../../services/secureLocalStorage';
+import Loader from '../common/Loader';
+import SnackbarView from '../common/SnackBar';
+
 
 const Roles = () => {
   const ChildRef = useRef();
@@ -15,8 +19,16 @@ const Roles = () => {
   const dispatch = useDispatch();
   const [data, setData] = useState([]);
 
+
+
+  const serverUrl = securedLocalStorage.baseUrl;
+  const [openSnackBar, setOpenSnackBar] = React.useState(false);
+  const [snackBarData, setSnackBarData] = React.useState();
+  const [showLoader, setShowLoader] = React.useState(false);
+
+
   const columns = [
-    { id: 'role', label: 'Role' },
+    { id: 'name', label: 'Role' },
     { id :'is_active', label:'Status'}
   ];
 
@@ -29,16 +41,49 @@ const onEdit = (data) =>{
 
   useEffect(() => {
     // Fetch data from the Redux store once when the component mounts
-    setData(rolesData);
-  }, [rolesData]);
+    async function  fetchData(){
+      const resp = await apiRequest(null, serverUrl + "/preference/roles ", 'get');
+      setShowLoader(false);
+      if (resp?.data?.data) {
+      setData(resp.data.data);
+       }
+      }   fetchData()
+   
+  }, [showForm]);
 
-  function submitFormData() {
+  const submitFormData = async () => {
     const payload = preparePayLoad(formData.fieldsArray);
-    setFormData({ ...formData });
-    dispatch(RolesRequest(payload));
-    setShowForm(false); // Hide the form after submission
+    console.log('payload', payload);
+    
+   
+    const resp = await apiRequest(payload, serverUrl + "/preference/roles ", 'post');
+    setShowLoader(false);
+    if (resp?.data?.data) {
+      setOpenSnackBar(true);
+      const data = {
+        type: "success",
+        message: "Role added  sucessfully!....",
+        open: true
+      }
+
+      setSnackBarData(data);
+      setShowForm(false);
+    } else {
+      setOpenSnackBar(true);
+      const data = {
+        type: "error",
+        message: 'Role added failed.',
+        open:true
+      }
+      setSnackBarData(data);
+    }
+  
+    // setShowForm(false); // Hide the form after submission
   }
 
+  const closeSnakBar = () => {
+    setOpenSnackBar(false)
+  }
   function onChange(data) {
     onChangeValueBind(formData, data);
   }
@@ -73,6 +118,10 @@ const onEdit = (data) =>{
             No data available. Please add new  Role.
           </Typography>
         )}
+         {openSnackBar && <SnackbarView {...snackBarData} onClose={closeSnakBar}/> }
+        {showLoader &&
+          <Loader />
+        }
     </Container>
   );
 };
