@@ -19,7 +19,7 @@ export const brandsForm = {
         {
             type : "file",
             label: "Upload File",
-            name: "uploadFile",
+            name: "file",
             rules: [{required: true,   message: 'Please upload Upload File' }],
             placeholder: "Upload File",
             xs: 24,
@@ -52,7 +52,7 @@ export const brandsForm = {
    
         buttons: [
             {type: "contained", colour: "primary", name: "Add", fun: "submit" ,
-            style: { marginTop: '20px' } }
+            }
            
         ]
     }
