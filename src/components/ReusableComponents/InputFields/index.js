@@ -19,7 +19,7 @@ import {
   FormLabel,
   FormGroup,
 } from '@mui/material';
-  
+
 
 
 
@@ -56,17 +56,21 @@ const InputFields = forwardRef((props, ref) => {
     let obj = { name, type, value };
     onChange(obj, index);
   };
-  
 
 
 
-// console.log(props, '****props***')
+
+  // console.log(props, '****props***')
   const bindValues = useCallback(() => {
     const initialValues = {};
     modaldata.fieldsArray.forEach((field) => {
+      if ((field.name === 'file') && field.value) {
+        setImagePreview(field.value);
+      }
       initialValues[field.name] = field.value || '';
     });
     setInitialValues(initialValues);
+    setFormData(initialValues)
   }, [modaldata.fieldsArray]);
 
   useImperativeHandle(ref, () => ({
@@ -88,9 +92,9 @@ const InputFields = forwardRef((props, ref) => {
       ...formData,
       [name]: file, // Update the form data with the selected file
     });
-  
+
     setSelectedFile(file);
-  
+
     // Create a preview URL for the selected file
     if (file) {
       const previewURL = URL.createObjectURL(file);
@@ -107,7 +111,7 @@ const InputFields = forwardRef((props, ref) => {
     let obj = { name, type, value: file }; // Pass 'file' as the value
     onChange(obj, index);
   };
-  
+
 
   const validateForm = () => {
     // Iterate through form data and perform validation
@@ -166,7 +170,6 @@ const InputFields = forwardRef((props, ref) => {
   useEffect(() => {
     bindValues();
   }, [bindValues])
-
   return (
     <Container>
       {modaldata.fieldsArray &&
@@ -175,134 +178,134 @@ const InputFields = forwardRef((props, ref) => {
             {modaldata.fieldsArray.map((ele, i) => (
               <Grid item xs={ele.xs} sm={ele.sm} md={ele.md} lg={ele.lg} key={i}>
                 {/* <Grid item xs={12} sm={6} md={4} lg={3} key={i}> */}
-             {ele.type === 'text' && (
-                <div>
-                  <TextField
-                    label={ele.label}
-                    name={ele.name}
-                    fullWidth
-                    variant='outlined'
-                    value={formData[ele.name] || ''}
-                    onChange={(e) => handleInputChange(ele.name, ele.type, e.target.value)}
-                    required={ele.required}
-                  />
-                  {validationMessages[ele.name] && (
-                    <Typography variant="caption" color="error">
-                      {validationMessages[ele.name]}
-                    </Typography>
-                  )}
-                </div>
-              )}
- 
-             {ele.type === 'text-area' && (
-              <div>
-              <TextField
-                 label={ele.label}
-                 name={ele.name}
-                 fullWidth
-                 variant='outlined'
-                 multiline
-                 minRows={2}
-                //  maxRows={8}
-                 placeholder={ele.label}
-                 value={formData[ele.name] || ''}
-                 onChange={(e) => handleInputChange(ele.name, ele.type, e.target.value)}
-                 required={ele.required}
-              />
-              {validationMessages[ele.name] && (
-              <Typography variant="caption" color="error">
-               {validationMessages[ele.name]}
-              </Typography>
-                 )}
-               </div>
-               )}
-                {ele.type === 'email' && (
-                 <div>
-               <TextField
-              label={ele.label}
-              fullWidth
-              variant='outlined'
-               placeholder={ele.placeholder}
-                InputProps={{
-                 startAdornment: (
-                 <InputAdornment position="start">
-                 <AccountCircle />
-                </InputAdornment>
-                ),
-                }}
-                 value={formData[ele.name] || ''}
-                  onChange={(e) => handleInputChange(ele.name, ele.type, e.target.value)}
-                 required={ele.required}
-                  />
-                  {validationMessages[ele.name] && (
-                   <Typography variant="caption" color="error">
-                    {validationMessages[ele.name]}
-                  </Typography>
-                   )}
-                </div>
+                {ele.type === 'text' && (
+                  <div>
+                    <TextField
+                      label={ele.label}
+                      name={ele.name}
+                      fullWidth
+                      variant='outlined'
+                      value={formData[ele.name] || ''}
+                      onChange={(e) => handleInputChange(ele.name, ele.type, e.target.value)}
+                      required={ele.required}
+                    />
+                    {validationMessages[ele.name] && (
+                      <Typography variant="caption" color="error">
+                        {validationMessages[ele.name]}
+                      </Typography>
                     )}
-          {ele.type === 'password' && (
-            <div>
-               <TextField
-               label={ele.label}
-               name={ele.name}
-               fullWidth
-               variant='outlined'
-               type='password'
-               value={formData[ele.name] || ''}
-               onChange={(e) => handleInputChange(ele.name, ele.type, e.target.value)}
-               required={ele.required}
-             />
-             {validationMessages[ele.name] && (
-             <Typography variant="caption" color="error">
-              {validationMessages[ele.name]}
-             </Typography>
+                  </div>
                 )}
-               </div>
-               )}
-              {ele.type === 'number' && (
-               <div>
-                <TextField
-                  label={ele.label}
-                  fullWidth
-                  type="number"
-                  placeholder={ele.placeholder}
-                  value={formData[ele.name] || ''}
-                 onChange={(e) => handleInputChange(ele.name, ele.type, e.target.value)}
-                  required={ele.required}
-                  />
-                {validationMessages[ele.name] && (
-                 <Typography variant="caption" color="error">
-                    {validationMessages[ele.name]}
-                 </Typography>
-                  )}
-                </div>
-                 )}
+
+                {ele.type === 'text-area' && (
+                  <div>
+                    <TextField
+                      label={ele.label}
+                      name={ele.name}
+                      fullWidth
+                      variant='outlined'
+                      multiline
+                      minRows={2}
+                      //  maxRows={8}
+                      placeholder={ele.label}
+                      value={formData[ele.name] || ''}
+                      onChange={(e) => handleInputChange(ele.name, ele.type, e.target.value)}
+                      required={ele.required}
+                    />
+                    {validationMessages[ele.name] && (
+                      <Typography variant="caption" color="error">
+                        {validationMessages[ele.name]}
+                      </Typography>
+                    )}
+                  </div>
+                )}
+                {ele.type === 'email' && (
+                  <div>
+                    <TextField
+                      label={ele.label}
+                      fullWidth
+                      variant='outlined'
+                      placeholder={ele.placeholder}
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <AccountCircle />
+                          </InputAdornment>
+                        ),
+                      }}
+                      value={formData[ele.name] || ''}
+                      onChange={(e) => handleInputChange(ele.name, ele.type, e.target.value)}
+                      required={ele.required}
+                    />
+                    {validationMessages[ele.name] && (
+                      <Typography variant="caption" color="error">
+                        {validationMessages[ele.name]}
+                      </Typography>
+                    )}
+                  </div>
+                )}
+                {ele.type === 'password' && (
+                  <div>
+                    <TextField
+                      label={ele.label}
+                      name={ele.name}
+                      fullWidth
+                      variant='outlined'
+                      type='password'
+                      value={formData[ele.name] || ''}
+                      onChange={(e) => handleInputChange(ele.name, ele.type, e.target.value)}
+                      required={ele.required}
+                    />
+                    {validationMessages[ele.name] && (
+                      <Typography variant="caption" color="error">
+                        {validationMessages[ele.name]}
+                      </Typography>
+                    )}
+                  </div>
+                )}
+                {ele.type === 'number' && (
+                  <div>
+                    <TextField
+                      label={ele.label}
+                      fullWidth
+                      type="number"
+                      placeholder={ele.placeholder}
+                      value={formData[ele.name] || ''}
+                      onChange={(e) => handleInputChange(ele.name, ele.type, e.target.value)}
+                      required={ele.required}
+                    />
+                    {validationMessages[ele.name] && (
+                      <Typography variant="caption" color="error">
+                        {validationMessages[ele.name]}
+                      </Typography>
+                    )}
+                  </div>
+                )}
                 {ele.type === 'phonenumber' && (
-                <div>
-                 <TextField
-                  label={ele.label}
-                   fullWidth
-                   type="number" // 'tel' type is often used for phone numbers
-                   placeholder={ele.placeholder}
-                   InputProps={{
-                   startAdornment: (
-                 <InputAdornment position="start">
-                    <Phone />
-                 </InputAdornment>
-                   ),
-                }}
-                 value={formData[ele.name] || ''}
-                 onChange={(e) => handleInputChange(ele.name, ele.type, e.target.value)}
-                 required={ele.required}
-                 />
-                 {validationMessages[ele.name] && (
-                 <Typography variant="caption" color="error">
-                  {validationMessages[ele.name]}
-                 </Typography>
+                  <div>
+                    <TextField
+                      label={ele.label}
+                      fullWidth
+                      type="number" // 'tel' type is often used for phone numbers
+                      placeholder={ele.placeholder}
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <Phone />
+                          </InputAdornment>
+                        ),
+                      }}
+                      value={formData[ele.name] || ''}
+                      onChange={(e) => handleInputChange(ele.name, ele.type, e.target.value)}
+                      required={ele.required}
+                    />
+                    {validationMessages[ele.name] && (
+                      <Typography variant="caption" color="error">
+                        {validationMessages[ele.name]}
+                      </Typography>
+                    )}
+                  </div>
                 )}
-               </div>
-               )}
                 {ele.type === 'accountnumber' && (
                   <TextField
                     label={ele.label}
@@ -344,7 +347,7 @@ const InputFields = forwardRef((props, ref) => {
                         key={index}
                         control={
                           <Checkbox
-                            checked={formData[ele.name] && formData[ele.name].includes(option.value)}
+                            checked={(formData[ele.name] || []).includes(option.value)}
                             onChange={(e) => handleCheckboxChange(ele.name, option.value, e.target.checked)}
                           />
                         }
@@ -353,31 +356,31 @@ const InputFields = forwardRef((props, ref) => {
                     ))}
                   </FormControl>
                 )}
-               {ele.type === 'dropdown' && (
-                 <div>
-                 <FormControl fullWidth variant='outlined'>
-                 <InputLabel>{ele.name}</InputLabel>
-                     <Select
-                       native
-                       value={formData[ele.name] || ''}
-                       onChange={(e) => handleInputChange(ele.name, ele.type, e.target.value)}
-                       label={ele.name}
+                {ele.type === 'dropdown' && (
+                  <div>
+                    <FormControl fullWidth variant='outlined'>
+                      <InputLabel>{ele.name}</InputLabel>
+                      <Select
+                        native
+                        value={formData[ele.name] || ''}
+                        onChange={(e) => handleInputChange(ele.name, ele.type, e.target.value)}
+                        label={ele.name}
                       >
-                  <option value=""></option>
-                   {ele.options.map((option, j) => (
-                  <option key={j} value={option.id}>
-                   {option.name}
-                  </option>
-                 ))}
-                  </Select>
-                  {validationMessages[ele.name] && (
-                    <Typography variant="caption" color="error">
-                       {validationMessages[ele.name]}
-                    </Typography>
-                   )}
-                 </FormControl>
-                    </div>
-                 )}
+                        <option value=""></option>
+                        {ele.options.map((option, j) => (
+                          <option key={j} value={option.id}>
+                            {option.name}
+                          </option>
+                        ))}
+                      </Select>
+                      {validationMessages[ele.name] && (
+                        <Typography variant="caption" color="error">
+                          {validationMessages[ele.name]}
+                        </Typography>
+                      )}
+                    </FormControl>
+                  </div>
+                )}
 
                 {ele.type === 'day' && (
                   <FormControl fullWidth>
@@ -441,14 +444,14 @@ const InputFields = forwardRef((props, ref) => {
                       id={`upload-button-${ele.name}`}
                       type="file"
                       multiple={ele.multiple}
-                      onChange={(e)=>handleFileChange(ele.name, ele.type, e)}
+                      onChange={(e) => handleFileChange(ele.name, ele.type, e)}
 
                     />
                     {validationMessages[ele.name] && (
-                    <Typography variant="caption" color="error">
-                      {validationMessages[ele.name]}
-                    </Typography>
-                  )}
+                      <Typography variant="caption" color="error">
+                        {validationMessages[ele.name]}
+                      </Typography>
+                    )}
                     <label htmlFor={`upload-button-${ele.name}`}>
                       <Button
                         variant="contained"
@@ -484,11 +487,11 @@ const InputFields = forwardRef((props, ref) => {
                 variant={ele.type}
                 disabled={ele.loading}
                 onClick={() => handlButton(ele.fun)}
-                style={{ marginTop: '10px', ...ele.style }} 
+                style={{ marginTop: '10px', ...ele.style }}
                 className={ele.style}
               >
-                
-              
+
+
                 {ele.name}
               </Button>
             </Grid>

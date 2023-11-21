@@ -50,33 +50,46 @@ export const onChangeValueBind = (formdata, data) => {
         matchingElement.value = dateFormat(data.value);
     }
 }
+export const mapValuesToForm = (jsonData, formConfig) => {
+    const mappedForm = { ...formConfig }; // Create a copy of the formConfig
+    mappedForm.fieldsArray = mappedForm.fieldsArray.map(field => {
+        const fieldName = field.name;
+        if (jsonData.hasOwnProperty(fieldName)) {
+            field.value = jsonData[fieldName];
+        }
+
+        return field;
+    });
+
+    return mappedForm;
+}
 
 
 export const preparePayLoad = (arr) => {
     let obj = {};
     // let formData = new FormData();
-  
+
     arr.forEach((ele) => {
-      if (ele.type !== "file") {
-    //     if (ele.value && ele.value.length > 0) {
-    //       ele.value.forEach((file) => {
-    //         formData.append(ele.name, file.originFileObj);
-    //       });
-    //     }
-    //   } else {
-        obj[ele.name] = ele.value;
-        if (ele.type === "phonenumber") {
-          obj[ele.name] = ele.value?.toString();
-        // }
-        // formData.append(ele.name, ele.value);
-      }
-    }
+        if (ele.type !== "file") {
+            //     if (ele.value && ele.value.length > 0) {
+            //       ele.value.forEach((file) => {
+            //         formData.append(ele.name, file.originFileObj);
+            //       });
+            //     }
+            //   } else {
+            obj[ele.name] = ele.value;
+            if (ele.type === "phonenumber") {
+                obj[ele.name] = ele.value?.toString();
+                // }
+                // formData.append(ele.name, ele.value);
+            }
+        }
     });
     // formData.append('payload', JSON.stringify(obj));
     // return {obj: obj, formData: formData};
     return obj;
-  };
-  
+};
+
 export const getErrorMsg = (res) => {
     if (typeof res.response.data.error == "string") {
         return res.response.data.error;
@@ -109,14 +122,14 @@ export const upDateForm = (reset, formdata, obj) => {
 
 export const validateField = (value, rules) => {
     for (const rule of rules) {
-      if (rule.required && !value) {
-        return { isValid: false, message: rule.message || 'This field is required.' };
-      }
-  
-      // Add more validation rules as needed
-      // Example: if (rule.min && value.length < rule.min) { /* return error message */ }
-      // Example: if (rule.type === 'email' && !isValidEmail(value)) { /* return error message */ }
+        if (rule.required && !value) {
+            return { isValid: false, message: rule.message || 'This field is required.' };
+        }
+
+        // Add more validation rules as needed
+        // Example: if (rule.min && value.length < rule.min) { /* return error message */ }
+        // Example: if (rule.type === 'email' && !isValidEmail(value)) { /* return error message */ }
     }
-  
+
     return { isValid: true, message: '' }; // No validation errors
-  };
+};
