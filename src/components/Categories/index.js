@@ -8,6 +8,8 @@ import { GetStoreData } from '../ReusableComponents/ReduxActions';
 import GenericTable from '../common/GenericDataTable';
 import { apiRequest } from '../../services/api';
 import * as securedLocalStorage from '../../services/secureLocalStorage';
+import SnackbarView from '../common/SnackBar';
+import Loader from '../common/Loader';
 
 
 const Categories = () => {
@@ -96,7 +98,9 @@ console.log("formDataToSend,", formDataToSend)
   const handleAddNewItem = () => {
     setShowForm(true);
   };
-
+  const closeSnakBar = () => {
+    setOpenSnackBar(false)
+  }
   return (
     <Container>
       <div>
@@ -123,6 +127,10 @@ console.log("formDataToSend,", formDataToSend)
             No data available. Please add new Category.
           </Typography>
         )}
+       {openSnackBar && <SnackbarView {...snackBarData} onClose={closeSnakBar}/> }
+        {showLoader &&
+          <Loader />
+        }
     </Container>
   );
 };
