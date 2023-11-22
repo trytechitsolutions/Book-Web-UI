@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Container, Grid, Typography, Button } from '@mui/material';
 import InputFields from '../ReusableComponents/InputFields';
 import { categoriesForm } from './model';
-import { onChangeValueBind, preparePayLoad } from '../ReusableComponents/CommonFunctions';
+import { mapValuesToForm, onChangeValueBind, preparePayLoad } from '../ReusableComponents/CommonFunctions';
 import { useDispatch } from 'react-redux';
 import { GetStoreData } from '../ReusableComponents/ReduxActions';
 import GenericTable from '../common/GenericDataTable';
@@ -20,9 +20,11 @@ const Categories = () => {
   const [data, setData] = useState([]);
 
   const serverUrl = securedLocalStorage.baseUrl;
+  const [selectedId, setSelectedId] = React.useState(null)
   const [openSnackBar, setOpenSnackBar] = React.useState(false);
   const [snackBarData, setSnackBarData] = React.useState();
   const [showLoader, setShowLoader] = React.useState(false);
+  const categoriesData = GetStoreData('CategoriesReducer')?.categoriesData;
 
   const columns = [
     { id: 'name', label: 'Title' },
@@ -32,7 +34,6 @@ const Categories = () => {
 
   ];
 
-  const categoriesData = GetStoreData('CategoriesReducer')?.categoriesData;
 
   useEffect(() => {
     // Fetch data from the Redux store once when the component mounts
@@ -41,17 +42,17 @@ const Categories = () => {
       setShowLoader(false);
       if (resp?.data?.data) {
       setData(resp.data.data);
-formData.fieldsArray.map( (f)=>{
+  formData.fieldsArray.map( (f)=>{
     if (f.name === "parent_id" ) {
       f.options=resp.data.data    
     }
-})
+  })
    setFormData(formData)
        }
       }
       fetchData()
   },[showForm] );
-console.log(formData)
+   console.log(formData)
   const submitFormData = async () => {
     const payload = preparePayLoad(formData.fieldsArray);
     const isFileExist = formData.fieldsArray.filter((f)=> f.type==="file");
@@ -87,17 +88,46 @@ console.log("formDataToSend,", formDataToSend)
       }
       setSnackBarData(data);
     }
-  
-    setShowForm(false); // Hide the form after submission
+  setShowForm(false); // Hide the form after submission
   }
-
   function onChange(data) {
     onChangeValueBind(formData, data);
   }
-
   const handleAddNewItem = () => {
     setShowForm(true);
   };
+  const onEdit = (id) => {
+    setSelectedId(id);
+    const selectedRecord = data.find((d) => d.id === id);
+    const updateForm = mapValuesToForm(selectedRecord, formData);
+    setFormData((prevFormData) => {
+      return updateForm;
+    });
+    setShowForm(true);
+   }
+   const onDelete = async (id) => {
+   const resp = await apiRequest(null, serverUrl + "/preference/category/"+id, 'delete');
+    setShowLoader(false);
+    if (resp?.data?.data) {
+      setOpenSnackBar(true);
+      const data = {
+        type: "success",
+        message: "category deleted  sucessfully!....",
+        open: true
+      }
+    setSelectedId(null)
+      setSnackBarData(data);
+      setShowForm(false); // Hide the form after submission
+    } else {
+      setOpenSnackBar(true);
+      const data = {
+        type: "error",
+        message: 'category deleted failed.',
+        open: true
+      }
+      setSnackBarData(data);
+    }
+    }
   const closeSnakBar = () => {
     setOpenSnackBar(false)
   }
@@ -121,7 +151,7 @@ console.log("formDataToSend,", formDataToSend)
         )}
       </div>
       {data?.length > 0 ? (
-          <GenericTable data={data} columns={columns} onEdit={null} onDelete={null} />
+          <GenericTable data={data} columns={columns} onEdit={onEdit} onDelete={onDelete} />
         ) : (
           <Typography variant="h6" align="center" style={{ marginTop: '10rem' }}>
             No data available. Please add new Category.

@@ -44,3 +44,15 @@ export const rolesForm = {
         ]
     }
 }
+
+
+
+// async function fetchData() {
+//     const resp = await apiRequest(null, serverUrl + "/preference/brand/:id ", 'put');
+//     setShowLoader(false);
+//     if (resp?.data?.data) {
+//       setData(resp.data.data);
+
+//     }
+//   }
+//   fetchData()

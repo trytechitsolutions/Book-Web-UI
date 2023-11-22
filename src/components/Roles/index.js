@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Container, Grid, Typography, Button } from '@mui/material';
 import InputFields from '../ReusableComponents/InputFields';
-import { onChangeValueBind, preparePayLoad } from '../ReusableComponents/CommonFunctions';
+import { mapValuesToForm, onChangeValueBind, preparePayLoad } from '../ReusableComponents/CommonFunctions';
 import { useDispatch } from 'react-redux';
 import { GetStoreData } from '../ReusableComponents/ReduxActions';
 import GenericTable from '../common/GenericDataTable';
@@ -25,6 +25,8 @@ const Roles = () => {
   const [openSnackBar, setOpenSnackBar] = React.useState(false);
   const [snackBarData, setSnackBarData] = React.useState();
   const [showLoader, setShowLoader] = React.useState(false);
+  const [selectedId, setSelectedId] = React.useState(null)
+
 
 
   const columns = [
@@ -35,14 +37,11 @@ const Roles = () => {
 const rolesData = GetStoreData('RolesReducer')?.rolesData;
 
 
-const onEdit = (data) =>{
-  console.log(data)
-}
 
   useEffect(() => {
     // Fetch data from the Redux store once when the component mounts
     async function  fetchData(){
-      const resp = await apiRequest(null, serverUrl + "/preference/roles ", 'get');
+      const resp = await apiRequest(null, serverUrl + "/preference/role", 'get');
       setShowLoader(false);
       if (resp?.data?.data) {
       setData(resp.data.data);
@@ -53,10 +52,15 @@ const onEdit = (data) =>{
 
   const submitFormData = async () => {
     const payload = preparePayLoad(formData.fieldsArray);
-    console.log('payload', payload);
     
-   
-    const resp = await apiRequest(payload, serverUrl + "/preference/roles ", 'post');
+    let formDataToSend = new FormData();
+    if (selectedId) {
+      payload.id = selectedId
+    } 
+    for (const key in payload) {
+      formDataToSend.append(key, payload[key]);
+    }
+    const resp = await apiRequest(payload, serverUrl + "/preference/role", 'post');
     setShowLoader(false);
     if (resp?.data?.data) {
       setOpenSnackBar(true);
@@ -80,7 +84,40 @@ const onEdit = (data) =>{
   
     // setShowForm(false); // Hide the form after submission
   }
-
+  const onEdit = (id) => {
+    setSelectedId(id);
+    const selectedRecord = data.find((d) => d.id === id);
+    const updateForm = mapValuesToForm(selectedRecord, formData);
+  
+    setFormData((prevFormData) => {
+      return updateForm;
+    });
+  
+    setShowForm(true);
+  }
+  const onDelete = async (id) => {
+    const resp = await apiRequest(null, serverUrl + "/preference/role/"+id, 'delete');
+    setShowLoader(false);
+    if (resp?.data?.data) {
+      setOpenSnackBar(true);
+      const data = {
+        type: "success",
+        message: "Role deleted  sucessfully!....",
+        open: true
+      }
+    setSelectedId(null)
+      setSnackBarData(data);
+      setShowForm(false); // Hide the form after submission 
+    } else {
+      setOpenSnackBar(true);
+      const data = {
+        type: "error",
+        message: 'Role delete failed.',
+        open: true
+      }
+      setSnackBarData(data);
+    }  
+  }
   const closeSnakBar = () => {
     setOpenSnackBar(false)
   }
@@ -112,7 +149,7 @@ const onEdit = (data) =>{
         )}
       </div>
       {data?.length > 0 ? (
-          <GenericTable data={data} columns={columns} onEdit={onEdit} onDelete={null} />
+          <GenericTable data={data} columns={columns} onEdit={onEdit} onDelete={onDelete} />
         ) : (
           <Typography variant="h6" align="center" style={{ marginTop: '10rem' }}>
             No data available. Please add new  Role.

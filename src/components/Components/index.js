@@ -2,11 +2,16 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Container, Grid, Typography, Button } from '@mui/material';
 import InputFields from '../ReusableComponents/InputFields';
 import { componentsForm } from './model';
-import { onChangeValueBind, preparePayLoad } from '../ReusableComponents/CommonFunctions';
+import { mapValuesToForm, onChangeValueBind, preparePayLoad } from '../ReusableComponents/CommonFunctions';
 import { useDispatch } from 'react-redux';
 import { GetStoreData } from '../ReusableComponents/ReduxActions';
-import { ComponentsRequest } from '../Redux/Reducer/ComponentsReducer';
 import GenericTable from '../common/GenericDataTable';
+import { apiRequest } from '../../services/api';
+import * as securedLocalStorage from '../../services/secureLocalStorage';
+import Loader from '../common/Loader';
+import SnackbarView from '../common/SnackBar';
+
+
 
 const Components = () => {
   const ChildRef = useRef();
@@ -21,24 +26,53 @@ const Components = () => {
     { id: 'is_active', label: 'Status' }
   ];
 
+
+  const serverUrl = securedLocalStorage.baseUrl;
+  const [openSnackBar, setOpenSnackBar] = React.useState(false);
+  const [snackBarData, setSnackBarData] = React.useState();
+  const [showLoader, setShowLoader] = React.useState(false);
+  const [selectedId, setSelectedId] = React.useState(null)
   const componentsData = GetStoreData('ComponentsReducer')?.componentsData;
 
   useEffect(() => {
     // Fetch data from the Redux store once when the component mounts
-    setData(componentsData);
-  }, [componentsData]);
-
-  function submitFormData() {
-    const payload = preparePayLoad(formData.fieldsArray);
-    const isFileExist = formData.fieldsArray.filter((f)=> f.type==="file");
-    if(isFileExist){
-    payload.file = isFileExist[0].value;
-    setFormData({ ...formData });
+    async function fetchData() {
+      const resp = await apiRequest(null, serverUrl + "preference/components", 'get');
+      setShowLoader(false);
+      if (resp?.data?.data) {
+        setData(resp.data.data);
+      }
     }
-    dispatch(ComponentsRequest(payload));
-    setShowForm(false); // Hide the form after submission
-  }
+    fetchData()
+  }, [showForm]);
 
+  const submitFormData = async () => {
+    const payload = preparePayLoad(formData.fieldsArray);
+    console.log('payload', payload);   
+    const resp = await apiRequest(payload, serverUrl + "preference/components", 'post');
+    setShowLoader(false);
+    if (resp?.data?.data) {
+      setOpenSnackBar(true);
+      const data = {
+        type: "success",
+        message: "Component added  sucessfully!....",
+        open: true
+      }
+      setSnackBarData(data);
+      setShowForm(false);
+     } else {
+      setOpenSnackBar(true);
+      const data = {
+        type: "error",
+        message: 'Component added failed.',
+        open:true
+      }
+      setSnackBarData(data);
+    }
+  }
+  const closeSnakBar = () => {
+    setOpenSnackBar(false)
+  }
   function onChange(data) {
     onChangeValueBind(formData, data);
   }
@@ -46,8 +80,40 @@ const Components = () => {
   const handleAddNewItem = () => {
     setShowForm(true);
   };
-  const onEdit=(id)=>{
-  }
+  const onEdit = (id) => {
+    setSelectedId(id);
+    const selectedRecord = data.find((d) => d.id === id);
+    const updateForm = mapValuesToForm(selectedRecord, formData);
+  
+    setFormData((prevFormData) => {
+      return updateForm;
+    });
+  
+    setShowForm(true);
+   }
+   const onDelete = async (id) => {
+    const resp = await apiRequest(null, serverUrl + "preference/component/"+id, 'delete');
+    setShowLoader(false);
+    if (resp?.data?.data) {
+      setOpenSnackBar(true);
+      const data = {
+        type: "success",
+        message: "Brand added  sucessfully!....",
+        open: true
+      }
+    setSelectedId(null)
+      setSnackBarData(data);
+      setShowForm(false); // Hide the form after submission
+    } else {
+      setOpenSnackBar(true);
+      const data = {
+        type: "error",
+        message: 'Brand added failed.',
+        open: true
+      }
+      setSnackBarData(data);
+    }
+    }
 
   return (
     <Container>
@@ -69,12 +135,16 @@ const Components = () => {
         )}
       </div>
       {data?.length > 0 ? (
-          <GenericTable data={data} columns={columns} onEdit={onEdit} onDelete={null} />
+          <GenericTable data={data} columns={columns} onEdit={onEdit} onDelete={onDelete} />
         ) : (
           <Typography variant="h6" align="center" style={{ marginTop: '10rem' }}>
             No data available. Please add new Component.
           </Typography>
         )}
+          {openSnackBar && <SnackbarView {...snackBarData} onClose={closeSnakBar}/> }
+        {showLoader &&
+          <Loader />
+        }
     </Container>
   );
 };

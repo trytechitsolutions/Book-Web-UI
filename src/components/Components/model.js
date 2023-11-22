@@ -36,13 +36,13 @@ export const componentsForm = {
             // label: "Active",
             name: "is_active",
             rules: [{ required: false, message: 'Please choose Active!' }],
-            xs: 12, // Adjust the xs, sm, md, lg values as needed
+            xs: 12,
             sm: 12,
             md: 12,
             lg: 12,
             labelCol: "",
             wrapperCol: "",
-            value: false, // Update with the selected value ("on" or "off")
+            value: false,
             options: [
                 { value: "is_active", label: "Active" },
             ],

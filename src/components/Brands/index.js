@@ -19,6 +19,7 @@ const columns = [
   { id: 'is_active', label: 'Status' }
 ];
 
+
 const Brands = () => {
   const ChildRef = useRef();
   const [showForm, setShowForm] = useState(false);
@@ -38,7 +39,7 @@ const Brands = () => {
   useEffect(() => {
     // Fetch data from the Redux store once when the component mounts
     async function fetchData() {
-      const resp = await apiRequest(null, serverUrl + "/preference/brand ", 'get');
+      const resp = await apiRequest(null, serverUrl + "/preference/brand", 'get');
       setShowLoader(false);
       if (resp?.data?.data) {
         setData(resp.data.data);
@@ -46,7 +47,7 @@ const Brands = () => {
       }
     }
     fetchData()
-  }, [brandsData]);
+  }, [showForm]);
 
 
 
@@ -58,16 +59,13 @@ const Brands = () => {
       setFormData({ ...formData });
     }
     let formDataToSend = new FormData();
+    if (selectedId) {
+      payload.id = selectedId
+    } 
     for (const key in payload) {
       formDataToSend.append(key, payload[key]);
     }
-    let resp;
-    // dispatch(BrandsRequest(payload));
-    if (selectedId) {
-      // edit
-    } else {
-      resp = await apiRequest(formDataToSend, serverUrl + "/preference/brand ", 'post');
-    }
+     const resp = await apiRequest(formDataToSend, serverUrl + "/preference/brand", 'post');
     setShowLoader(false);
     if (resp?.data?.data) {
       setOpenSnackBar(true);
@@ -75,12 +73,10 @@ const Brands = () => {
         type: "success",
         message: "Brand added  sucessfully!....",
         open: true
-
       }
-
+  setSelectedId(null)
       setSnackBarData(data);
       setShowForm(false); // Hide the form after submission
-
     } else {
       setOpenSnackBar(true);
       const data = {
@@ -92,26 +88,49 @@ const Brands = () => {
     }
 
   }
-
   function onChange(data) {
     onChangeValueBind(formData, data);
   }
-
   const handleAddNewItem = () => {
     setShowForm(true);
   };
   const onEdit = (id) => {
-    setSelectedId(id);
-    const selectedRecord = data.find((d) => d.id === id);
-    const updateForm = mapValuesToForm(selectedRecord, formData);
+  setSelectedId(id);
+  const selectedRecord = data.find((d) => d.id === id);
+  const updateForm = mapValuesToForm(selectedRecord, formData);
 
-    setFormData((prevFormData) => {
-      return updateForm;
-    });
+  setFormData((prevFormData) => {
+    return updateForm;
+  });
 
-    setShowForm(true);
+  setShowForm(true);
+ }
+ const onDelete = async (id) => {
+
+  const resp = await apiRequest(null, serverUrl + "/preference/brand/"+id, 'delete');
+  setShowLoader(false);
+  if (resp?.data?.data) {
+    setOpenSnackBar(true);
+    const data = {
+      type: "success",
+      message: "Brand added  sucessfully!....",
+      open: true
+    }
+  setSelectedId(null)
+    setSnackBarData(data);
+    setShowForm(false); // Hide the form after submission
+
+  } else {
+    setOpenSnackBar(true);
+    const data = {
+      type: "error",
+      message: 'Brand added failed.',
+      open: true
+    }
+    setSnackBarData(data);
   }
 
+  }
   const closeSnakBar = () => {
     setOpenSnackBar(false)
   }
@@ -135,7 +154,7 @@ const Brands = () => {
         )}
       </div>
       {data?.length > 0 ? (
-        <GenericTable data={data} columns={columns} onEdit={onEdit} onDelete={null} />
+        <GenericTable data={data} columns={columns} onEdit={onEdit} onDelete={onDelete} />
       ) : (
         <Typography variant="h6" align="center" style={{ marginTop: '10rem' }}>
           No data available. Please add new Brand.
