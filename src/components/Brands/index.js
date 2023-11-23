@@ -106,7 +106,6 @@ const Brands = () => {
   setShowForm(true);
  }
  const onDelete = async (id) => {
-
   const resp = await apiRequest(null, serverUrl + "/preference/brand/"+id, 'delete');
   setShowLoader(false);
   if (resp?.data?.data) {

@@ -34,7 +34,7 @@ const UserSignUp = () => {
     const submitFormData = async () => {
       const payload = preparePayLoad(formData.fieldsArray);
       console.log('payload', payload);   
-      const resp = await apiRequest(payload, serverUrl + "preference/user_sign_up" , 'post' );
+      const resp = await apiRequest(payload, serverUrl + "preference/users" , 'post' );
       setShowLoader(false);
       if (resp?.data?.data) {
         setOpenSnackBar(true);
