@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Container, Grid, Typography, Button } from '@mui/material';
 import InputFields from '../ReusableComponents/InputFields';
-import { componentsForm } from './model';
 import { mapValuesToForm, onChangeValueBind, preparePayLoad } from '../ReusableComponents/CommonFunctions';
 import { useDispatch } from 'react-redux';
 import { GetStoreData } from '../ReusableComponents/ReduxActions';
@@ -10,15 +9,22 @@ import { apiRequest } from '../../services/api';
 import * as securedLocalStorage from '../../services/secureLocalStorage';
 import Loader from '../common/Loader';
 import SnackbarView from '../common/SnackBar';
+import { userForm } from '../CustomerUserSignUp/mode';
 
 
 
 const Components = () => {
   const ChildRef = useRef();
   const [showForm, setShowForm] = useState(false);
-  const [formData, setFormData] = useState(componentsForm);
+  const [formData, setFormData] = useState(userForm);
   const dispatch = useDispatch();
   const [data, setData] = useState([]);
+  const serverUrl = securedLocalStorage.baseUrl;
+  const [openSnackBar, setOpenSnackBar] = React.useState(false);
+  const [snackBarData, setSnackBarData] = React.useState();
+  const [showLoader, setShowLoader] = React.useState(false);
+  const [selectedId, setSelectedId] = React.useState(null)
+  const userData = GetStoreData('UserSignUpReducer')?.userData;
 
   const columns = [
     { id: 'title', label: 'Title' },
@@ -26,14 +32,7 @@ const Components = () => {
     { id: 'is_active', label: 'Status' }
   ];
 
-
-  const serverUrl = securedLocalStorage.baseUrl;
-  const [openSnackBar, setOpenSnackBar] = React.useState(false);
-  const [snackBarData, setSnackBarData] = React.useState();
-  const [showLoader, setShowLoader] = React.useState(false);
-  const [selectedId, setSelectedId] = React.useState(null)
-  const componentsData = GetStoreData('ComponentsReducer')?.componentsData;
-
+ 
   useEffect(() => {
     // Fetch data from the Redux store once when the component mounts
     async function fetchData() {
@@ -150,3 +149,9 @@ const Components = () => {
 };
 
 export default Components;
+
+
+
+
+
+
