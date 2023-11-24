@@ -56,11 +56,6 @@ const InputFields = forwardRef((props, ref) => {
     let obj = { name, type, value };
     onChange(obj, index);
   };
-
-
-
-
-  // console.log(props, '****props***')
   const bindValues = useCallback(() => {
     const initialValues = {};
     modaldata.fieldsArray.forEach((field) => {
@@ -149,21 +144,28 @@ const InputFields = forwardRef((props, ref) => {
 
   //checkbox
 
-  const handleCheckboxChange = (name, optionValue, checked) => {
-    // If formData[name] doesn't exist, create it as an empty array
-    formData[name] = formData[name] || [];
-
-    if (checked) {
-      // Add the checked option to the array
-      formData[name].push(optionValue);
-    } else {
-      // Remove the unchecked option from the array
-      formData[name] = formData[name].filter((value) => value !== optionValue);
-    }
-
-    // Call your general handleInputChange function
+  const handleCheckboxChange = (name, optionValue, type, checked) => {
+    // Use the setFormData function to update the state
+    setFormData((prevFormData) => {
+      // If formData[name] doesn't exist, create it as an empty array
+      const updatedFormData = { ...prevFormData, [name]: prevFormData[name] || [] };
+  
+      if (checked) {
+        // Add the checked option to the array
+        updatedFormData[name].push(optionValue);
+      } else {
+        // Remove the unchecked option from the array
+        updatedFormData[name] = updatedFormData[name].filter((value) => value !== optionValue);
+      }
+  
+      return updatedFormData;
+    });
+    let obj = { name, type, value:checked };
+    onChange(obj, index);
+    // Call your general handleInputChange function if needed
     // handleInputChange(name, formData[name]);
   };
+  
 
   //checkbox
 
@@ -348,7 +350,7 @@ const InputFields = forwardRef((props, ref) => {
                         control={
                           <Checkbox
                             checked={(formData[ele.name] || []).includes(option.value)}
-                            onChange={(e) => handleCheckboxChange(ele.name, option.value, e.target.checked)}
+                            onChange={(e) => handleCheckboxChange(ele.name, option.value, ele.type, e.target.checked)}
                           />
                         }
                         label={option.label}

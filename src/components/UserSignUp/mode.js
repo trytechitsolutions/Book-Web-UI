@@ -126,3 +126,93 @@ export const userForm = {
     
     }
 }
+export const userDataEditForm = {
+    formlayout: "vertical",
+    fieldsArray: [
+        {
+            type: "text",
+            label: "First Name*",
+            name: "first_name",
+            rules: [{ required: true, message: 'Please enter First name' }],
+            placeholder: "First Name",
+            xs: 24,
+            sm: 6,
+            md: 6,
+            lg: 6,
+            labelCol: "",
+            wrapperCol: "",
+            value: "",
+        },
+        {
+            type: "text",
+            label: "Last Name*",
+            name: "last_name",
+            rules: [{ required: true, message: 'Please enter Last name' }],
+            placeholder: "Last Name",
+            xs: 24,
+            sm: 6,
+            md: 6,
+            lg: 6,
+            labelCol: "",
+            wrapperCol: "",
+            value: "",
+        },
+        {
+            type: "email",
+            label: "Email Address*",
+            name: "email",
+            rules: [
+                { required: true, message: 'Please enter email' },
+                { type: 'email', message: 'Please enter a valid email' },
+            ],
+            placeholder: "Email",
+            xs: 24,
+            sm: 16,
+            md: 24,
+            lg: 24,
+            labelCol: "",
+            wrapperCol: "",
+            value: "",
+           },
+           {
+            type: "phonenumber",
+            label: "Contact Number*",
+            name: "contact_number",
+            rules: [
+                { required: true, message: 'Please enter contact number' },
+                { validator: validatePhoneNumber }
+            ],
+            placeholder: "Contact Number",
+            xs: 24,
+            sm: 16,
+            md: 24,
+            lg: 24,
+            labelCol: "",
+            wrapperCol: "",
+            value: "",
+        } ,
+        {
+            type: "checkbox",
+            name: "is_active",
+            rules: [{ required: false, message: 'Please choose Active!' }],
+            xs: 12, 
+            sm: 12,
+            md: 12,
+            lg: 12,
+            labelCol: "",
+            wrapperCol: "",
+            value: false,
+            options: [
+                { value: "is_active", label: "User Status" },
+            ],
+        }  
+    ],
+    buttonSecction: { 
+        justify: "center",      
+        buttons: [
+            { type: "contained",colour: "primary", name: "Update", fun: "submit" ,
+            style: { marginTop: '20px' } , },
+        ],
+    
+    }
+}

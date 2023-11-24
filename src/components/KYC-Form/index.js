@@ -2,6 +2,11 @@ import React, { useState } from 'react';
 import FileUploadPreview from '../ReusableComponents/FileUploadPreview';
 import { makeStyles } from '@mui/styles';
 import { Button, Stack, Grid } from '@mui/material';
+// import StoreTimingsConfigurator from '../ReusableComponents/StoreTimings';
+import { apiRequest } from '../../services/api';
+import * as securedLocalStorage from '../../services/secureLocalStorage';
+import SnackbarView from '../common/SnackBar';
+import Loader from '../common/Loader';
 
 const useStyles = makeStyles((theme) => ({
   formContainer: {
@@ -31,6 +36,11 @@ const KycForm = () => {
   const [companyPAN, setCompanyPAN] = useState(null);
   const [gst, setGst] = useState(null);
 
+  const [openSnackBar, setOpenSnackBar] = React.useState(false);
+  const [snackBarData, setSnackBarData] = React.useState();
+  const [showLoader, setShowLoader] = React.useState(false);
+
+  const serverUrl = securedLocalStorage.baseUrl;
   const handleAadharCardChange = (file) => {
     setAadharCardFile(file);
   };
@@ -87,10 +97,30 @@ const KycForm = () => {
         formData.append(fieldName, file);
       }
     }
-    console.log('Form submitted:', formData);
-    handleReset();
+    const resp = await apiRequest(formData, serverUrl + "preference/kyc ", 'post');
+    setShowLoader(false);
+    if (resp?.data?.data) {
+      setOpenSnackBar(true);
+      const data = {
+        type: "success",
+        message: "Kyc documents uploaded sucessfully!....",
+        open: true
+      }
+      setSnackBarData(data);
+      handleReset();
+    } else {
+      setOpenSnackBar(true);
+      const data = {
+        type: "error",
+        message: 'Kyc documents upload failed.',
+        open:true
+      }
+      setSnackBarData(data);
+    }
   };
-
+  const closeSnakBar = () => {
+    setOpenSnackBar(false)
+  }
 
   return (
     <div className={classes.formContainer}>
@@ -124,7 +154,6 @@ const KycForm = () => {
         previewUrl={null}
         onRemove={() => onRemove('GST')}
       />
-
       <Grid container className={classes.buttonContainer} >
         <Stack spacing={2} direction="row">
           <Button variant="contained" color="primary" className={classes.button} onClick={handleSubmit}>
@@ -135,6 +164,10 @@ const KycForm = () => {
           </Button>
         </Stack>
       </Grid>
+      {openSnackBar && <SnackbarView {...snackBarData} onClose={closeSnakBar}/> }
+        {showLoader &&
+          <Loader />
+        }
     </div>
   );
 };
