@@ -9,14 +9,14 @@ import { apiRequest } from '../../services/api';
 import * as securedLocalStorage from '../../services/secureLocalStorage';
 import Loader from '../common/Loader';
 import SnackbarView from '../common/SnackBar';
-import { userForm } from '../CustomerUserSignUp/mode';
+import { componentsForm } from './model';
 
 
 
 const Components = () => {
   const ChildRef = useRef();
   const [showForm, setShowForm] = useState(false);
-  const [formData, setFormData] = useState(userForm);
+  const [formData, setFormData] = useState(componentsForm);
   const dispatch = useDispatch();
   const [data, setData] = useState([]);
   const serverUrl = securedLocalStorage.baseUrl;

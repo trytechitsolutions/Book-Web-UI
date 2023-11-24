@@ -4,8 +4,8 @@ import { Container, Typography } from '@mui/material';
 import { GetStoreData } from '../ReusableComponents/ReduxActions';
 import { apiRequest } from '../../services/api';
 import * as securedLocalStorage from '../../services/secureLocalStorage';
-import { userForm } from '../CustomerUserSignUp/mode';
 import { mapValuesToForm } from '../ReusableComponents/CommonFunctions';
+import { userForm } from '../UserSignUp/mode';
 
 
 

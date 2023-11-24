@@ -1,0 +1,262 @@
+/* import { Button, Container, Grid, InputAdornment, Stack, TextField, Typography } from '@mui/material'
+import React, { useEffect, useRef, useState } from 'react'
+import FileUploadPreview from '../ReusableComponents/FileUploadPreview';
+import { makeStyles } from '@mui/styles';
+// import './index.css';
+import InstagramIcon from '@mui/icons-material/Instagram';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
+import TwitterIcon from '@mui/icons-material/Twitter';
+import YouTubeIcon from '@mui/icons-material/YouTube';
+import PinterestIcon from '@mui/icons-material/Pinterest';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import StoreTimingsConfigurator from '../ReusableComponents/StoreTimings';
+
+const useStyles = makeStyles((theme) => ({
+  formContainer: {
+    maxWidth: '1000px',
+    margin: '0 auto',
+    padding: 8,
+    border: '1px solid #ccc',
+    borderRadius: 4,
+    marginTop: 12,
+  },
+  buttonContainer: {
+    marginTop: 16,
+    display: 'flex',
+    justifyContent: 'center',
+    gap: 8, // Add space between buttons
+  },
+  button: {
+    flex: 1,
+  },
+}));
+
+const Store = () => {
+  const classes = useStyles();
+  const [storeLogoFile, setStoreLogoFile] = useState(null);
+  const [storeFeviconFile, setStoreFeviconFile] = useState(null);
+  const [storeName, setStoreName] = useState('');
+  const [domain, setDomain] = useState('');
+  const [socialInstagram, setSocialInstagram] = useState('');
+  const [socialFacebook, setSocialFacebook] = useState('');
+  const [socialWhatsApp, setSocialWhatsApp] = useState('');
+  const [socialTwitter, setSocialTwitter] = useState('');
+  const [socialYouTube, setSocialYouTube] = useState('');
+  const [socialPinterest, setSocialPinterest] = useState('');
+  const [socialLinkedIn, setSocialLinkedIn] = useState('');
+  const [storeTimings, setStoreTimings] = useState([]);
+
+
+
+    const handleStoreLogoChange = (file) => {
+        setStoreLogoFile(file);
+      };   
+      const handleStoreFeviconChange = (file) => {
+        setStoreFeviconFile(file);
+      };
+      const handleReset = () => {
+        setStoreName('');
+        setDomain('');
+        setSocialInstagram('');
+        setSocialFacebook('');
+        setSocialWhatsApp('');
+        setSocialTwitter('');
+        setStoreLogoFile(null);
+        setStoreFeviconFile(null);
+        setStoreTimings([]);
+      };
+      const onRemove = (label) => {
+        if (label === 'Store Logo') {
+            setStoreLogoFile(null);
+        }
+        if (label === 'Store Fevicon') {
+            setStoreFeviconFile(null);
+        }
+      }
+      const handleSubmit = async () => {
+      const formData = new FormData();
+      const fileInputs = {
+        'store_name': storeName,
+        'store_logo': storeLogoFile,
+        'store_fevicon': storeFeviconFile,
+        'domain' : domain,
+        'social_instagram': socialInstagram,
+        'social_facebook': socialFacebook ,
+        'social_whatsapp': socialWhatsApp,
+        'social_twitter': socialTwitter,
+        'social_youtube': socialYouTube ,
+        'social_pinterest': socialPinterest,
+        'social_linkedin': socialLinkedIn,
+    };
+    for (const [fieldName, file] of Object.entries(fileInputs)) {
+      if (file) {
+        formData.append(fieldName, file);
+        console.log(formData)
+      }
+    }
+    console.log('Form submitted:', formData);
+    handleReset();
+    }
+
+    const onChangeAction = (data) => {
+      setStoreTimings(data);
+      console.log(data)
+     }
+
+  return (
+    <div className={classes.formContainer}>
+    <TextField
+          label="Store Name"
+          name="store_name"
+           fullWidth
+           required
+           sx={{ marginBottom: '10px' }} 
+           value={storeName}
+           onChange={(e) => setStoreName(e.target.value)}
+            /> 
+    <FileUploadPreview
+        label="Store Logo"
+        name="logo"
+        onFileChange={handleStoreLogoChange}
+        previewUrl={null}
+        onRemove={() => onRemove('Store Logo')}
+      />
+      <FileUploadPreview
+        label="Store Fevicon"
+        name="fevicon"
+        onFileChange={handleStoreFeviconChange}
+        previewUrl={null}
+        onRemove={() => onRemove('Store Fevicon')}
+      />   
+      <TextField
+        label="Domain"
+        name="domain"
+        fullWidth
+        required
+        sx={{ marginBottom: '10px' }}
+        value={domain}
+        onChange={(e) => setDomain(e.target.value)} 
+        />     
+    <TextField
+      label="Instagram"
+      name="social_instagram"
+      id="outlined-start-adornment"
+      sx={{ m: 1, width: '25ch' }}
+       InputProps={{
+        startAdornment: (
+          <InputAdornment position="start">
+            <InstagramIcon />
+          </InputAdornment>
+         ),
+        }}
+        value={socialInstagram}
+        onChange={(e) => setSocialInstagram(e.target.value)}
+       />
+      <TextField
+      label="Facebook"
+      name="social_facebook"
+      id="outlined-start-adornment"
+      sx={{ m: 1, width: '25ch' }}
+      InputProps={{
+        startAdornment: (
+          <InputAdornment position="start">
+            <FacebookIcon />
+          </InputAdornment>
+        ),
+       }}
+       value={socialFacebook}
+       onChange={(e) => setSocialFacebook(e.target.value)}
+       />
+      <TextField
+        label="WhatsApp"
+        name="social_whatsapp"
+        id="outlined-whatsapp-adornment"
+        sx={{ m: 1, width: '25ch' }}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <WhatsAppIcon />
+            </InputAdornment>
+          ),
+        }}
+        value={socialWhatsApp}
+        onChange={(e) => setSocialWhatsApp(e.target.value)}
+      />
+      <TextField
+        label="Twitter"
+        name="social_twitter"
+        id="outlined-twitter-adornment"
+        sx={{ m: 1, width: '25ch' }}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <TwitterIcon />
+            </InputAdornment>
+          ),
+        }}
+        value={socialTwitter}
+        onChange={(e) => setSocialTwitter(e.target.value)}
+      />
+      <TextField
+        label="YouTube"
+        name="social_youtube"
+        id="outlined-youtube-adornment"
+        sx={{ m: 1, width: '25ch' }}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <YouTubeIcon />
+            </InputAdornment>
+          ),
+        }}
+        value={socialYouTube}
+        onChange={(e) => setSocialYouTube(e.target.value)}
+      />
+      <TextField
+        label="Pinterest"
+        name="social_pinterest"
+        id="outlined-pinterest-adornment"
+        sx={{ m: 1, width: '25ch' }}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <PinterestIcon />
+            </InputAdornment>
+          ),
+        }}
+        value={socialPinterest}
+        onChange={(e) => setSocialPinterest(e.target.value)}
+      />
+      <TextField
+        label="LinkedIn"
+        name="social_linkedin"
+        id="outlined-linkedin-adornment"
+        sx={{ m: 1, width: '25ch' }}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <LinkedInIcon />
+            </InputAdornment>
+          ),
+        }}
+        value={socialLinkedIn}
+        onChange={(e) => setSocialLinkedIn(e.target.value)}
+      />
+     <StoreTimingsConfigurator onChangeAction={onChangeAction}/> 
+
+      <Grid container className={classes.buttonContainer} >
+      <Stack spacing={2} direction="row">
+          <Button variant="contained" color="primary" className={classes.button} onClick={handleSubmit}>
+            Submit
+          </Button>
+          <Button variant="outlined" color="secondary" className={classes.button} onClick={handleReset}>
+            Reset
+          </Button>
+        </Stack>
+      </Grid>
+    </div>
+     )
+}
+
+export default Store */

@@ -10,6 +10,7 @@ import RolesReducer from "./Reducer/RolesReducer";
 import KycReducer from "./Reducer/KycReducer";
 import BrandsReducer from "./Reducer/BrandsReducer";
 import UserSignUpReducer from "./Reducer/UserSignUpReducer";
+import StoreReducer from "./Reducer/StoreReducer";
 
 
 
@@ -28,6 +29,7 @@ const store = configureStore({
     KycReducer : KycReducer,
     BrandsReducer : BrandsReducer,
     UserSignUpReducer : UserSignUpReducer,
+    StoreReducer : StoreReducer,
 
   },
   middleware: [...getDefaultMiddleware({ thunk: false }), sagaMiddleware],
