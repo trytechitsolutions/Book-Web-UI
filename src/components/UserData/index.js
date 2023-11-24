@@ -30,7 +30,7 @@ const Users = () => {
     { id: 'last_name', label: 'Last Name' },
     { id: 'email', label: 'Email' },
     { id: 'contact_number', label: 'Contact Number' },
-    // { id: 'is_active', label: 'Status' },
+    { id: 'is_active', label: 'Status' },
   ];
 
 
@@ -60,7 +60,7 @@ const Users = () => {
     if(selectedId){
       payload.id = selectedId;
     }
-    const resp = await apiRequest(payload, serverUrl + "preference/users", 'post');
+    const resp = await apiRequest(payload, serverUrl + "preference/users", 'put');
     setShowLoader(false);
     if (resp?.data?.data) {
       setOpenSnackBar(true);
