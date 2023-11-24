@@ -4,7 +4,7 @@ import { Container, Grid, Typography } from '@mui/material';
 import { GetStoreData } from '../ReusableComponents/ReduxActions';
 import { apiRequest } from '../../services/api';
 import * as securedLocalStorage from '../../services/secureLocalStorage';
-import { userForm } from '../CustomerUserSignUp/mode';
+import { userDataEditForm } from '../CustomerUserSignUp/mode';
 import { mapValuesToForm, onChangeValueBind, preparePayLoad } from '../ReusableComponents/CommonFunctions';
 import InputFields from '../ReusableComponents/InputFields';
 
@@ -18,7 +18,7 @@ const Users = () => {
   const serverUrl = securedLocalStorage.baseUrl;
   const [showLoader, setShowLoader] = React.useState(false);
   const [showForm, setShowForm] = useState(false);
-  const [formData, setFormData] = useState(userForm);
+  const [formData, setFormData] = useState(userDataEditForm);
   const [openSnackBar, setOpenSnackBar] = React.useState(false);
   const [snackBarData, setSnackBarData] = React.useState();
   const [selectedId, setSelectedId] = React.useState(null)
@@ -57,7 +57,6 @@ const Users = () => {
   }
   const submitFormData = async () => {
     const payload = preparePayLoad(formData.fieldsArray);
-    console.log('payload', payload);
     if(selectedId){
       payload.id = selectedId;
     }
@@ -67,7 +66,7 @@ const Users = () => {
       setOpenSnackBar(true);
       const data = {
         type: "success",
-        message: "signUp   sucessfully!....",
+        message: "User Data added sucessfully!....",
         open: true
       }
       setSelectedId(null);
@@ -77,7 +76,7 @@ const Users = () => {
       setOpenSnackBar(true);
       const data = {
         type: "error",
-        message: 'signUp failed.',
+        message: 'User data operation failed.',
         open: true
       }
       setSnackBarData(data);
