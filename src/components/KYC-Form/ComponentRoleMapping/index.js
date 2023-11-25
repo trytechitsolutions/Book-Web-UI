@@ -19,7 +19,6 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    height: '100vh',
     width: '50%',
     margin: '0 auto',
     padding: defaultTheme.spacing(3),
