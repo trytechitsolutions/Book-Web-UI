@@ -20,7 +20,7 @@ import UserSignUp from './components/UserSignUp';
 import Users from './components/UserData';
 import Store from './components/Store';
 import ComponentRoleMapping from './components/KYC-Form/ComponentRoleMapping';
-
+import NavigationBar from './components/customer-store-components/navbar';
 
 // Custom PrivateRoute component
 const PrivateRoute = ({ element }) => {
@@ -68,6 +68,8 @@ function App() {
         <Route path="/user" element={<Users />} />
         <Route path="/store" element={<Store/>} />
         <Route path="/rolemap" element={<ComponentRoleMapping/>} />
+        <Route path="/navbar" element={<NavigationBar />} />
+
           {/* <Route path="/bookslist"  element={<BookList />}  />
           <Route path="/books"  element={<Books />}  />
           <Route path="/publisher" element={<PrivateRoute element={<PublisherComponent />} />} /> */}
