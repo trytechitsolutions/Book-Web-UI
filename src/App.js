@@ -19,6 +19,7 @@ import Brands from './components/Brands';
 import UserSignUp from './components/UserSignUp';
 import Users from './components/UserData';
 import Store from './components/Store';
+import ComponentRoleMapping from './components/KYC-Form/ComponentRoleMapping';
 
 
 // Custom PrivateRoute component
@@ -66,6 +67,7 @@ function App() {
         <Route path="/userSignUp" element={<UserSignUp />} />
         <Route path="/user" element={<Users />} />
         <Route path="/store" element={<Store/>} />
+        <Route path="/rolemap" element={<ComponentRoleMapping/>} />
           {/* <Route path="/bookslist"  element={<BookList />}  />
           <Route path="/books"  element={<Books />}  />
           <Route path="/publisher" element={<PrivateRoute element={<PublisherComponent />} />} /> */}
