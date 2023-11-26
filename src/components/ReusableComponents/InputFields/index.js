@@ -42,17 +42,33 @@ const InputFields = forwardRef((props, ref) => {
   const [validationMessages, setValidationMessages] = useState({});
 
   const handleInputChange = (name, type, value) => {
-    // Update the form data without immediate validation
+    const field = modaldata.fieldsArray.find((field) => field.name === name);
+    // Apply rules validation
+    const validationMessages = field?.rules.reduce((messages, rule) => {
+      if (rule.required && !value.trim()) {
+        messages.push(rule.message || 'This field is required');
+      } else if (rule.type === 'email' && !rule.regex.test(value)) {
+        messages.push(rule.message || 'Please enter a valid email');
+      } else if (rule.type === 'password' && !rule.regex.test(value)) {
+        messages.push(rule.message || 'Please enter a valid email');
+      }
+
+      return messages;
+    }, []);
+    setValidationMessages((prevMessages) => ({
+      ...prevMessages,
+      [name]: validationMessages.join(' '), // Combine multiple messages into one string
+    }));
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: value,
     }));
-
-    // Clear the validation message for the current field
-    setValidationMessages((prevMessages) => ({
-      ...prevMessages,
-      [name]: '',
-    }));
+    if (validationMessages.length === 0) {
+      setValidationMessages((prevMessages) => ({
+        ...prevMessages,
+        [name]: '',
+      }));
+    }
     let obj = { name, type, value };
     onChange(obj, index);
   };
@@ -106,10 +122,7 @@ const InputFields = forwardRef((props, ref) => {
     let obj = { name, type, value: file }; // Pass 'file' as the value
     onChange(obj, index);
   };
-
-
   const validateForm = () => {
-    // Iterate through form data and perform validation
     const updatedFormData = { ...formData };
     const updatedValidationMessages = {};
 
@@ -118,16 +131,13 @@ const InputFields = forwardRef((props, ref) => {
       const validationResult = validateField(updatedFormData[field.name], fieldRules);
 
       if (!validationResult.isValid) {
-        // Set the validation message for the current field
         updatedValidationMessages[field.name] = validationResult.message;
       }
     });
 
     if (Object.keys(updatedValidationMessages).length === 0) {
-      // If there are no validation messages, the form is valid
       submitFormData(updatedFormData);
     } else {
-      // If there are validation messages, update the state to display them
       setValidationMessages(updatedValidationMessages);
     }
   };
@@ -160,12 +170,12 @@ const InputFields = forwardRef((props, ref) => {
   
       return updatedFormData;
     });
-    let obj = { name, type, value:checked };
+    let obj = { name, type, value: checked };
     onChange(obj, index);
     // Call your general handleInputChange function if needed
     // handleInputChange(name, formData[name]);
   };
-  
+
 
   //checkbox
 

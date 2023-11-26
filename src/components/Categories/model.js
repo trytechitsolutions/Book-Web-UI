@@ -21,7 +21,7 @@ export const categoriesForm = {
             label: "Parent Category",
             name: "parent_id",
             rules: [
-                {   message: 'Please choose Parent Category!' },
+                { required: false,  message: 'Please choose Parent Category!' },
             ],
             xs: 24,
             sm: 16,
