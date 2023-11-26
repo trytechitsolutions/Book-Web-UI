@@ -40,8 +40,9 @@ export const registrationForm = {
         name: "contact_number",
         rules: [
             { required: true, message: 'Please enter contact number' },
-            { validator: validatePhoneNumber }
-        ],
+            { type: 'phonenumber', message: 'Please enter a valid contact number', 
+            regex: /^\+[0-9]{1,3}\.[0-9]{1,14}$|^[0-9]{1,14}$/ },  
+            ],
         placeholder: "Contact Number",
         xs: 24,
         sm: 6,
@@ -57,7 +58,8 @@ export const registrationForm = {
         name: "email",
         rules: [
             { required: true, message: 'Please enter email' },
-            { type: 'email', message: 'Please enter a valid email' },
+            { type: 'email', message: 'Please enter a valid email', 
+            regex: /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/ },        
         ],
         placeholder: "Email",
         xs: 24,
@@ -74,7 +76,11 @@ export const registrationForm = {
         name: "password",
         rules: [
             { required: true, message: 'Please enter password' },
-            { min: 8, message: 'Password must be at least 8 characters long' }
+                { type:'password', regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, min: 8, message: `Minimum length: 8 characters
+                At least one uppercase letter 
+                At least one lowercase letter
+                At least one digit
+                At least one special character (e.g., !, @, #, $, %)` }
         ],
         placeholder: "Password",
         xs: 24,

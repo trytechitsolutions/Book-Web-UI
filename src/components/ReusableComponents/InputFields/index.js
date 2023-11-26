@@ -50,9 +50,12 @@ const InputFields = forwardRef((props, ref) => {
       } else if (rule.type === 'email' && !rule.regex.test(value)) {
         messages.push(rule.message || 'Please enter a valid email');
       } else if (rule.type === 'password' && !rule.regex.test(value)) {
-        messages.push(rule.message || 'Please enter a valid email');
+        messages.push(rule.message || 'Please enter a valid password');
+      }else if (rule.type === 'phonenumber' && !rule.regex.test(value)) {
+        messages.push(rule.message || 'Please enter a valid phonenumber');
+      }else if (rule.type === 'file' && !rule.regex.test(value)) {
+        messages.push(rule.message || 'Please  Upload valid File'); 
       }
-
       return messages;
     }, []);
     setValidationMessages((prevMessages) => ({

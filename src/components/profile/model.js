@@ -54,8 +54,9 @@ export const profileForm = {
         name: "contactNumber",
         rules: [
             { required: true, message: 'Please enter contact number' },
-            { validator: validatePhoneNumber }
-        ],
+            { type: 'phonenumber', message: 'Please enter a valid contact number', 
+            regex: /^\+[0-9]{1,3}\.[0-9]{1,14}$|^[0-9]{1,14}$/ },  
+            ],
         placeholder: "Contact Number",
         xs: 24,
         sm: 16,
@@ -71,7 +72,8 @@ export const profileForm = {
         name: "email",
         rules: [
             { required: true, message: 'Please enter email' },
-            { type: 'email', message: 'Please enter a valid email' },
+            { type: 'email', message: 'Please enter a valid email', 
+            regex: /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/ },        
         ],
         placeholder: "Email",
         xs: 24,
