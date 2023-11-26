@@ -47,6 +47,8 @@ const RegisterForm = () => {
         }
 
         setSnackBarData(data);
+        navigate('/login');
+
       } else {
         setOpenSnackBar(true);
         const data = {

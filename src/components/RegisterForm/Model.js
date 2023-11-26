@@ -22,20 +22,6 @@ export const registrationForm = {
     },
     {
         type: "text",
-        label: "Company Name",
-        name: "company_name",
-        rules: [{ required: true, message: 'Please enter Company name' }],
-        placeholder: "Company Name",
-        xs: 24,
-        sm: 6,
-        md: 6,
-        lg: 6,
-        labelCol: "",
-        wrapperCol: "",
-        value: "",
-    },
-    {
-        type: "text",
         label: "Store Name",
         name: "store_name",
         rules: [{ required: true, message: 'Please enter Store name' }],
@@ -82,26 +68,6 @@ export const registrationForm = {
         wrapperCol: "",
         value: "",
        },
-       {
-        type: "dropdown",
-        label: "Business Category",
-        name: "business_category",
-        rules: [
-            { required: true, message: 'Please choose Business Category!' },
-        ],
-        xs: 24,
-        sm: 6,
-        md: 6,
-        lg: 6,
-        labelCol: "",
-        wrapperCol: "",
-        value: "",
-        options: [
-            { id: "Category1", value: "Category 1" },
-            { id: "Category2", value: "Category 2" },
-            { id: "Category3", value: "Category 3" },
-        ], 
-    },
     {
         type: "password",
         label: "Password",
@@ -167,3 +133,16 @@ export const registrationForm = {
       
     }
 }
+
+
+
+
+
+// "development": {
+//     "username": "postgres",
+//     "password": "Admin@123",
+//     "database": "ecom-trytechit",
+//     "host": "localhost",
+//     "dialect": "postgres",
+//     "port":5432
+//   },

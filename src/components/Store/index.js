@@ -11,6 +11,9 @@ import YouTubeIcon from '@mui/icons-material/YouTube';
 import PinterestIcon from '@mui/icons-material/Pinterest';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import StoreTimingsConfigurator from '../ReusableComponents/StoreTimings';
+import { apiRequest } from '../../services/api';
+import * as securedLocalStorage from '../../services/secureLocalStorage';
+
 
 const useStyles = makeStyles((theme) => ({
   formContainer: {
@@ -36,13 +39,12 @@ const Store = () => {
   const classes = useStyles();
   const [storeLogoFile, setStoreLogoFile] = useState(null);
   const [storeFeviconFile, setStoreFeviconFile] = useState(null);
-  const [storeTimings, setStoreTimings] = useState([]);
+  const [storeTimings, setStoreTimings] = useState(null);
+  const serverUrl = securedLocalStorage.baseUrl;
 
 
   const [formData, setFormData] = useState({
-    store_name: '',
-    store_logo: null,
-    store_fevicon: null,
+    name: '',
     domain: '',
     social_instagram: '',
     social_facebook: '',
@@ -51,6 +53,7 @@ const Store = () => {
     social_youtube: '',
     social_pinterest: '',
     social_linkedin: '',
+    social_snapchat:'',
     store_timings: [],
   });
 
@@ -90,7 +93,7 @@ const Store = () => {
       const data = new FormData();
       const fileInputs = {
         'store_logo': storeLogoFile,
-        'store_fevicon': storeFeviconFile,
+        'store_favicon': storeFeviconFile,
     };
     // for (const [fieldName, file] of Object.entries(fileInputs)) {
     //   if (file) {
@@ -103,10 +106,20 @@ const Store = () => {
         data.append(key, value);
       }
     }
+    if (storeLogoFile){
+      data.append('store_logo', storeLogoFile)
+    }
+    if (storeFeviconFile){
+      data.append('store_favicon', storeFeviconFile)
+    }
+    const resp = await apiRequest(data, serverUrl + "preference/store", 'post');
     console.log('Form submitted:', data);
     handleReset();
     }
     const onChangeAction = (data) => {
+
+      formData.store_timings= JSON.stringify(data)
+      setFormData(formData)
       console.log(data)
      }
 
@@ -114,11 +127,11 @@ const Store = () => {
     <div className={classes.formContainer}>
     <TextField
           label="Store Name"
-          name="store_name"
+          name="name"
            fullWidth
            required
            sx={{ marginBottom: '10px' }} 
-           value={formData.store_name}
+           value={formData.name}
         onChange={handleInputChange}
             /> 
     <FileUploadPreview
@@ -142,6 +155,8 @@ const Store = () => {
         fullWidth
         required
         sx={{ marginBottom: '10px' }} 
+        value={formData.domain}
+        onChange={handleInputChange}
         />     
     <TextField
       label="Instagram"
@@ -215,7 +230,7 @@ const Store = () => {
             </InputAdornment>
           ),
         }}
-        value={formData.social_instagram}
+        value={formData.social_youtube}
         onChange={handleInputChange}
       />
       <TextField
@@ -233,6 +248,21 @@ const Store = () => {
         value={formData.social_pinterest}
         onChange={handleInputChange}
       />
+       <TextField
+      label="Instagram"
+      name="social_snapchat"
+      id="outlined-start-adornment"
+      sx={{ m: 1, width: '25ch' }}
+       InputProps={{
+        startAdornment: (
+          <InputAdornment position="start">
+            <InstagramIcon />
+          </InputAdornment>
+         ),
+        }}
+        value={formData.social_snapchat}
+        onChange={handleInputChange}
+       />
       <TextField
         label="LinkedIn"
         name="social_linkedin"
