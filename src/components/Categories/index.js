@@ -28,7 +28,7 @@ const Categories = () => {
 
   const columns = [
     { id: 'name', label: 'Title' },
-    { id: 'parent_id', label: 'Parent Category' },
+    { id: 'parent_name', label: 'Parent Category' },
     { id: 'file', label: 'Files' },
     { id: 'is_active', label: 'Status' }
 
