@@ -10,7 +10,8 @@ export const loginForm = {
             name: "email",
             rules: [
                 { required: true, message: 'Please enter email' },
-                { type: 'email', message: 'Please enter a valid email' },
+                { type: 'email', message: 'Please enter a valid email', 
+                regex: /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/ },
             ],
             placeholder: "Email",
             xs: 24,
@@ -20,6 +21,7 @@ export const loginForm = {
             labelCol: 4,
             wrapperCol: 16,
             value: "",
+            // regex: /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/,
         },
         {
             type: "password",
@@ -27,7 +29,11 @@ export const loginForm = {
             name: "password",
             rules: [
                 { required: true, message: 'Please enter password' },
-                { min: 8, message: 'Password must be at least 8 characters long' }
+                { type:'password', regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, min: 8, message: `Minimum length: 8 characters
+                At least one uppercase letter 
+                At least one lowercase letter
+                At least one digit
+                At least one special character (e.g., !, @, #, $, %)` }
             ],
             placeholder: "Password",
             xs: 24,
@@ -36,7 +42,7 @@ export const loginForm = {
             lg: 24,
             labelCol: 4,
             wrapperCol: 16,
-            value: "",
+            value: ""
         },
     ],
     buttonSecction: { 
