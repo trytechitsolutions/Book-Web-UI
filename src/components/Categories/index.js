@@ -30,44 +30,48 @@ const Categories = () => {
     { id: 'name', label: 'Title' },
     { id: 'parent_id', label: 'Parent Category' },
     { id: 'file', label: 'Files' },
-    { id :'is_active', label:'Status'}
+    { id: 'is_active', label: 'Status' }
 
   ];
 
-
+const getCategories=async()=>{
+  setShowLoader(true);
+  const resp = await apiRequest(null, serverUrl + "preference/category", 'get');
+  setShowLoader(false);
+  if (resp?.data?.data) {
+    setData(resp.data.data);
+    formData.fieldsArray.map((f) => {
+      if (f.name === "parent_id") {
+        f.options = resp.data.data
+      }
+    })
+    setFormData(formData)
+  }
+}
   useEffect(() => {
     // Fetch data from the Redux store once when the component mounts
-    async function  fetchData(){
-      const resp = await apiRequest(null, serverUrl + "preference/category", 'get');
-      setShowLoader(false);
-      if (resp?.data?.data) {
-      setData(resp.data.data);
-  formData.fieldsArray.map( (f)=>{
-    if (f.name === "parent_id" ) {
-      f.options=resp.data.data    
+    async function fetchData() {
+     await getCategories();
     }
-  })
-   setFormData(formData)
-       }
-      }
-      fetchData()
-  },[showForm] );
-   console.log(formData)
+    fetchData()
+  }, [showForm]);
   const submitFormData = async () => {
     const payload = preparePayLoad(formData.fieldsArray);
-    const isFileExist = formData.fieldsArray.filter((f)=> f.type==="file");
-    console.log('payload', payload);
-    console.log('fileexist', isFileExist);
-    if(isFileExist){
-    payload.logo = isFileExist[0].value;
-    setFormData({ ...formData });
+    const isFileExist = formData.fieldsArray.filter((f) => f.type === "file");
+
+    if (isFileExist) {
+      payload.logo = isFileExist[0].value;
+      setFormData({ ...formData });
     }
     let formDataToSend = new FormData();
     for (const key in payload) {
-        formDataToSend.append(key, payload[key]);
+      formDataToSend.append(key, payload[key]);
     }
-console.log("formDataToSend,", formDataToSend)
     // dispatch(BrandsRequest(payload));
+    if(selectedId){
+      formDataToSend.append('id', selectedId);
+    }
+    setShowLoader(true);
     const resp = await apiRequest(formDataToSend, serverUrl + "preference/category ", 'post');
     setShowLoader(false);
     if (resp?.data?.data) {
@@ -77,24 +81,26 @@ console.log("formDataToSend,", formDataToSend)
         message: "Categories added  sucessfully!....",
         open: true
       }
-
+      await getCategories();
+      setFormData(categoriesForm)
       setSnackBarData(data);
     } else {
       setOpenSnackBar(true);
       const data = {
         type: "error",
         message: 'Categories added failed.',
-        open:true
+        open: true
       }
       setSnackBarData(data);
     }
-  setShowForm(false); // Hide the form after submission
+    setShowForm(false); // Hide the form after submission
   }
   function onChange(data) {
     onChangeValueBind(formData, data);
   }
   const handleAddNewItem = () => {
     setShowForm(true);
+    setFormData(categoriesForm)
   };
   const onEdit = (id) => {
     setSelectedId(id);
@@ -104,9 +110,10 @@ console.log("formDataToSend,", formDataToSend)
       return updateForm;
     });
     setShowForm(true);
-   }
-   const onDelete = async (id) => {
-   const resp = await apiRequest(null, serverUrl + "/preference/category/"+id, 'delete');
+  }
+  const onDelete = async (id) => {
+    setShowLoader(true)
+    const resp = await apiRequest(null, serverUrl + "/preference/category/" + id, 'delete');
     setShowLoader(false);
     if (resp?.data?.data) {
       setOpenSnackBar(true);
@@ -115,9 +122,10 @@ console.log("formDataToSend,", formDataToSend)
         message: "category deleted  sucessfully!....",
         open: true
       }
-    setSelectedId(null)
+      setSelectedId(null)
       setSnackBarData(data);
       setShowForm(false); // Hide the form after submission
+      await getCategories();
     } else {
       setOpenSnackBar(true);
       const data = {
@@ -127,7 +135,7 @@ console.log("formDataToSend,", formDataToSend)
       }
       setSnackBarData(data);
     }
-    }
+  }
   const closeSnakBar = () => {
     setOpenSnackBar(false)
   }
@@ -138,7 +146,7 @@ console.log("formDataToSend,", formDataToSend)
           Categories
         </Typography>
         {!showForm && (
-          <Grid item xs={24} sm={16} md={12} lg={13} style={{ marginTop: '20px', marginBottom:'2rem', float:'right' }}>
+          <Grid item xs={24} sm={16} md={12} lg={13} style={{ marginTop: '20px', marginBottom: '2rem', float: 'right' }}>
             <Button variant="contained" onClick={handleAddNewItem}>
               Add New Category
             </Button>
@@ -150,17 +158,18 @@ console.log("formDataToSend,", formDataToSend)
           </Grid>
         )}
       </div>
-      {data?.length > 0 ? (
-          <GenericTable data={data} columns={columns} onEdit={onEdit} onDelete={onDelete} />
-        ) : (
-          <Typography variant="h6" align="center" style={{ marginTop: '10rem' }}>
-            No data available. Please add new Category.
-          </Typography>
-        )}
-       {openSnackBar && <SnackbarView {...snackBarData} onClose={closeSnakBar}/> }
-        {showLoader &&
-          <Loader />
-        }
+      {!showForm && data?.length > 0 && (
+        <GenericTable data={data} columns={columns} onEdit={onEdit} onDelete={onDelete} />
+      )} 
+      {!showForm && (data?.length === 0) && (
+        <Typography variant="h6" align="center" style={{ marginTop: '10rem' }}>
+          No data available. Please add new Category.
+        </Typography>
+      )}
+      {openSnackBar && <SnackbarView {...snackBarData} onClose={closeSnakBar} />}
+      {showLoader &&
+        <Loader />
+      }
     </Container>
   );
 };

@@ -1,4 +1,3 @@
-
 export const brandsForm = {
     formlayout: "vertical",
     fieldsArray: [ 
@@ -20,9 +19,7 @@ export const brandsForm = {
             type : "file",
             label: "Upload File",
             name: "file",
-            rules: [{required: true,   message: 'Please upload Upload File' },
-            { type: 'file', message: 'Please  Upload valid File', 
-            regex: /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/ },],
+            rules: [{required: true,   message: 'Please upload Upload File' }],
             placeholder: "Upload File",
             xs: 24,
             sm: 16,
@@ -34,6 +31,7 @@ export const brandsForm = {
         },
         {
             type: "checkbox",
+            label:"Active",
             name: "is_active",
             rules: [{ required: false, message: 'Please choose Active!' }],
             xs: 12,

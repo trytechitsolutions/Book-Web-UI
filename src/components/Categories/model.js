@@ -39,11 +39,8 @@ export const categoriesForm = {
         {
             type : "file",
             label: "Upload File",
-            name: "upload_file",
-            rules: [{ required: true, message: 'Please upload Upload File' },
-            { type: 'file', message: 'Please  Upload valid File', 
-            regex: /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/ },
-             ],
+            name: "file",
+            rules: [{ required: true, message: 'Please upload Upload File' }],
             placeholder: "Upload File",
             xs: 24,
             sm: 16,
@@ -55,7 +52,7 @@ export const categoriesForm = {
         },
         {
             type: "checkbox",
-            // label: "Active",
+            label: "Active",
             name: "is_active",
             rules: [{ required: false, message: 'Please choose Active!' }],
             xs: 12, // Adjust the xs, sm, md, lg values as needed

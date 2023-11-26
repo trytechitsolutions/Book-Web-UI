@@ -40,7 +40,6 @@ const InputFields = forwardRef((props, ref) => {
   const [imagePreview, setImagePreview] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [validationMessages, setValidationMessages] = useState({});
-
   const handleInputChange = (name, type, value) => {
     const field = modaldata.fieldsArray.find((field) => field.name === name);
     // Apply rules validation
@@ -51,10 +50,10 @@ const InputFields = forwardRef((props, ref) => {
         messages.push(rule.message || 'Please enter a valid email');
       } else if (rule.type === 'password' && !rule.regex.test(value)) {
         messages.push(rule.message || 'Please enter a valid password');
-      }else if (rule.type === 'phonenumber' && !rule.regex.test(value)) {
+      } else if (rule.type === 'phonenumber' && !rule.regex.test(value)) {
         messages.push(rule.message || 'Please enter a valid phonenumber');
-      }else if (rule.type === 'file' && !rule.regex.test(value)) {
-        messages.push(rule.message || 'Please  Upload valid File'); 
+      } else if (rule.type === 'file' && !rule.regex.test(value)) {
+        messages.push(rule.message || 'Please  Upload valid File');
       }
       return messages;
     }, []);
@@ -156,23 +155,49 @@ const InputFields = forwardRef((props, ref) => {
 
 
   //checkbox
+  // const handleCheckboxChange = (name, optionValue, type, checked) => {
+  //   // Use the setFormData function to update the state
+  //   setFormData((prevFormData) => {
+  //     // If formData[name] doesn't exist or is not an array, create it as an empty array
+  //     const updatedFormData = { ...prevFormData, [name]: Array.isArray(prevFormData[name]) ? prevFormData[name] : [] };
+
+  //     if (checked) {
+  //       // Add the checked option to the array
+  //       updatedFormData[name].push(optionValue);
+  //     } else {
+  //       // Remove the unchecked option from the array
+  //       updatedFormData[name] = updatedFormData[name].filter((value) => value !== optionValue);
+  //     }
+
+  //     return updatedFormData;
+  //   });
+
+  //   let obj = { name, type, value: formData[name] }; // Pass the array of values
+  //   onChange(obj, index);
+  // };
 
   const handleCheckboxChange = (name, optionValue, type, checked) => {
+    console.log(name, optionValue, type, checked, 'onchangecheckbox****')
     // Use the setFormData function to update the state
-    setFormData((prevFormData) => {
-      // If formData[name] doesn't exist, create it as an empty array
-      const updatedFormData = { ...prevFormData, [name]: prevFormData[name] || [] };
-  
-      if (checked) {
-        // Add the checked option to the array
-        updatedFormData[name].push(optionValue);
-      } else {
-        // Remove the unchecked option from the array
-        updatedFormData[name] = updatedFormData[name].filter((value) => value !== optionValue);
-      }
-  
-      return updatedFormData;
-    });
+    // setFormData((prevFormData) => {
+    //   // If formData[name] doesn't exist, create it as an empty array
+    //   // const updatedFormData = { ...prevFormData, [name]: prevFormData[name] || [] };
+    //   const updatedFormData = { ...prevFormData, [name]: Array.isArray(prevFormData[name]) ? prevFormData[name] : [] };
+
+    //   if (checked) {
+    //     // Add the checked option to the array
+    //     updatedFormData[name].push(optionValue);
+    //   } else {
+    //     // Remove the unchecked option from the array
+    //     updatedFormData[name] = updatedFormData[name].filter((value) => value !== optionValue);
+    //   }
+
+    //   return updatedFormData;
+    // });
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: checked,
+    }));
     let obj = { name, type, value: checked };
     onChange(obj, index);
     // Call your general handleInputChange function if needed
@@ -350,6 +375,19 @@ const InputFields = forwardRef((props, ref) => {
                   />
                 )}
                 {ele.type === 'checkbox' && (
+                  <FormControlLabel
+                    key={index}
+                    control={
+                      <Checkbox
+                        checked={formData[ele.name] || false}  // Set checked based on formData[ele.name]
+                        onChange={(e) => handleCheckboxChange(ele.name, formData[ele.name], ele.type, e.target.checked)}
+                      />
+                    }
+                    label={ele.label}
+                  />
+                )}
+
+                {/* {ele.type === 'checkbox' && (
                   <FormControl>
                     <InputLabel>
                       {ele.label}
@@ -357,12 +395,14 @@ const InputFields = forwardRef((props, ref) => {
                         <span style={{ color: 'red' }}>*</span>
                       )}
                     </InputLabel>
+                    {JSON.stringify(formData)} {ele.name}
                     {ele.options.map((option, index) => (
                       <FormControlLabel
                         key={index}
                         control={
                           <Checkbox
-                            checked={(formData[ele.name] || []).includes(option.value)}
+                            // checked={Array.isArray(formData[ele.name]) ?  (formData[ele.name]).includes(option.value) : formData[ele.name]}
+                            checked= {formData[ele.name]}
                             onChange={(e) => handleCheckboxChange(ele.name, option.value, ele.type, e.target.checked)}
                           />
                         }
@@ -370,7 +410,7 @@ const InputFields = forwardRef((props, ref) => {
                       />
                     ))}
                   </FormControl>
-                )}
+                )} */}
                 {ele.type === 'dropdown' && (
                   <div>
                     <FormControl fullWidth variant='outlined'>
@@ -487,7 +527,7 @@ const InputFields = forwardRef((props, ref) => {
                     )}
                   </FormControl>
                 )}
-               
+
               </Grid>
             ))}
           </Grid>
