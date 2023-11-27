@@ -34,22 +34,31 @@ const Categories = () => {
 
   ];
 
-const getCategories=async()=>{
-  setShowLoader(true);
-  const resp = await apiRequest(null, serverUrl + "preference/category", 'get');
-  setShowLoader(false);
-  if (resp?.data?.data) {
-    setData(resp.data.data);
-    if (formData.fieldsArray) { 
-    formData.fieldsArray.map((f) => {
-      if (f.name === "parent_id") {
-        f.options = resp.data.data
+  const getCategories = async () => {
+    setShowLoader(true);
+    const resp = await apiRequest(null, serverUrl + "preference/category", 'get');
+    setShowLoader(false);
+    if (resp?.data?.data) {
+      setData(resp.data.data);
+      if (formData.fieldsArray) {
+        formData.fieldsArray.map((f) => {
+          if (f.name === "parent_id") {
+            f.options = resp.data.data
+          }
+        })
+        setFormData(formData)
       }
+    }
+  }
+  const resetForm = () => {
+    setSelectedId(null);
+    setShowForm(false);
+    formData.fieldsArray?.map((f) => {
+      f.value = ''
+      return f;
     })
-    setFormData(formData)
-  }
-  }
-}
+    setFormData(formData);
+  };
   useEffect(() => {
     async function fetchData() {
       setShowLoader(true);
@@ -58,6 +67,14 @@ const getCategories=async()=>{
 
       if (resp?.data?.data) {
         setData(resp.data.data);
+        if (formData.fieldsArray) {
+          formData.fieldsArray.map((f) => {
+            if (f.name === "parent_id") {
+              f.options = resp.data.data
+            }
+          })
+          setFormData(formData)
+        }
       }
     }
     fetchData()
@@ -76,7 +93,7 @@ const getCategories=async()=>{
       formDataToSend.append(key, payload[key]);
     }
     // dispatch(BrandsRequest(payload));
-    if(selectedId){
+    if (selectedId) {
       formDataToSend.append('id', selectedId);
     }
     setShowLoader(true);
@@ -133,7 +150,7 @@ const getCategories=async()=>{
       };
       resetForm();
       setSnackBarData(data);
-      setShowForm(false); 
+      setShowForm(false);
     } else {
       setOpenSnackBar(true);
       const data = {
@@ -168,7 +185,7 @@ const getCategories=async()=>{
       </div>
       {!showForm && data?.length > 0 && (
         <GenericTable data={data} columns={columns} onEdit={onEdit} onDelete={onDelete} />
-      )} 
+      )}
       {!showForm && (data?.length === 0) && (
         <Typography variant="h6" align="center" style={{ marginTop: '10rem' }}>
           No data available. Please add new Category.

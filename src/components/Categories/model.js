@@ -30,11 +30,7 @@ export const categoriesForm = {
             labelCol: "",
             wrapperCol: "",
             value: "",
-            options: [
-                { id: "Category1", value: "Category 1" },
-                { id: "Category2", value: "Category 2" },
-                { id: "Category3", value: "Category 3" },
-            ], 
+            options: [], 
         },
         {
             type : "file",
