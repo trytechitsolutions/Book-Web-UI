@@ -19,6 +19,7 @@ export const rolesForm = {
         {
             type: "checkbox",
             name: "is_active",
+            label:'Active',
             rules: [{ required: false, message: 'Please choose Active!' }],
             xs: 12, 
             sm: 12,
