@@ -52,11 +52,11 @@ export const brandsForm = {
     ],
     buttonSecction: {
         justify: "end",
-   
         buttons: [
-            {type: "contained", colour: "primary", name: "Add", fun: "submit" ,
-            }
-           
+            {type: "outlined", colour: "secondary", name: "Reset", fun: "reset",
+            style: { marginTop: '20px' }  },
+            {type: "contained", colour: "primary", name: "Add", fun: "submit",
+            style: { marginTop: '20px' }  }
         ]
     }
 }

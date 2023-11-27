@@ -12,13 +12,6 @@ import * as securedLocalStorage from '../../services/secureLocalStorage';
 import Loader from '../common/Loader';
 import SnackbarView from '../common/SnackBar';
 
-const columns = [
-  { id: 'id', label: 'ID' },
-  { id: 'name', label: 'Brand Name' },
-  { id: 'file', label: 'Brand Logo' },
-  { id: 'is_active', label: 'Status' }
-];
-
 
 const Brands = () => {
   const ChildRef = useRef();
@@ -35,21 +28,52 @@ const Brands = () => {
   const [selectedId, setSelectedId] = React.useState(null)
   const brandsData = GetStoreData('BrandsReducer')?.brandsData;
 
+  const columns = [
+    { id: 'id', label: 'ID' },
+    { id: 'name', label: 'Brand Name' },
+    { id: 'file', label: 'Brand Logo' },
+    { id: 'is_active', label: 'Status' }
+  ];
 
+  const getBrand = async () => {
+    setShowLoader(true);
+    const resp = await apiRequest(null, serverUrl + "preference/brand", 'get');
+    setShowLoader(false);
+    if (resp?.data?.data) {
+      setData(resp.data.data);
+      if (formData.fieldsArray) {
+        formData.fieldsArray?.map((f) => {
+          f.value = ''
+          return f;
+        })
+        setFormData(formData)
+      }
+    }
+  }
   const resetForm = () => {
-    setFormData(brandsForm);
     setSelectedId(null);
+    setShowForm(false);
+    formData.fieldsArray?.map((f)=>{
+        f.value = ''
+      return f;
+    })
+    setFormData(formData);
   };
-
   useEffect(() => {
     // Fetch data from the Redux store once when the component mounts
     setShowLoader(true);
     async function fetchData() {
-      const resp = await apiRequest(null, serverUrl + "/preference/brand", 'get');
+      const resp = await apiRequest(null, serverUrl + "preference/brand", 'get');
       setShowLoader(false);
       if (resp?.data?.data) {
         setData(resp.data.data);
-
+        if (formData.fieldsArray) {
+          formData.fieldsArray?.map((f) => {
+            f.value = ''
+            return f;
+          })
+          setFormData(formData)
+        }
       }
     }
     fetchData()
@@ -67,14 +91,14 @@ const Brands = () => {
     }
     let formDataToSend = new FormData();
     if (selectedId) {
-      payload.id = selectedId
+      formDataToSend.append('id', selectedId);
     }
     for (const key in payload) {
       formDataToSend.append(key, payload[key]);
     }
+    setShowLoader(true);
     const resp = await apiRequest(formDataToSend, serverUrl + "preference/brand", 'post');
     setShowLoader(false);
-    setShowForm(false);
     if (resp?.data?.data) {
       setOpenSnackBar(true);
       const data = {
@@ -82,9 +106,10 @@ const Brands = () => {
         message: "Brand added  sucessfully!....",
         open: true
       }
-      setSelectedId(null)
+      await getBrand();
+      resetForm();
       setSnackBarData(data);
-      resetForm(); 
+      setShowForm(false);
     } else {
       setOpenSnackBar(true);
       const data = {
@@ -102,6 +127,7 @@ const Brands = () => {
   }
   const handleAddNewItem = () => {
     setShowForm(true);
+    setFormData(brandsForm)
   };
   const onEdit = (id) => {
     setSelectedId(id);
@@ -114,16 +140,16 @@ const Brands = () => {
   }
   const onDelete = async (id) => {
     setShowLoader(true)
-    const resp = await apiRequest(null, serverUrl + "/preference/brand/" + id, 'delete');
+    const resp = await apiRequest(null, serverUrl + "preference/brand/" + id, 'delete');
     setShowLoader(false);
     if (resp?.data?.data) {
       setOpenSnackBar(true);
       const data = {
         type: "success",
-        message: "Brand added  sucessfully!....",
+        message: "Brand deleted  sucessfully!....",
         open: true
       }
-      setSelectedId(null)
+      resetForm();
       setSnackBarData(data);
       setShowForm(false); // Hide the form after submission
 
@@ -131,7 +157,7 @@ const Brands = () => {
       setOpenSnackBar(true);
       const data = {
         type: "error",
-        message: 'Brand added failed.',
+        message: 'Brand deleted failed.',
         open: true
       }
       setSnackBarData(data);

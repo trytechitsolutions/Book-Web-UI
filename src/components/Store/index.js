@@ -63,7 +63,15 @@ const Store = () => {
   });
 
 
-
+  // const resetStore = () => {
+  //   setSelectedId(null);
+  //   setShowForm(false);
+  //   formData.fieldsArray?.map((f) => {
+  //     f.value = ''
+  //     return f;
+  //   })
+  //   setFormData(formData);
+  // };
 
 
 

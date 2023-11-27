@@ -33,15 +33,7 @@ const Categories = () => {
     { id: 'is_active', label: 'Status' }
 
   ];
-  const resetForm = () => {
-    setSelectedId(null);
-    setShowForm(false);
-    formData.fieldsArray?.map((f)=>{
-        f.value = ''
-      return f;
-    })
-    setFormData(formData);
-  };
+
 
   const getCategories = async () => {
     setShowLoader(true);

@@ -32,88 +32,79 @@ const Components = () => {
     { id: 'is_active', label: 'Status' }
   ];
 
- 
+  const getComponents = async () => {
+    setShowLoader(true);
+    const resp = await apiRequest(null, serverUrl + "preference/role", 'get');
+    setShowLoader(false);
+    if (resp?.data?.data) {
+      setData(resp.data.data);
+      if (formData.fieldsArray) {
+        formData.fieldsArray?.map((f) => {
+          f.value = ''
+          return f;
+        })
+        setFormData(formData)
+      }
+    }
+  }
   const resetForm = () => {
     setFormData(componentsForm);
     setSelectedId(null);
   };
   useEffect(() => {
-    setShowLoader(true);
     async function fetchData() {
+      setShowLoader(true);
       const resp = await apiRequest(null, serverUrl + "preference/components", 'get');
       setShowLoader(false); 
       if (resp?.data?.data) {
         setData(resp.data.data);
+        if (formData.fieldsArray) {
+          formData.fieldsArray?.map((f) => {
+            f.value = ''
+            return f;
+          })
+          setFormData(formData)
+        }
       }
     }
     fetchData()
   }, [showForm]);
 
-  // const submitFormData = async () => {
-  //   setShowLoader(true);
-  //   const payload = preparePayLoad(formData.fieldsArray);
-  //   console.log('payload', payload);   
-  //   const resp = await apiRequest(payload, serverUrl + "preference/components", 'post');
-  //   setShowLoader(false);
-  //   if (resp?.data?.data) {
-  //     setOpenSnackBar(true);
-  //     const data = {
-  //       type: "success",
-  //       message: "Component added  sucessfully!....",
-  //       open: true
-  //     }
-  //     setSnackBarData(data);
-  //     resetForm(); 
-  //    } else {
-  //     setOpenSnackBar(true);
-  //     resetForm(); 
-  //     const data = {
-  //       type: "error",
-  //       message: 'Component added failed.',
-  //       open:true
-  //     }
-  //     setSnackBarData(data);
-  //     setShowForm(false);
-  //   }
-    
-  // }
   const submitFormData = async () => {
-    setShowLoader(true);
-  
-    try {
-      const payload = preparePayLoad(formData.fieldsArray);
-      console.log('payload', payload);
-      const resp = await apiRequest(payload, serverUrl + "preference/components", 'post');
-      setShowLoader(false);
-  
-      if (resp?.data?.data) {
-        setOpenSnackBar(true);
-        const data = {
-          type: "success",
-          message: "Component added successfully!....",
-          open: true
-        };
-        setSnackBarData(data);
-        resetForm(); // Reset the form fields after successful submission
-      } else {
-        setOpenSnackBar(true);
-        resetForm();
-        const data = {
-          type: "error",
-          message: 'Component added failed.',
-          open: true
-        };
-        setSnackBarData(data);
-      }
-    } catch (error) {
-      setShowLoader(false);
-      // Handle errors, log or display an error message
-      console.error('Error submitting component:', error);
+    setShowLoader(true)
+    const payload = preparePayLoad(formData.fieldsArray);
+    
+    let formDataToSend = new FormData();
+    if (selectedId) {
+      payload.id = selectedId
+    } 
+    for (const key in payload) {
+      formDataToSend.append(key, payload[key]);
     }
-  };
-  
-  const closeSnakBar = () => {
-    setOpenSnackBar(false)
+    setShowLoader(true);
+    const resp = await apiRequest(payload, serverUrl + "preference/components", 'post');
+    setShowLoader(false);
+    if (resp?.data?.data) {
+      setOpenSnackBar(true);
+      const data = {
+        type: "success",
+        message: "Component added successfully!....",
+        open: true
+      }
+      await getComponents();
+      resetForm();
+      setSnackBarData(data);
+      setShowForm(false);
+    } else {
+      setOpenSnackBar(true);
+      const data = {
+        type: "error",
+        message: 'Component added failed.',
+        open:true
+      }
+      setSnackBarData(data);
+      setShowForm(false);
+    } 
   }
   function onChange(data) {
     onChangeValueBind(formData, data);
@@ -121,12 +112,13 @@ const Components = () => {
 
   const handleAddNewItem = () => {
     setShowForm(true);
-  };
+    setFormData(componentsForm)
+  }; 
+
   const onEdit = (id) => {
     setSelectedId(id);
     const selectedRecord = data.find((d) => d.id === id);
     const updateForm = mapValuesToForm(selectedRecord, formData);
-  
     setFormData((prevFormData) => {
       return updateForm;
     });
@@ -140,21 +132,24 @@ const Components = () => {
       setOpenSnackBar(true);
       const data = {
         type: "success",
-        message: "Brand added  sucessfully!....",
+        message: "component deleted  sucessfully!....",
         open: true
       }
-    setSelectedId(null)
+      resetForm();
       setSnackBarData(data);
       setShowForm(false); // Hide the form after submission
     } else {
       setOpenSnackBar(true);
       const data = {
         type: "error",
-        message: 'Brand added failed.',
+        message: 'component delete failed.',
         open: true
       }
       setSnackBarData(data);
     }
+    }
+    const closeSnakBar = () => {
+      setOpenSnackBar(false)
     }
 
   return (
@@ -176,13 +171,14 @@ const Components = () => {
           </Grid>
         )}
       </div>
-      {data?.length > 0 ? (
+      {!showForm && data?.length > 0 && (
           <GenericTable data={data} columns={columns} onEdit={onEdit} onDelete={onDelete} />
-        ) : (
-          <Typography variant="h6" align="center" style={{ marginTop: '10rem' }}>
+          )}
+          {!showForm && (data?.length === 0) && (
+            <Typography variant="h6" align="center" style={{ marginTop: '10rem' }}>
             No data available. Please add new Component.
-          </Typography>
-        )}
+            </Typography>
+          )}
           {openSnackBar && <SnackbarView {...snackBarData} onClose={closeSnakBar}/> }
         {showLoader &&
           <Loader />

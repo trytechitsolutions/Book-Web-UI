@@ -33,7 +33,7 @@ export const componentsForm = {
         },
         {
             type: "checkbox",
-            // label: "Active",
+            label: "Active",
             name: "is_active",
             rules: [{ required: false, message: 'Please choose Active!' }],
             xs: 12,

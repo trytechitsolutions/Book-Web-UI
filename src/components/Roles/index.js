@@ -26,29 +26,59 @@ const Roles = () => {
   const [snackBarData, setSnackBarData] = React.useState();
   const [showLoader, setShowLoader] = React.useState(false);
   const [selectedId, setSelectedId] = React.useState(null)
-
+  const rolesData = GetStoreData('RolesReducer')?.rolesData;
 
 
   const columns = [
+    { id: 'id', label: 'ID' },
     { id: 'name', label: 'Role' },
     { id :'is_active', label:'Status'}
   ];
 
-const rolesData = GetStoreData('RolesReducer')?.rolesData;
 
-
-
+const getRole = async () => {
+  setShowLoader(true);
+  const resp = await apiRequest(null, serverUrl + "preference/role", 'get');
+  setShowLoader(false);
+  if (resp?.data?.data) {
+    setData(resp.data.data);
+    if (formData.fieldsArray) {
+      formData.fieldsArray?.map((f) => {
+        f.value = ''
+        return f;
+      })
+      setFormData(formData)
+    }
+  }
+}
+const resetForm = () => {
+  setSelectedId(null);
+  setShowForm(false);
+  formData.fieldsArray?.map((f) => {
+    f.value = ''
+    return f;
+  })
+  setFormData(formData);
+};
   useEffect(() => {
-    setShowLoader(true);
     async function  fetchData(){
+      setShowLoader(true);
       const resp = await apiRequest(null, serverUrl + "/preference/role", 'get');
       setShowLoader(false);
       if (resp?.data?.data) {
-      setData(resp.data.data);
-       }
-      }   fetchData()
-   
+        setData(resp.data.data);
+        if (formData.fieldsArray) {
+          formData.fieldsArray?.map((f) => {
+            f.value = ''
+            return f;
+          })
+          setFormData(formData)
+        }
+      }
+    }
+     fetchData()
   }, [showForm]);
+
 
   const submitFormData = async () => {
     setShowLoader(true)
@@ -61,6 +91,7 @@ const rolesData = GetStoreData('RolesReducer')?.rolesData;
     for (const key in payload) {
       formDataToSend.append(key, payload[key]);
     }
+    setShowLoader(true);
     const resp = await apiRequest(payload, serverUrl + "/preference/role", 'post');
     setShowLoader(false);
     if (resp?.data?.data) {
@@ -70,7 +101,8 @@ const rolesData = GetStoreData('RolesReducer')?.rolesData;
         message: "Role added  sucessfully!....",
         open: true
       }
-
+      await getRole();
+      resetForm();
       setSnackBarData(data);
       setShowForm(false);
     } else {
@@ -84,6 +116,14 @@ const rolesData = GetStoreData('RolesReducer')?.rolesData;
       setShowForm(false);
     } 
   }
+  function onChange(data) {
+    onChangeValueBind(formData, data);
+  }
+  const handleAddNewItem = () => {
+    setShowForm(true);
+    setFormData(rolesForm)
+  };
+
   const onEdit = (id) => {
     setSelectedId(id);
     const selectedRecord = data.find((d) => d.id === id);
@@ -104,7 +144,7 @@ const rolesData = GetStoreData('RolesReducer')?.rolesData;
         message: "Role deleted  sucessfully!....",
         open: true
       }
-    setSelectedId(null)
+      resetForm();
       setSnackBarData(data);
       setShowForm(false); // Hide the form after submission 
     } else {
@@ -120,13 +160,8 @@ const rolesData = GetStoreData('RolesReducer')?.rolesData;
   const closeSnakBar = () => {
     setOpenSnackBar(false)
   }
-  function onChange(data) {
-    onChangeValueBind(formData, data);
-  }
 
-  const handleAddNewItem = () => {
-    setShowForm(true);
-  };
+
 
   return (
     <Container>
@@ -147,13 +182,14 @@ const rolesData = GetStoreData('RolesReducer')?.rolesData;
           </Grid>
         )}
       </div>
-      {data?.length > 0 ? (
+      {!showForm && data?.length > 0 && (
           <GenericTable data={data} columns={columns} onEdit={onEdit} onDelete={onDelete} />
-        ) : (
-          <Typography variant="h6" align="center" style={{ marginTop: '10rem' }}>
-            No data available. Please add new  Role.
-          </Typography>
-        )}
+          )}
+          {!showForm && (data?.length === 0) && (
+            <Typography variant="h6" align="center" style={{ marginTop: '10rem' }}>
+              No data available. Please add new Role.
+            </Typography>
+          )}
          {openSnackBar && <SnackbarView {...snackBarData} onClose={closeSnakBar}/> }
         {showLoader &&
           <Loader />
