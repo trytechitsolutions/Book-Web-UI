@@ -2,8 +2,7 @@
 // import React, { lazy } from 'react';
 // import { Routes, Route, Navigate, BrowserRouter } from 'react-router-dom';
 import * as React from 'react';
-import { BrowserRouter } from 'react-router-dom';
-import { Link, Route, Routes, useNavigate } from "react-router-dom";
+import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -147,7 +146,7 @@ function App() {
 
   function logout() {
     localStorage.clear();
-    window.location = "";
+    window.location.href = window?.location?.origin;
     setIsLoggedIn(false);
   }
 
@@ -190,7 +189,6 @@ function App() {
 
   return (
     <Provider store={store}>
-
       <BrowserRouter>
         {/* {checkAuthentication() && <Header items={menuItems} />} */}
         <CssBaseline />
@@ -264,27 +262,27 @@ function App() {
         <Main open={open}>
           <DrawerHeader />
           <Routes>
-          {!isLoggedIn && (
-    <Route
-      path="/login"  // Add a path for the Login route
-      element={<Login loginData={loginData} />}
-    />
-  )}
+            {!isLoggedIn && (
+              <Route
+                path="/login"  // Add a path for the Login route
+                element={<Login loginData={loginData} />}
+              />
+            )}
             {/* <Route path="/login" element={<Login/>} /> */}
             <Route path="/" element={<Login loginData={loginData} />} />
             <Route path="/register" element={<RegisterForm />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/category" element={<Categories />} />
-              <Route path="/kyc_form" element={<KycForm />} />
-              <Route path="/components" element={<Components />} />
-              <Route path="/roles" element={<Roles />} />
-              <Route path="/store-form" element={<StoreFrom />} />
-              <Route path="/brands" element={<Brands />} />
-              <Route path="/userSignUp" element={<UserSignUp />} />
-              <Route path="/user" element={<Users />} />
-              <Route path="/store" element={<Store />} />
-              <Route path="/rolemap" element={<ComponentRoleMapping />} />
-              <Route path="/navbar" element={<NavigationBar />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/category" element={<Categories />} />
+            <Route path="/kyc_form" element={<KycForm />} />
+            <Route path="/components" element={<Components />} />
+            <Route path="/roles" element={<Roles />} />
+            <Route path="/store-form" element={<StoreFrom />} />
+            <Route path="/brands" element={<Brands />} />
+            <Route path="/userSignUp" element={<UserSignUp />} />
+            <Route path="/user" element={<Users />} />
+            <Route path="/store" element={<Store />} />
+            <Route path="/rolemap" element={<ComponentRoleMapping />} />
+            <Route path="/navbar" element={<NavigationBar />} />
             {/* <Route path="/bookslist"  element={<BookList />}  />
           <Route path="/books"  element={<Books />}  />
           <Route path="/publisher" element={<PrivateRoute element={<PublisherComponent />} />} /> */}
