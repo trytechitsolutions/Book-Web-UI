@@ -9,7 +9,7 @@ import { apiRequest } from '../../services/api';
 import Loader from '../common/Loader';
 import SnackbarView from '../common/SnackBar';
 
-const Login = () => {
+const Login = (props) => {
   const ChildRef = useRef();
   const [formData, setFormData] = useState(loginForm);
   const [page, setPage] = useState("Login");
@@ -34,6 +34,7 @@ const Login = () => {
           message: "Logged in sucessfully!....",
           open: true
         }
+        props.loginData();
         navigate('/kyc_form')
 
         setSnackBarData(data);
