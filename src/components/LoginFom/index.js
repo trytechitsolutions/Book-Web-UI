@@ -55,6 +55,7 @@ const Login = (props) => {
         open: true,
       }
       setSnackBarData(data);
+       setShowLoader(false);
     }
   };
 

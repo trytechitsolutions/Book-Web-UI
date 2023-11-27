@@ -13,6 +13,8 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import StoreTimingsConfigurator from '../ReusableComponents/StoreTimings';
 import { apiRequest } from '../../services/api';
 import * as securedLocalStorage from '../../services/secureLocalStorage';
+import Loader from '../common/Loader';
+import SnackbarView from '../common/SnackBar';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -41,6 +43,9 @@ const Store = () => {
   const [storeFeviconFile, setStoreFeviconFile] = useState(null);
   const [storeTimings, setStoreTimings] = useState(null);
   const serverUrl = securedLocalStorage.baseUrl;
+  const [showLoader, setShowLoader] = React.useState(false);
+  const [openSnackBar, setOpenSnackBar] = React.useState(false);
+  const [snackBarData, setSnackBarData] = React.useState();
 
 
   const [formData, setFormData] = useState({
@@ -90,6 +95,7 @@ const Store = () => {
         }
       }
       const handleSubmit = async () => {
+        setShowLoader(true);
       const data = new FormData();
       const fileInputs = {
         'store_logo': storeLogoFile,
@@ -113,16 +119,37 @@ const Store = () => {
       data.append('store_favicon', storeFeviconFile)
     }
     const resp = await apiRequest(data, serverUrl + "preference/store", 'post');
-    console.log('Form submitted:', data);
-    handleReset();
+    setShowLoader(false);
+    if (resp?.data?.data) {
+      setOpenSnackBar(true);
+      const data = {
+        type: "success",
+        message: "Store added  sucessfully!....",
+        open: true
+      }
+      setSnackBarData(data);
+      handleReset();
+
+    } else {
+      setOpenSnackBar(true);
+      handleReset();
+      const data = {
+        type: "error",
+        message: 'Store added failed.',
+        open: true
+      }
+      setSnackBarData(data);
+    }
+   
     }
     const onChangeAction = (data) => {
-
       formData.store_timings= JSON.stringify(data)
       setFormData(formData)
       console.log(data)
      }
-
+     const closeSnakBar = () => {
+      setOpenSnackBar(false)
+    }
   return (
     <div className={classes.formContainer}>
     <TextField
@@ -289,6 +316,10 @@ const Store = () => {
             Reset
           </Button>
         </Stack>
+        {openSnackBar && <SnackbarView {...snackBarData} onClose={closeSnakBar} />}
+      {showLoader &&
+        <Loader />
+      }
       </Grid>
     </div>
      )

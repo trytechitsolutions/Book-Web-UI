@@ -51,22 +51,19 @@ const getCategories=async()=>{
   }
 }
   useEffect(() => {
-    // Fetch data from the Redux store once when the component mounts
     async function fetchData() {
-     await getCategories();
+      setShowLoader(true);
+      const resp = await apiRequest(null, serverUrl + "preference/category", 'get');
+      setShowLoader(false);
+
+      if (resp?.data?.data) {
+        setData(resp.data.data);
+      }
     }
     fetchData()
   }, [showForm]);
-  const resetForm = () => {
-    setSelectedId(null);
-    setShowForm(false);
-    formData.fieldsArray?.map((f)=>{
-        f.value = ''
-      return f;
-    })
-    setFormData(formData);
-  };
   const submitFormData = async () => {
+    setShowLoader(true);
     const payload = preparePayLoad(formData.fieldsArray);
     const isFileExist = formData.fieldsArray.filter((f) => f.type === "file");
 
@@ -83,7 +80,7 @@ const getCategories=async()=>{
       formDataToSend.append('id', selectedId);
     }
     setShowLoader(true);
-    const resp = await apiRequest(formDataToSend, serverUrl + "preference/category ", 'post');
+    const resp = await apiRequest(formDataToSend, serverUrl + "preference/category", 'post');
     setShowLoader(false);
     if (resp?.data?.data) {
       setOpenSnackBar(true);
@@ -95,6 +92,7 @@ const getCategories=async()=>{
       await getCategories();
       resetForm();
       setSnackBarData(data);
+      setShowForm(false);
     } else {
       setOpenSnackBar(true);
       const data = {
@@ -103,6 +101,7 @@ const getCategories=async()=>{
         open: true
       }
       setSnackBarData(data);
+      setShowForm(false);
     }
   }
   function onChange(data) {
@@ -134,8 +133,7 @@ const getCategories=async()=>{
       };
       resetForm();
       setSnackBarData(data);
-      setShowForm(false); // Hide the form after submission
-      await getCategories();
+      setShowForm(false); 
     } else {
       setOpenSnackBar(true);
       const data = {

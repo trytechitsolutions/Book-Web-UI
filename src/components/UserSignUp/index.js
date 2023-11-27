@@ -27,11 +27,13 @@ const UserSignUp = () => {
     const userData = GetStoreData('UserSignUpReducer')?.userData;
     
     useEffect(() => {
-      // Fetch data from the Redux store once when the component mounts
+      setShowLoader(true)
       setData(userData);
+      setShowLoader(false)
     }, [userData]);
 
     const submitFormData = async () => {
+      setShowLoader(true)
       const payload = preparePayLoad(formData.fieldsArray);
       console.log('payload', payload);   
       const resp = await apiRequest(payload, serverUrl + "preference/users" , 'post' );

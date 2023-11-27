@@ -84,6 +84,7 @@ const KycForm = () => {
 
   }
   const handleSubmit = async () => {
+    setShowLoader(true);
     const formData = new FormData();
     const fileInputs = {
       'aadhar_card': aadharCardFile,

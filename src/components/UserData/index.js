@@ -37,6 +37,7 @@ const Users = () => {
   useEffect(() => {
     // Fetch data from the Redux store once when the component mounts
     async function fetchData() {
+      setShowLoader(true)
       const resp = await apiRequest(null, serverUrl + "preference/users", 'get');
       setShowLoader(false);
       if (resp?.data?.data) {
@@ -56,6 +57,7 @@ const Users = () => {
     setShowForm(true);
   }
   const submitFormData = async () => {
+    setShowLoader(true)
     const payload = preparePayLoad(formData.fieldsArray);
     if(selectedId){
       payload.id = selectedId;
@@ -86,6 +88,7 @@ const Users = () => {
     onChangeValueBind(formData, data);
   }
   const onDelete = async (id) => {
+    setShowLoader(true)
     const resp = await apiRequest(null, serverUrl + "/preference/users/" + id, 'delete');
     setShowLoader(false);
     if (resp?.data?.data) {
