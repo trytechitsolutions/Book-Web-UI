@@ -28,13 +28,28 @@ const Categories = () => {
 
   const columns = [
     { id: 'name', label: 'Title' },
-    { id: 'parent_id', label: 'Parent Category' },
+    { id: 'parent_name', label: 'Parent Category' },
     { id: 'file', label: 'Files' },
     { id: 'is_active', label: 'Status' }
 
   ];
 
-
+const getCategories=async()=>{
+  setShowLoader(true);
+  const resp = await apiRequest(null, serverUrl + "preference/category", 'get');
+  setShowLoader(false);
+  if (resp?.data?.data) {
+    setData(resp.data.data);
+    if (formData.fieldsArray) { 
+    formData.fieldsArray.map((f) => {
+      if (f.name === "parent_id") {
+        f.options = resp.data.data
+      }
+    })
+    setFormData(formData)
+  }
+  }
+}
   useEffect(() => {
     async function fetchData() {
       setShowLoader(true);
@@ -47,7 +62,6 @@ const Categories = () => {
     }
     fetchData()
   }, [showForm]);
-
   const submitFormData = async () => {
     setShowLoader(true);
     const payload = preparePayLoad(formData.fieldsArray);
@@ -75,7 +89,8 @@ const Categories = () => {
         message: "Categories added  sucessfully!....",
         open: true
       }
-      setFormData(categoriesForm)
+      await getCategories();
+      resetForm();
       setSnackBarData(data);
       setShowForm(false);
     } else {
@@ -112,20 +127,20 @@ const Categories = () => {
     if (resp?.data?.data) {
       setOpenSnackBar(true);
       const data = {
-        type: "success",
-        message: "category deleted  sucessfully!....",
-        open: true
-      }
-      setSelectedId(null)
+        type: 'success',
+        message: 'category deleted successfully!....',
+        open: true,
+      };
+      resetForm();
       setSnackBarData(data);
       setShowForm(false); 
     } else {
       setOpenSnackBar(true);
       const data = {
-        type: "error",
+        type: 'error',
         message: 'category deleted failed.',
-        open: true
-      }
+        open: true,
+      };
       setSnackBarData(data);
     }
   }
