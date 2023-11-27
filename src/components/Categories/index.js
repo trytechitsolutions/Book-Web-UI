@@ -40,12 +40,14 @@ const getCategories=async()=>{
   setShowLoader(false);
   if (resp?.data?.data) {
     setData(resp.data.data);
+    if (formData.fieldsArray) { 
     formData.fieldsArray.map((f) => {
       if (f.name === "parent_id") {
         f.options = resp.data.data
       }
     })
     setFormData(formData)
+  }
   }
 }
   useEffect(() => {
@@ -55,6 +57,15 @@ const getCategories=async()=>{
     }
     fetchData()
   }, [showForm]);
+  const resetForm = () => {
+    setSelectedId(null);
+    setShowForm(false);
+    formData.fieldsArray?.map((f)=>{
+        f.value = ''
+      return f;
+    })
+    setFormData(formData);
+  };
   const submitFormData = async () => {
     const payload = preparePayLoad(formData.fieldsArray);
     const isFileExist = formData.fieldsArray.filter((f) => f.type === "file");
@@ -82,7 +93,7 @@ const getCategories=async()=>{
         open: true
       }
       await getCategories();
-      setFormData(categoriesForm)
+      resetForm();
       setSnackBarData(data);
     } else {
       setOpenSnackBar(true);
@@ -93,7 +104,6 @@ const getCategories=async()=>{
       }
       setSnackBarData(data);
     }
-    setShowForm(false); // Hide the form after submission
   }
   function onChange(data) {
     onChangeValueBind(formData, data);
@@ -118,21 +128,21 @@ const getCategories=async()=>{
     if (resp?.data?.data) {
       setOpenSnackBar(true);
       const data = {
-        type: "success",
-        message: "category deleted  sucessfully!....",
-        open: true
-      }
-      setSelectedId(null)
+        type: 'success',
+        message: 'category deleted successfully!....',
+        open: true,
+      };
+      resetForm();
       setSnackBarData(data);
       setShowForm(false); // Hide the form after submission
       await getCategories();
     } else {
       setOpenSnackBar(true);
       const data = {
-        type: "error",
+        type: 'error',
         message: 'category deleted failed.',
-        open: true
-      }
+        open: true,
+      };
       setSnackBarData(data);
     }
   }
