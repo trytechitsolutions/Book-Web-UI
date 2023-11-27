@@ -39,7 +39,7 @@ const rolesData = GetStoreData('RolesReducer')?.rolesData;
 
 
   useEffect(() => {
-    // Fetch data from the Redux store once when the component mounts
+    setShowLoader(true);
     async function  fetchData(){
       const resp = await apiRequest(null, serverUrl + "/preference/role", 'get');
       setShowLoader(false);
@@ -51,6 +51,7 @@ const rolesData = GetStoreData('RolesReducer')?.rolesData;
   }, [showForm]);
 
   const submitFormData = async () => {
+    setShowLoader(true)
     const payload = preparePayLoad(formData.fieldsArray);
     
     let formDataToSend = new FormData();
@@ -80,22 +81,20 @@ const rolesData = GetStoreData('RolesReducer')?.rolesData;
         open:true
       }
       setSnackBarData(data);
-    }
-  
-    // setShowForm(false); // Hide the form after submission
+      setShowForm(false);
+    } 
   }
   const onEdit = (id) => {
     setSelectedId(id);
     const selectedRecord = data.find((d) => d.id === id);
     const updateForm = mapValuesToForm(selectedRecord, formData);
-  
     setFormData((prevFormData) => {
       return updateForm;
     });
-  
     setShowForm(true);
   }
   const onDelete = async (id) => {
+    setShowLoader(true)
     const resp = await apiRequest(null, serverUrl + "/preference/role/"+id, 'delete');
     setShowLoader(false);
     if (resp?.data?.data) {

@@ -34,28 +34,22 @@ const Categories = () => {
 
   ];
 
-const getCategories=async()=>{
-  setShowLoader(true);
-  const resp = await apiRequest(null, serverUrl + "preference/category", 'get');
-  setShowLoader(false);
-  if (resp?.data?.data) {
-    setData(resp.data.data);
-    formData.fieldsArray.map((f) => {
-      if (f.name === "parent_id") {
-        f.options = resp.data.data
-      }
-    })
-    setFormData(formData)
-  }
-}
+
   useEffect(() => {
-    // Fetch data from the Redux store once when the component mounts
     async function fetchData() {
-     await getCategories();
+      setShowLoader(true);
+      const resp = await apiRequest(null, serverUrl + "preference/category", 'get');
+      setShowLoader(false);
+
+      if (resp?.data?.data) {
+        setData(resp.data.data);
+      }
     }
     fetchData()
   }, [showForm]);
+
   const submitFormData = async () => {
+    setShowLoader(true);
     const payload = preparePayLoad(formData.fieldsArray);
     const isFileExist = formData.fieldsArray.filter((f) => f.type === "file");
 
@@ -72,7 +66,7 @@ const getCategories=async()=>{
       formDataToSend.append('id', selectedId);
     }
     setShowLoader(true);
-    const resp = await apiRequest(formDataToSend, serverUrl + "preference/category ", 'post');
+    const resp = await apiRequest(formDataToSend, serverUrl + "preference/category", 'post');
     setShowLoader(false);
     if (resp?.data?.data) {
       setOpenSnackBar(true);
@@ -81,9 +75,9 @@ const getCategories=async()=>{
         message: "Categories added  sucessfully!....",
         open: true
       }
-      await getCategories();
       setFormData(categoriesForm)
       setSnackBarData(data);
+      setShowForm(false);
     } else {
       setOpenSnackBar(true);
       const data = {
@@ -92,8 +86,8 @@ const getCategories=async()=>{
         open: true
       }
       setSnackBarData(data);
+      setShowForm(false);
     }
-    setShowForm(false); // Hide the form after submission
   }
   function onChange(data) {
     onChangeValueBind(formData, data);
@@ -124,8 +118,7 @@ const getCategories=async()=>{
       }
       setSelectedId(null)
       setSnackBarData(data);
-      setShowForm(false); // Hide the form after submission
-      await getCategories();
+      setShowForm(false); 
     } else {
       setOpenSnackBar(true);
       const data = {

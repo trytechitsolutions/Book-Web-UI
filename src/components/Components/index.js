@@ -33,11 +33,15 @@ const Components = () => {
   ];
 
  
+  const resetForm = () => {
+    setFormData(componentsForm);
+    setSelectedId(null);
+  };
   useEffect(() => {
-    // Fetch data from the Redux store once when the component mounts
+    setShowLoader(true);
     async function fetchData() {
       const resp = await apiRequest(null, serverUrl + "preference/components", 'get');
-      setShowLoader(false);
+      setShowLoader(false); 
       if (resp?.data?.data) {
         setData(resp.data.data);
       }
@@ -45,30 +49,69 @@ const Components = () => {
     fetchData()
   }, [showForm]);
 
+  // const submitFormData = async () => {
+  //   setShowLoader(true);
+  //   const payload = preparePayLoad(formData.fieldsArray);
+  //   console.log('payload', payload);   
+  //   const resp = await apiRequest(payload, serverUrl + "preference/components", 'post');
+  //   setShowLoader(false);
+  //   if (resp?.data?.data) {
+  //     setOpenSnackBar(true);
+  //     const data = {
+  //       type: "success",
+  //       message: "Component added  sucessfully!....",
+  //       open: true
+  //     }
+  //     setSnackBarData(data);
+  //     resetForm(); 
+  //    } else {
+  //     setOpenSnackBar(true);
+  //     resetForm(); 
+  //     const data = {
+  //       type: "error",
+  //       message: 'Component added failed.',
+  //       open:true
+  //     }
+  //     setSnackBarData(data);
+  //     setShowForm(false);
+  //   }
+    
+  // }
   const submitFormData = async () => {
-    const payload = preparePayLoad(formData.fieldsArray);
-    console.log('payload', payload);   
-    const resp = await apiRequest(payload, serverUrl + "preference/components", 'post');
-    setShowLoader(false);
-    if (resp?.data?.data) {
-      setOpenSnackBar(true);
-      const data = {
-        type: "success",
-        message: "Component added  sucessfully!....",
-        open: true
+    setShowLoader(true);
+  
+    try {
+      const payload = preparePayLoad(formData.fieldsArray);
+      console.log('payload', payload);
+      const resp = await apiRequest(payload, serverUrl + "preference/components", 'post');
+      setShowLoader(false);
+  
+      if (resp?.data?.data) {
+        setOpenSnackBar(true);
+        const data = {
+          type: "success",
+          message: "Component added successfully!....",
+          open: true
+        };
+        setSnackBarData(data);
+        resetForm(); // Reset the form fields after successful submission
+      } else {
+        setOpenSnackBar(true);
+        resetForm();
+        const data = {
+          type: "error",
+          message: 'Component added failed.',
+          open: true
+        };
+        setSnackBarData(data);
       }
-      setSnackBarData(data);
-      setShowForm(false);
-     } else {
-      setOpenSnackBar(true);
-      const data = {
-        type: "error",
-        message: 'Component added failed.',
-        open:true
-      }
-      setSnackBarData(data);
+    } catch (error) {
+      setShowLoader(false);
+      // Handle errors, log or display an error message
+      console.error('Error submitting component:', error);
     }
-  }
+  };
+  
   const closeSnakBar = () => {
     setOpenSnackBar(false)
   }
@@ -87,10 +130,10 @@ const Components = () => {
     setFormData((prevFormData) => {
       return updateForm;
     });
-  
     setShowForm(true);
    }
    const onDelete = async (id) => {
+    setShowLoader(true)
     const resp = await apiRequest(null, serverUrl + "preference/component/"+id, 'delete');
     setShowLoader(false);
     if (resp?.data?.data) {

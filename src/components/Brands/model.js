@@ -30,21 +30,24 @@ export const brandsForm = {
             value: "",
         },
         {
-            type: "checkbox",
-            label:"Active",
-            name: "is_active",
-            rules: [{ required: false, message: 'Please choose Active!' }],
-            xs: 12,
-            sm: 12,
-            md: 12,
-            lg: 12,
-            labelCol: "",
-            wrapperCol: "",
-            value: false, // Update with the selected value ("on" or "off")
-            options: [
-                { value: "is_active", label: "Active" },
-            ],
-        },
+                type: "checkbox",
+                label: "Active",
+                name: "is_active",
+                rules: [
+                    { required: false, message: 'Please selct checkbox!' },
+                ],
+                xs: 12,
+                sm: 12,
+                md: 12,
+                lg: 12,
+                labelCol: "",
+                wrapperCol: "",
+                value: "",
+                options: [
+                    { value: "is_active", label: "Active" },
+
+                ],
+            },
        
     ],
     buttonSecction: {

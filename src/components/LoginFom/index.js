@@ -54,6 +54,7 @@ const Login = () => {
         open: true,
       }
       setSnackBarData(data);
+       setShowLoader(false);
     }
   };
 

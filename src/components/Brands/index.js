@@ -36,6 +36,11 @@ const Brands = () => {
   const brandsData = GetStoreData('BrandsReducer')?.brandsData;
 
 
+  const resetForm = () => {
+    setFormData(brandsForm);
+    setSelectedId(null);
+  };
+
   useEffect(() => {
     // Fetch data from the Redux store once when the component mounts
     setShowLoader(true);
@@ -67,8 +72,9 @@ const Brands = () => {
     for (const key in payload) {
       formDataToSend.append(key, payload[key]);
     }
-    const resp = await apiRequest(formDataToSend, serverUrl + "/preference/brand", 'post');
+    const resp = await apiRequest(formDataToSend, serverUrl + "preference/brand", 'post');
     setShowLoader(false);
+    setShowForm(false);
     if (resp?.data?.data) {
       setOpenSnackBar(true);
       const data = {
@@ -78,7 +84,7 @@ const Brands = () => {
       }
       setSelectedId(null)
       setSnackBarData(data);
-      setShowForm(false); // Hide the form after submission
+      resetForm(); 
     } else {
       setOpenSnackBar(true);
       const data = {
@@ -101,13 +107,13 @@ const Brands = () => {
     setSelectedId(id);
     const selectedRecord = data.find((d) => d.id === id);
     const updateForm = mapValuesToForm(selectedRecord, formData);
-
     setFormData((prevFormData) => {
       return updateForm;
     });
     setShowForm(true);
   }
   const onDelete = async (id) => {
+    setShowLoader(true)
     const resp = await apiRequest(null, serverUrl + "/preference/brand/" + id, 'delete');
     setShowLoader(false);
     if (resp?.data?.data) {
