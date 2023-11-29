@@ -53,6 +53,7 @@ import { jwtDecode } from 'jwt-decode';
 
 
 import { apiRequest } from './services/api';
+import Products from './components/Products';
 const drawerWidth = 240;
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
@@ -268,10 +269,11 @@ function App() {
                 element={<Login loginData={loginData} />}
               />
             )}
-            {/* <Route path="/login" element={<Login/>} /> */}
+            <Route path="/login" element={<Login/>} />
             <Route path="/" element={<Login loginData={loginData} />} />
             <Route path="/register" element={<RegisterForm />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/product" element={<Products />} />
             <Route path="/category" element={<Categories />} />
             <Route path="/kyc_form" element={<KycForm />} />
             <Route path="/components" element={<Components />} />

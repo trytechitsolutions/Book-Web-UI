@@ -67,13 +67,6 @@ const Brands = () => {
       setShowLoader(false);
       if (resp?.data?.data) {
         setData(resp.data.data);
-        if (formData.fieldsArray) {
-          formData.fieldsArray?.map((f) => {
-            f.value = ''
-            return f;
-          })
-          setFormData(formData)
-        }
       }
     }
     fetchData()

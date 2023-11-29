@@ -65,7 +65,6 @@ const Categories = () => {
       setShowLoader(true);
       const resp = await apiRequest(null, serverUrl + "preference/category", 'get');
       setShowLoader(false);
-
       if (resp?.data?.data) {
         setData(resp.data.data);
         if (formData.fieldsArray) {
