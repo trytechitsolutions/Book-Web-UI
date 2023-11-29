@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useImperativeHandle, useState, useCallback } from 'react';
+import React, { forwardRef, useEffect, useImperativeHandle, useState, useCallback, useRef } from 'react';
 import {
   TextField,
   TextareaAutosize,
@@ -32,6 +32,8 @@ import {
 } from '@mui/icons-material';
 import './index.css';
 import { validateField } from '../CommonFunctions';
+import Autocomplete from '@mui/material/Autocomplete';
+import Chip from '@mui/material/Chip';
 
 const InputFields = forwardRef((props, ref) => {
   const { modaldata, onChange, submitFormData, index } = props;
@@ -41,26 +43,81 @@ const InputFields = forwardRef((props, ref) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [validationMessages, setValidationMessages] = useState({});
 
+  const [inputValue, setInputValue] = useState('');
+  const [selectedWords, setSelectedWords] = useState([]);
+
   const handleInputChange = (name, type, value) => {
-    // Update the form data without immediate validation
+    // Handle Autocomplete input
+    if (type === 'auto-complete-text') {
+      setInputValue(value);
+    }
+
+    const field = modaldata.fieldsArray.find((field) => field.name === name);
+    // Apply rules validation
+    const validationMessages = field?.rules.reduce((messages, rule) => {
+      if (rule.required && !value.trim()) {
+        messages.push(rule.message || 'This field is required');
+      } else if (rule.type === 'email' && !rule.regex.test(value)) {
+        messages.push(rule.message || 'Please enter a valid email');
+      } else if (rule.type === 'password' && !rule.regex.test(value)) {
+        messages.push(rule.message || 'Please enter a valid password');
+      } else if (rule.type === 'phonenumber' && !rule.regex.test(value)) {
+        messages.push(rule.message || 'Please enter a valid phonenumber');
+      } else if (rule.type === 'file' && !rule.regex.test(value)) {
+        messages.push(rule.message || 'Please  Upload valid File');
+      }
+      return messages;
+    }, []);
+    setValidationMessages((prevMessages) => ({
+      ...prevMessages,
+      [name]: validationMessages.join(' '), // Combine multiple messages into one string
+    }));
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: value,
     }));
-
-    // Clear the validation message for the current field
-    setValidationMessages((prevMessages) => ({
-      ...prevMessages,
-      [name]: '',
-    }));
+    if (validationMessages.length === 0) {
+      setValidationMessages((prevMessages) => ({
+        ...prevMessages,
+        [name]: '',
+      }));
+    }
+    console.log(name, type, value, 'onchange****')
     let obj = { name, type, value };
     onChange(obj, index);
   };
 
-
-
-
-  // console.log(props, '****props***')
+  // const handleKeyDown = (event) => {
+  //   console.log(event, '**event***input fields****')
+  //   if (event.key === 'Enter' && inputValue.trim() !== '') {
+  //     setSelectedWords((prevWords) => [...prevWords, inputValue.trim()]);
+  //     setInputValue('');
+  //   }
+  // };
+  const ChildRef = useRef();
+  const handleKeyDown = (event, name, type, value) => {
+    console.log(event.key, '**event***input fields****')
+    
+    // if ((event.key === 'Enter') && (inputValue !=='')) {
+    //   event.preventDefault();  // Prevent form submission
+    //   setSelectedWords((prevWords) => [...prevWords, inputValue.trim()]);
+    //   setInputValue('');
+    //   setFormData((prevFormData) => ({
+    //     ...prevFormData,
+    //     [name]: selectedWords,
+    //   }));
+    //   let obj = { name, type, value }; // Pass 'file' as the value
+    //   // onChange(obj, index);
+    //   console.log(formData, '***formData*****')
+    //   // ChildRef.current && ChildRef.current.handleKeyDown(event);
+    //   // ChildRef.current.handleKeyDown(event);  // Pass the event to InputFields component
+    // }
+  };
+  const handleDelete = (wordToDelete) => {
+    setSelectedWords((prevWords) =>
+      prevWords.filter((word) => word !== wordToDelete)
+    );
+  };
   const bindValues = useCallback(() => {
     const initialValues = {};
     modaldata.fieldsArray.forEach((field) => {
@@ -194,6 +251,35 @@ const InputFields = forwardRef((props, ref) => {
                         {validationMessages[ele.name]}
                       </Typography>
                     )}
+                  </div>
+                )}
+                {ele.type === 'auto-complete-text' && (
+                  <div>
+                    <Autocomplete
+                      freeSolo
+                      value={inputValue}
+                      onChange={(event, newValue) => setInputValue(newValue)}
+                      onKeyDown={(e)=> handleKeyDown(e, ele.name, ele.type, e.target.value)}
+                      options={[]}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label={ele.label}
+                          variant="outlined"
+                          fullWidth
+                        />
+                      )}
+                    />
+                    <div style={{ marginTop: 10 }}>
+                      {selectedWords.map((word, index) => (
+                        <Chip
+                          key={index}
+                          label={word}
+                          onDelete={() => handleDelete(word)}
+                          style={{ margin: 4 }}
+                        />
+                      ))}
+                    </div>
                   </div>
                 )}
 
