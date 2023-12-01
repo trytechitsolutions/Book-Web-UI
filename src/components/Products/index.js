@@ -5,6 +5,11 @@ import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import './styles.css';
+import GeneralInfo from './GeneralInfo';
+import Price from './Price';
+import Images from './Images';
+import TagsLabels from './TagsLabels';
+import DeliveryOptions from './DeliveryOption';
 
 const TabPanel = (props) => {
   const { children, value, index, ...other } = props;
@@ -39,15 +44,14 @@ const a11yProps = (index) => {
   };
 };
 
-// ... (imports)
+ // ... (imports)
 
 const Products = () => {
     const [value, setValue] = useState(0);
   
     const handleChange = (event, newValue) => {
       setValue(newValue);
-    };
-  
+    };  
     return (
       <Box sx={{ display: 'flex', height: '100vh' }}>
         <Tabs
@@ -72,19 +76,19 @@ const Products = () => {
         </Tabs>
         <Box sx={{ flexGrow: 1, bgcolor: 'background.paper', padding: 3 }}>
           <TabPanel value={value} index={0}>
-            Item One
+          <GeneralInfo/>
           </TabPanel>
           <TabPanel value={value} index={1}>
-            Item Two
+           <Price/>
           </TabPanel>
           <TabPanel value={value} index={2}>
-            Item Three
+            <Images/>
           </TabPanel>
           <TabPanel value={value} index={3}>
-            Item Four
+            Inventory
           </TabPanel>
           <TabPanel value={value} index={4}>
-            Item Five
+            <TagsLabels/>
           </TabPanel>
           <TabPanel value={value} index={5}>
             Item Six
@@ -93,7 +97,7 @@ const Products = () => {
             Item Seven
           </TabPanel>
           <TabPanel value={value} index={7}>
-          Delivery Option
+             <DeliveryOptions/>
           </TabPanel>
           <TabPanel value={value} index={8}>
           Product Meta

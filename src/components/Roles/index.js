@@ -67,13 +67,13 @@ const resetForm = () => {
       setShowLoader(false);
       if (resp?.data?.data) {
         setData(resp.data.data);
-        if (formData.fieldsArray) {
-          formData.fieldsArray?.map((f) => {
-            f.value = ''
-            return f;
-          })
-          setFormData(formData)
-        }
+        // if (formData.fieldsArray) {
+        //   formData.fieldsArray?.map((f) => {
+        //     f.value = ''
+        //     return f;
+        //   })
+        //   setFormData(formData)
+        // }
       }
     }
      fetchData()
@@ -113,7 +113,7 @@ const resetForm = () => {
         open:true
       }
       setSnackBarData(data);
-      setShowForm(false);
+      // setShowForm(false);
     } 
   }
   function onChange(data) {

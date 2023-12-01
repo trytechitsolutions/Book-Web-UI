@@ -26,11 +26,42 @@ const RegisterForm = () => {
   const [showLoader, setShowLoader] = React.useState(false);
 
   const registerData = GetStoreData('RegisterReducer')?.registerData;
+  // const getRole = async () => {
+  //   setShowLoader(true);
+  //   const resp = await apiRequest(null, serverUrl + "preference/role", 'get');
+  //   setShowLoader(false);
+  //   if (resp?.data?.data) {
+  //     setData(resp.data.data);
+  //     if (formData.fieldsArray) {
+  //       formData.fieldsArray?.map((f) => {
+  //         f.value = ''
+  //         return f;
+  //       })
+  //       setFormData(formData)
+  //     }
+  //   }
+  // }
+  // const resetForm = () => {
+  //   setSelectedId(null);
+  //   setShowForm(false);
+  //   formData.fieldsArray?.map((f) => {
+  //     f.value = ''
+  //     return f;
+  //   })
+  //   setFormData(formData);
+  // };
+
 
   useEffect(() => {
     // Fetch data from the Redux store once when the component mounts
-    setData(registerData);
-  }, [registerData]);
+    if (formData.fieldsArray) {
+            formData.fieldsArray?.map((f) => {
+              f.value = ''
+              return f;
+            })
+            setFormData(formData)
+          }
+  }, []);
 
   const submitFormData = async () => {
     try {
