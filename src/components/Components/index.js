@@ -38,17 +38,17 @@ const Components = () => {
     setShowLoader(false);
     if (resp?.data?.data) {
       setData(resp.data.data);
-      if (formData.fieldsArray) {
-        formData.fieldsArray?.map((f) => {
-          f.value = ''
-          return f;
-        })
-        setFormData(formData)
-      }
     }
   }
   const resetForm = () => {
-    setFormData(componentsForm);
+    if (formData.fieldsArray) {
+      formData.fieldsArray?.map((f) => {
+        f.value = ''
+        return f;
+      })
+      setFormData(formData)
+    }
+    // setFormData(componentsForm);
     setSelectedId(null);
   };
   useEffect(() => {
