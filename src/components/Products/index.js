@@ -10,6 +10,7 @@ import Price from './Price';
 import Images from './Images';
 import TagsLabels from './TagsLabels';
 import DeliveryOptions from './DeliveryOption';
+import ProductSetting from './ProductSetting';
 
 const TabPanel = (props) => {
   const { children, value, index, ...other } = props;
@@ -68,15 +69,15 @@ const Products = () => {
           <Tab className='tab' label="Inventory" {...a11yProps(3)} />
           <Tab className='tab' label="Tags & Label" {...a11yProps(4)} />
           <Tab className='tab' label="Attributes" {...a11yProps(5)} />
-          <Tab className='tab' label="Categories" {...a11yProps(6)} />
-          <Tab className='tab' label="Delivery Option" {...a11yProps(7)} />
-          <Tab className='tab' label="Product Meta" {...a11yProps(8)} />
-          <Tab className='tab' label="Product Setting" {...a11yProps(9)} />
+          <Tab className='tab' label="Delivery Option" {...a11yProps(6)} />
+          <Tab className='tab' label="Product Meta" {...a11yProps(7)} />
+          <Tab className='tab' label="Product Setting" {...a11yProps(8)} />
 
         </Tabs>
         <Box sx={{ flexGrow: 1, bgcolor: 'background.paper', padding: 3 }}>
           <TabPanel value={value} index={0}>
-          <GeneralInfo/>
+          <GeneralInfo />
+          {/* <GeneralInfo onUpdate={data => updateFormData('generalInfo', data)} /> */}
           </TabPanel>
           <TabPanel value={value} index={1}>
            <Price/>
@@ -94,21 +95,19 @@ const Products = () => {
             Item Six
           </TabPanel>
           <TabPanel value={value} index={6}>
-            Item Seven
-          </TabPanel>
-          <TabPanel value={value} index={7}>
              <DeliveryOptions/>
           </TabPanel>
-          <TabPanel value={value} index={8}>
+          <TabPanel value={value} index={7}>
           Product Meta
           </TabPanel>
-          <TabPanel value={value} index={9}>
-          Product Setting
-          </TabPanel>
+          <TabPanel value={value} index={8}>
+           <ProductSetting/>
+          </TabPanel>  
         </Box>
+
       </Box>
+
     );
   };
   
   export default Products;
-  

@@ -1,11 +1,37 @@
 import { Container, FormControl, FormControlLabel, Grid, InputLabel, MenuItem, Select, Switch, TextField, Typography } from '@mui/material';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
-const GeneralInfo = () => {
+const GeneralInfo = ({ onUpdate }) => {
   const [isRefundable, setIsRefundable] = useState(false);
+
+
+  const [formData, setFormData] = useState({
+    productName: '',
+    brand: '',
+    unit: '',
+    weight: '',
+    minPurchaseQty: '',
+    tags: '',
+    barcode: '',
+    productCategory: '',
+    productSummary: '',
+    description: '',
+  });
+
+
+  // useEffect(()=>{
+  //   onUpdate(formData);
+  // }, [formData, onUpdate])
 
   const handleSwitchChange = () => {
       setIsRefundable(!isRefundable);
+    };
+    const handleInputChange = (event) => {
+      const { name, value } = event.target;
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: value,
+      }));
     };
   return (
     <Container >
@@ -18,11 +44,11 @@ const GeneralInfo = () => {
             <TextField
               fullWidth
               label="Product Name"
-              name="ProductName"
+              name="productName"
               placeholder="write product name"
               variant="outlined"
-              value=''
-              onChange={null}
+              value={formData.productName}
+              onChange={handleInputChange}
               required
             />
           </Grid>
@@ -32,6 +58,8 @@ const GeneralInfo = () => {
               <Select
                 label="Brand"
                 name="brand"
+                value={formData.brand}
+             onChange={handleInputChange}
                 required
               >
                 <MenuItem value="brand">brand</MenuItem>
@@ -47,8 +75,8 @@ const GeneralInfo = () => {
               name="unit"
               placeholder="unit (e.g KG etc )"
               variant="outlined"
-              value=''
-              onChange={null}
+              value={formData.unit}
+             onChange={handleInputChange}
               required
             />
         </Grid> 
@@ -59,8 +87,8 @@ const GeneralInfo = () => {
               name="weight"
               placeholder="0.00"
               variant="outlined"
-              value=''
-              onChange={null}
+              value={formData.weight}
+             onChange={handleInputChange}
               required
             />
         </Grid>
@@ -68,11 +96,11 @@ const GeneralInfo = () => {
             <TextField
               fullWidth
               label="Minimum Purchase Qty"
-              name="min-pur-qty"
+              name="minPurQty"
               placeholder="1"
               variant="outlined"
-              value=''
-              onChange={null}
+              value={formData.minPurQty}
+             onChange={handleInputChange}
               required
             />
         </Grid>    
@@ -83,8 +111,8 @@ const GeneralInfo = () => {
               name="tags"
               placeholder="Type and hit enter to add a tag"
               variant="outlined"
-              value=''
-              onChange={null}
+              value={formData.tags}
+             onChange={handleInputChange}
               required
             />
         </Grid>
@@ -95,20 +123,31 @@ const GeneralInfo = () => {
               name="barcode"
               placeholder="Barcode"
               variant="outlined"
-              value=''
-              onChange={null}
+              value={formData.barcode}
+             onChange={handleInputChange}
               required
             />
         </Grid> 
+        <Grid item xs={6} sm={6}>
+            <TextField
+              fullWidth
+              label="Product Category"
+              name="productCategory"
+              placeholder="Product Category"
+              variant="outlined"
+              value={formData.productCategory}
+             onChange={handleInputChange}
+              required
+            />
+        </Grid>
         <Grid item xs={12} sm={12}>
             <TextField
               fullWidth
               label="Product Summery"
-              name="ProductSummery"
-              placeholder="Write product summery"
-              variant="outlined"
-              value=''
-              onChange={null}
+              name="productSummery"
+               variant="outlined"
+              value={formData.productSummery}
+              onChange={handleInputChange}
               required
             />
           </Grid>
@@ -116,8 +155,10 @@ const GeneralInfo = () => {
             <TextField
               fullWidth
               label="Description"
-              name="Description"
+              name="description"
               variant="outlined"
+              value={formData.description}
+              onChange={handleInputChange}
               multiline
               rows={4}
               required
@@ -143,19 +184,6 @@ const GeneralInfo = () => {
           </FormControl>
         </Grid> */}
           </Grid>
-          <Grid item xs={6} sm={6}>
-          <FormControlLabel
-            required
-            control={
-              <Switch
-                checked={isRefundable}
-                onChange={handleSwitchChange}
-                inputProps={{ 'aria-label': 'Is Refundable' }}
-              />
-            }
-            label="Refundable"
-          />
-        </Grid>
           </form>
           </Container>
   )
