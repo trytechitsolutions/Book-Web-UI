@@ -1,27 +1,25 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   FormControl,
   FormLabel,
   FormGroup,
   FormControlLabel,
   Checkbox,
-  Button,
   Grid,
   Typography,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles((theme) => ({
-  // Your styles here
+  formControl: {
+    // Add your styles here
+  },
 }));
 
-const DeliveryOptions = () => {
+const DeliveryOptions = ({ onUpdate }) => {
   const classes = useStyles();
   const [selectedOptions, setSelectedOptions] = useState([]);
-  const [additionalOptions, setAdditionalOptions] = useState({
-    giftWrap: false,
-    tracking: false,
-  });
+
 
   const handleOptionChange = (option) => () => {
     const updatedOptions = selectedOptions.includes(option)
@@ -30,15 +28,19 @@ const DeliveryOptions = () => {
     setSelectedOptions(updatedOptions);
   };
 
-  const handleCheckboxChange = (name) => (event) => {
-    setAdditionalOptions({ ...additionalOptions, [name]: event.target.checked });
+
+  // Update the form data in the parent component
+  const updateParentFormData = () => {
+    const formData = {
+      selectedOptions,
+    };
+    onUpdate(formData);
   };
 
-  // const handlePlaceOrder = () => {
-  //   // Add logic to handle placing the order with the selected delivery options and additional options
-  //   console.log('Order placed with delivery options:', selectedOptions);
-  //   console.log('Additional options:', additionalOptions);
-  // };
+  // Call the updateParentFormData whenever selectedOptions or additionalOptions change
+ useEffect(() => {
+    updateParentFormData();
+  }, [selectedOptions]);
 
   return (
     <Grid container spacing={2}>
@@ -67,7 +69,7 @@ const DeliveryOptions = () => {
               }
               label="Standard Delivery"
             />
-             <FormControlLabel
+            <FormControlLabel
               control={
                 <Checkbox
                   checked={selectedOptions.includes('Same-Day')}
@@ -105,16 +107,6 @@ const DeliveryOptions = () => {
             />
           </FormGroup>
         </FormControl>
-      </Grid>
-      <Grid item xs={12}>
-        <Button
-          variant="contained"
-          color="primary"
-          className={classes.button}
-          disabled={selectedOptions.length === 0}
-        >
-          Submit
-        </Button>
       </Grid>
     </Grid>
   );

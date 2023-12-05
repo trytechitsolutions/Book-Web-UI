@@ -11,17 +11,16 @@ const GeneralInfo = ({ onUpdate }) => {
     unit: '',
     weight: '',
     minPurchaseQty: '',
-    tags: '',
     barcode: '',
     productCategory: '',
-    productSummary: '',
+    productSummery: '',
     description: '',
   });
 
 
-  // useEffect(()=>{
-  //   onUpdate(formData);
-  // }, [formData, onUpdate])
+  useEffect(()=>{
+    onUpdate(formData);
+  }, [formData, onUpdate])
 
   const handleSwitchChange = () => {
       setIsRefundable(!isRefundable);
@@ -77,7 +76,6 @@ const GeneralInfo = ({ onUpdate }) => {
               variant="outlined"
               value={formData.unit}
              onChange={handleInputChange}
-              required
             />
         </Grid> 
         <Grid item xs={6} sm={6}>
@@ -89,7 +87,6 @@ const GeneralInfo = ({ onUpdate }) => {
               variant="outlined"
               value={formData.weight}
              onChange={handleInputChange}
-              required
             />
         </Grid>
         <Grid item xs={6} sm={6}>
@@ -107,25 +104,12 @@ const GeneralInfo = ({ onUpdate }) => {
         <Grid item xs={6} sm={6}>
             <TextField
               fullWidth
-              label="Tags"
-              name="tags"
-              placeholder="Type and hit enter to add a tag"
-              variant="outlined"
-              value={formData.tags}
-             onChange={handleInputChange}
-              required
-            />
-        </Grid>
-        <Grid item xs={6} sm={6}>
-            <TextField
-              fullWidth
               label="Barcode"
               name="barcode"
               placeholder="Barcode"
               variant="outlined"
               value={formData.barcode}
-             onChange={handleInputChange}
-              required
+             onChange={handleInputChange} 
             />
         </Grid> 
         <Grid item xs={6} sm={6}>
