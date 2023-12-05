@@ -12,9 +12,10 @@ import TagsLabels from './TagsLabels';
 import DeliveryOptions from './DeliveryOption';
 import ProductSetting from './ProductSetting';
 import { Button } from '@mui/material';
+import ErrorDialog from '../common/Dialogue';
 
 const TabPanel = (props) => {
-  const { children, index,value, ...other } = props;
+  const { children, index, value, ...other } = props;
 
   return (
     <div
@@ -49,79 +50,79 @@ const a11yProps = (index) => {
 
 
 const Products = () => {
-    const [value, setValue] = useState(0);
-    const [formData, setFormData] = useState({});
-    const [validationStatus, setValidationStatus] = useState({});
+  const [value, setValue] = useState(0);
+  const [formData, setFormData] = useState({});
+  const [validationErrors, setValidationErrors] = useState({});
+  const [isDialogOpen, setDialogOpen] = useState(false);
 
-    const updateFormData = (section, data, isValid) => {
-      setFormData((prevData) => ({
-        ...prevData,
-        [section]: data,
-      }));
-  
-      setValidationStatus((prevStatus) => ({
-        ...prevStatus,
-        [section]: isValid,
-      }));
-    };
-    // const isFormValid = Object.values(validationStatus).every((isValid) => isValid);
-    const isFormValid = (data) => {
-      // Implement your form validation logic here
-      const errors = {};
-  
-      // General Info Section Validation
-      if (!data.generalInfo) {
-        errors.generalInfo = {};
-        if (!data.generalInfo.productName || !data.generalInfo.productName.trim()) {
-          errors.generalInfo.productName = 'Product Name is required';
+  const updateFormData = (section, data, isValid) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      [section]: data,
+    }));
+  };
+  const isFormValid = () => {
+    const errors = {};
+    console.log(formData)
+    if (formData.generalInfo) {
+      errors.generalInfo = [];
+      console.log(formData.generalInfo.productName)
+      Object.keys(formData.generalInfo).forEach((f) => {
+        if (!formData.generalInfo[f] || formData.generalInfo[f].trim() === '') {
+          errors.generalInfo.push(`${f} is required`);
+
         }
-        // Add more validation rules for the General Info section as needed
-      }
-  
-      // Price Section Validation
-      if (!data.price) {
-        errors.price = {};
-        // Add validation rules for the Price section as needed
-      }
-  
-      // Images Section Validation
-      if (!data.images) {
-        errors.images = {};
-        // Add validation rules for the Images section as needed
-      }
-  
-      // Add more sections as needed
-      return Object.keys(errors).length === 0;
-    };
-    
-    const handleSubmit = () => {
-      const isValid = isFormValid(formData);
+      })
+    }
 
-      if (isValid) {
-        // Perform form submission logic here
-        console.log('Form submitted!', formData);
-      } else {
-        // Handle the case where the form is not valid
-        console.error('Form is not valid. Please check the sections.');
-      }
-    };
-  
-     // ... (imports)
+    if (!formData.price) {
+      errors.price = ['Price is required'];
+    }
 
-    const handleChange = (event, newValue) => {
-      setValue(newValue);
-    };  
+    // Images Section Validation
+    if (!formData.images) {
+      errors.images = ['Images required'];
+    }
+    console.log(errors, '***errors valid***');
 
-    
-    return (
-      <Box sx={{ display: 'flex', height: '100vh' }}>
+    return errors;
+  };
+
+  const handleSubmit = () => {
+    const errors = isFormValid();
+
+    if (Object.keys(errors).length === 0) {
+      console.log('Form submitted!', formData);
+    } else {
+      setValidationErrors(errors);
+      handleDialogOpen();
+      console.error('Form is not valid. Please check the sections.');
+    }
+  };
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+
+  const handleDialogOpen = () => {
+    setDialogOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+  };
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+      <div style={{ display: 'flex', flexGrow: 1 }}>
         <Tabs
           orientation="vertical"
           variant="scrollable"
           value={value}
           onChange={handleChange}
           aria-label="Vertical tabs example"
-          sx={{ borderRight: 1, borderColor: 'divider' , marginLeft: 50 }}
+          sx={{ borderRight: 1, borderColor: 'divider', marginLeft: 50 }}
         >
           <Tab className='tab' label="General Info" {...a11yProps(0)} />
           <Tab className='tab' label="Price" {...a11yProps(1)} />
@@ -136,11 +137,11 @@ const Products = () => {
         </Tabs>
         <Box sx={{ flexGrow: 1, bgcolor: 'background.paper', padding: 3 }}>
           <TabPanel value={value} index={0}>
-          {/* <GeneralInfo /> */}
-             <GeneralInfo onUpdate={(data) => updateFormData('generalInfo', data)} />
+            {/* <GeneralInfo /> */}
+            <GeneralInfo onUpdate={(data) => updateFormData('generalInfo', data)} />
           </TabPanel>
           <TabPanel value={value} index={1}>
-           {/* <Price/> */}
+            {/* <Price/> */}
             <Price onUpdate={(data) => updateFormData('price', data)} />
           </TabPanel>
           <TabPanel value={value} index={2}>
@@ -158,33 +159,33 @@ const Products = () => {
             Item Six
           </TabPanel>
           <TabPanel value={value} index={6}>
-             {/* <DeliveryOptions/> */}
-             <DeliveryOptions onUpdate={(data) => updateFormData('deliveryOptions', data)} />
+            {/* <DeliveryOptions/> */}
+            <DeliveryOptions onUpdate={(data) => updateFormData('deliveryOptions', data)} />
           </TabPanel>
           <TabPanel value={value} index={7}>
-          Product Meta
+            Product Meta
           </TabPanel>
           <TabPanel value={value} index={8}>
-           {/* <ProductSetting/> */}
-           <ProductSetting onUpdate={(data) => updateFormData('productSetting', data)} />
-          </TabPanel>  
+            {/* <ProductSetting/> */}
+            <ProductSetting onUpdate={(data) => updateFormData('productSetting', data)} />
+          </TabPanel>
         </Box>
-        <Box sx={{ padding: 3 }}>
+      </div>
+      <div style={{ padding: 3, textAlign: 'end' }}>
         <Button variant="contained" onClick={handleSubmit}>
           Submit
         </Button>
-      </Box>
-       {/* Display validation errors */}
-       {Object.keys(validationStatus).map((section, index) => (
-          !validationStatus[section] && (
-            <Typography key={index} color="error">
-              {`Validation error in ${section} section`}
-            </Typography>
-          )
-        ))}
-      </Box>
+      </div>
+      <div>
+        <ErrorDialog
+          isOpen={isDialogOpen}
+          onClose={handleDialogClose}
+          errors={validationErrors}
+        />
+      </div>
+    </div>
 
-    );
-  };
-  
-  export default Products;
+  );
+};
+
+export default Products;
