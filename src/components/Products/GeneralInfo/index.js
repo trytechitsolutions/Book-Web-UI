@@ -1,8 +1,40 @@
 import { Container, FormControl, FormControlLabel, Grid, InputLabel, MenuItem, Select, Switch, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react'
+import CheckboxTree from 'react-checkbox-tree';
+import 'react-checkbox-tree/lib/react-checkbox-tree.css';
+import './index.css';
 
+
+const nodes = [
+  {
+    value: 'electronics',
+    label: 'Electronics',
+    children: [
+      { value: 'laptops', label: 'Laptops' },
+      { value: 'phones', label: 'Phones' },
+      {
+        value: 'books',
+        label: 'Books',
+        children: [
+          { value: 'entertainment', label: 'Entertainment' },
+          { value: 'educational', label: 'Educational' },
+        ],
+      },,
+      { value: 'dress', label: 'Dress' },
+    ],
+  },
+];
 const GeneralInfo = ({ onUpdate }) => {
-  const [isRefundable, setIsRefundable] = useState(false);
+  const [checked, setChecked] = useState([]);
+  const [expanded, setExpanded] = useState([]);
+
+  const handleCheck = (newChecked) => {
+    setChecked(newChecked);
+  };
+
+  const handleExpand = (newExpanded) => {
+    setExpanded(newExpanded);
+  };
 
 
   const [formData, setFormData] = useState({
@@ -12,7 +44,7 @@ const GeneralInfo = ({ onUpdate }) => {
     weight: '',
     minPurchaseQty: '',
     barcode: '',
-    productCategory: '',
+    productCategory: [],
     productSummery: '',
     description: '',
   });
@@ -22,9 +54,6 @@ const GeneralInfo = ({ onUpdate }) => {
     onUpdate(formData);
   }, [formData, onUpdate])
 
-  const handleSwitchChange = () => {
-      setIsRefundable(!isRefundable);
-    };
     const handleInputChange = (event) => {
       const { name, value } = event.target;
       setFormData((prevFormData) => ({
@@ -32,14 +61,21 @@ const GeneralInfo = ({ onUpdate }) => {
         [name]: value,
       }));
     };
+    const handleCategoryChange = (checkedCategories) => {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        productCategory: checkedCategories,
+      }));
+    }
   return (
     <Container >
     <Typography variant="h5" align="center" gutterBottom>
       General Info
     </Typography>
-    <form>
-           <Grid container spacing={2}>  
-           <Grid item xs={6} sm={6}>
+    <form className='container'>
+           <Grid container spacing={2} >  
+           <Grid item xs={12} sm={12}>
+           <InputLabel >Product Name</InputLabel>
             <TextField
               fullWidth
               label="Product Name"
@@ -52,6 +88,7 @@ const GeneralInfo = ({ onUpdate }) => {
             />
           </Grid>
           <Grid item xs={6}>
+          <InputLabel >Brand</InputLabel>
             <FormControl fullWidth variant="outlined">
               <InputLabel htmlFor="brand">Brand</InputLabel>
               <Select
@@ -68,6 +105,7 @@ const GeneralInfo = ({ onUpdate }) => {
             </FormControl>
           </Grid>
           <Grid item xs={6} sm={6}>
+          <InputLabel >Unit </InputLabel>
             <TextField
               fullWidth
               label="Unit"
@@ -79,6 +117,7 @@ const GeneralInfo = ({ onUpdate }) => {
             />
         </Grid> 
         <Grid item xs={6} sm={6}>
+        <InputLabel >Weight</InputLabel>
             <TextField
               fullWidth
               label="Weight"
@@ -90,10 +129,11 @@ const GeneralInfo = ({ onUpdate }) => {
             />
         </Grid>
         <Grid item xs={6} sm={6}>
+        <InputLabel >Minimum Purchase Qty</InputLabel>
             <TextField
               fullWidth
               label="Minimum Purchase Qty"
-              name="minPurQty"
+              name="minPurchaseQty"
               placeholder="1"
               variant="outlined"
               value={formData.minPurQty}
@@ -102,6 +142,7 @@ const GeneralInfo = ({ onUpdate }) => {
             />
         </Grid>    
         <Grid item xs={6} sm={6}>
+        <InputLabel >Barcode</InputLabel>
             <TextField
               fullWidth
               label="Barcode"
@@ -113,18 +154,18 @@ const GeneralInfo = ({ onUpdate }) => {
             />
         </Grid> 
         <Grid item xs={6} sm={6}>
-            <TextField
-              fullWidth
-              label="Product Category"
-              name="productCategory"
-              placeholder="Product Category"
-              variant="outlined"
-              value={formData.productCategory}
-             onChange={handleInputChange}
-              required
+        <InputLabel >Category</InputLabel>
+           <CheckboxTree
+            nodes={nodes}
+            checked={checked}
+            expanded={expanded}
+            onCheck={handleCheck}
+            onExpand={handleExpand}
+            onChange={handleCategoryChange}
             />
-        </Grid>
-        <Grid item xs={12} sm={12}>
+            </Grid>
+        <Grid item xs={6} sm={6}>
+        <InputLabel >Product Summery</InputLabel>
             <TextField
               fullWidth
               label="Product Summery"
@@ -136,6 +177,7 @@ const GeneralInfo = ({ onUpdate }) => {
             />
           </Grid>
         <Grid item xs={12} sm={12 }>
+        <InputLabel >Description</InputLabel>
             <TextField
               fullWidth
               label="Description"

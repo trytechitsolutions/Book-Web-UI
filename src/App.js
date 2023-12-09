@@ -53,7 +53,8 @@ import { jwtDecode } from 'jwt-decode';
 
 
 import { apiRequest } from './services/api';
-import Products from './components/Products';
+import Products from './components/Products/main';
+import Product from './components/Products';
 const drawerWidth = 240;
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
@@ -285,6 +286,7 @@ function App() {
             <Route path="/store" element={<Store />} />
             <Route path="/rolemap" element={<ComponentRoleMapping />} />
             <Route path="/navbar" element={<NavigationBar />} />
+            <Route path="/digital-product" element={<Product />} />
             {/* <Route path="/bookslist"  element={<BookList />}  />
           <Route path="/books"  element={<Books />}  />
           <Route path="/publisher" element={<PrivateRoute element={<PublisherComponent />} />} /> */}

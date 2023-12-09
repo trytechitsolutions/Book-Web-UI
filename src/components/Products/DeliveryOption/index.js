@@ -19,28 +19,25 @@ const useStyles = makeStyles((theme) => ({
 const DeliveryOptions = ({ onUpdate }) => {
   const classes = useStyles();
   const [selectedOptions, setSelectedOptions] = useState([]);
-
+  const [formData, setFormData] = useState({
+    expressDelivery: false,
+    standardDelivery: false,
+    sameDayDelivery: false,
+    scheduledDelivery: false,
+    weekendDelivery: false,
+    eveningDelivery:false,
+  }); 
+  useEffect(() => {
+    onUpdate(formData);
+  }, [formData, onUpdate]);
 
   const handleOptionChange = (option) => () => {
-    const updatedOptions = selectedOptions.includes(option)
-      ? selectedOptions.filter((item) => item !== option)
-      : [...selectedOptions, option];
-    setSelectedOptions(updatedOptions);
+    // Update form data
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [`${option}Delivery`]: !prevFormData[`${option}Delivery`],
+    }));
   };
-
-
-  // Update the form data in the parent component
-  const updateParentFormData = () => {
-    const formData = {
-      selectedOptions,
-    };
-    onUpdate(formData);
-  };
-
-  // Call the updateParentFormData whenever selectedOptions or additionalOptions change
- useEffect(() => {
-    updateParentFormData();
-  }, [selectedOptions]);
 
   return (
     <Grid container spacing={2}>
@@ -48,67 +45,67 @@ const DeliveryOptions = ({ onUpdate }) => {
         <Typography variant="h6">Select Delivery Options:</Typography>
       </Grid>
       <Grid item xs={12}>
-        <FormControl component="fieldset" className={classes.formControl}>
-          <FormLabel component="legend">Delivery Options</FormLabel>
-          <FormGroup>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={selectedOptions.includes('express')}
-                  onChange={handleOptionChange('express')}
+            <FormControl component="fieldset" className={classes.formControl}>
+              <FormGroup>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={formData.expressDelivery}
+                      onChange={handleOptionChange('express')}
+                    />
+                  }
+                  label="Express Delivery"
                 />
-              }
-              label="Express Delivery"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={selectedOptions.includes('standard')}
-                  onChange={handleOptionChange('standard')}
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={formData.standardDelivery}
+                      onChange={handleOptionChange('standard')}
+                    />
+                  }
+                  label="Standard Delivery"
                 />
-              }
-              label="Standard Delivery"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={selectedOptions.includes('Same-Day')}
-                  onChange={handleOptionChange('Same-Day')}
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={formData.sameDayDelivery}
+                      onChange={handleOptionChange('sameDay')}
+                    />
+                  }
+                  label="Same-Day Delivery"
                 />
-              }
-              label="Same Day Delivery"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={selectedOptions.includes('scheduled')}
-                  onChange={handleOptionChange('scheduled')}
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={formData.scheduledDelivery}
+                      onChange={handleOptionChange('scheduled')}
+                    />
+                  }
+                  label="Scheduled Delivery"
                 />
-              }
-              label="Scheduled Delivery"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={selectedOptions.includes('weekend')}
-                  onChange={handleOptionChange('weekend')}
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={formData.weekendDelivery}
+                      onChange={handleOptionChange('weekend')}
+                    />
+                  }
+                  label="Weekend Delivery"
                 />
-              }
-              label="Weekend  Delivery"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={selectedOptions.includes('evening')}
-                  onChange={handleOptionChange('evening')}
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={formData.eveningDelivery}
+                      onChange={handleOptionChange('evening')}
+                    />
+                  }
+                  label="Evening Delivery"
                 />
-              }
-              label="Evening Delivery"
-            />
-          </FormGroup>
-        </FormControl>
-      </Grid>
+              </FormGroup>
+            </FormControl>
+          </Grid>
     </Grid>
+    
   );
 };
 

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import PropTypes, { object } from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
@@ -11,11 +11,17 @@ import Images from './Images';
 import TagsLabels from './TagsLabels';
 import DeliveryOptions from './DeliveryOption';
 import ProductSetting from './ProductSetting';
-import { Button } from '@mui/material';
+import { Button, Paper } from '@mui/material';
 import ErrorDialog from '../common/Dialogue';
+import { ProductRequest } from '../Redux/Reducer/ProductReducer';
+import { preparePayLoad } from '../ReusableComponents/CommonFunctions';
+import { GetStoreData } from '../ReusableComponents/ReduxActions';
+import { useDispatch } from 'react-redux';
+
 
 const TabPanel = (props) => {
   const { children, index, value, ...other } = props;
+
 
   return (
     <div
@@ -49,11 +55,36 @@ const a11yProps = (index) => {
 
 
 
-const Products = () => {
+const Product = () => {
   const [value, setValue] = useState(0);
   const [formData, setFormData] = useState({});
   const [validationErrors, setValidationErrors] = useState({});
   const [isDialogOpen, setDialogOpen] = useState(false);
+  const [data, setData] = useState([]);
+  const dispatch = useDispatch();
+
+
+  const productData = GetStoreData('ProductReducer')?.productData;
+
+      useEffect(() => {
+        // Fetch data from the Redux store once when the component mounts
+        setData(productData);
+      }, [productData]);
+
+      function handleSubmit () {
+        const errors = isFormValid();
+    
+        if (Object.keys(errors).length === 0) {
+          const payload = preparePayLoad(formData.fieldsArray);
+        setFormData({ ...formData });
+        dispatch(ProductRequest(payload));
+          console.log('Form submitted!', formData);
+        } else {
+          setValidationErrors(errors);
+          handleDialogOpen();
+          console.error('Form is not valid. Please check the sections.');
+        }
+      };
 
   const updateFormData = (section, data, isValid) => {
     setFormData((prevData) => ({
@@ -61,6 +92,7 @@ const Products = () => {
       [section]: data,
     }));
   };
+
   const isFormValid = () => {
     const errors = {};
     console.log(formData)
@@ -68,36 +100,56 @@ const Products = () => {
       errors.generalInfo = [];
       console.log(formData.generalInfo.productName)
       Object.keys(formData.generalInfo).forEach((f) => {
-        if (!formData.generalInfo[f] || formData.generalInfo[f].trim() === '') {
+        const value = formData.generalInfo[f];
+        if (typeof value === 'string' && value.trim() === '') {
           errors.generalInfo.push(`${f} is required`);
 
         }
       })
     }
 
-    if (!formData.price) {
-      errors.price = ['Price is required'];
+    if (formData.price) {
+      errors.price = [];
+      Object.keys(formData.price).forEach((f) => {
+      if(!formData.price[f] || formData.price[f].trim() === ''){
+        errors.price.push(`${f} is required`);
+      }
+      })
     }
 
     // Images Section Validation
-    if (!formData.images) {
+    if ( formData.images) {
       errors.images = ['Images required'];
     }
-    console.log(errors, '***errors valid***');
+        
+    if (formData.tagsLabels) {
+      errors.tagsLabels = [];
+      Object.keys(formData.tagsLabels).forEach((f) => {
+        const value = formData.tagsLabels[f];
+        if (!value || (typeof value === 'string' && value.trim() === '')) {
+          errors.tagsLabels.push(`${f} is required`);
+        }
+      });
+    }  
+    if (formData.deliveryOptions) {
+      errors.deliveryOptions = [];
+      Object.keys(formData.deliveryOptions).forEach((f) => {
+        if (!formData.deliveryOptions[f] || formData.deliveryOptions[f].trim() === '') {
+          errors.deliveryOptions.push(`${f} is required`);
+        }
+      })
+    } 
+    if(formData.productSetting) {
+      errors.productSetting = [];
+      Object.keys(formData.productSetting).forEach((f) => {
+        const value = formData.productSetting[f];
+        if (!value || (typeof value === 'string' && value.trim() === '')){
+          errors.productSetting.push(`${f} is required`)
+        }
+      })
+    }
 
     return errors;
-  };
-
-  const handleSubmit = () => {
-    const errors = isFormValid();
-
-    if (Object.keys(errors).length === 0) {
-      console.log('Form submitted!', formData);
-    } else {
-      setValidationErrors(errors);
-      handleDialogOpen();
-      console.error('Form is not valid. Please check the sections.');
-    }
   };
 
   const handleChange = (event, newValue) => {
@@ -107,14 +159,14 @@ const Products = () => {
 
   const handleDialogOpen = () => {
     setDialogOpen(true);
-  };
+  };  
 
   const handleDialogClose = () => {
     setDialogOpen(false);
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }} >
       <div style={{ display: 'flex', flexGrow: 1 }}>
         <Tabs
           orientation="vertical"
@@ -133,9 +185,9 @@ const Products = () => {
           <Tab className='tab' label="Delivery Option" {...a11yProps(6)} />
           <Tab className='tab' label="Product Meta" {...a11yProps(7)} />
           <Tab className='tab' label="Product Setting" {...a11yProps(8)} />
-
         </Tabs>
         <Box sx={{ flexGrow: 1, bgcolor: 'background.paper', padding: 3 }}>
+        <Paper elevation={3} sx={{ padding: 2 }}>
           <TabPanel value={value} index={0}>
             {/* <GeneralInfo /> */}
             <GeneralInfo onUpdate={(data) => updateFormData('generalInfo', data)} />
@@ -169,6 +221,7 @@ const Products = () => {
             {/* <ProductSetting/> */}
             <ProductSetting onUpdate={(data) => updateFormData('productSetting', data)} />
           </TabPanel>
+          </Paper>
         </Box>
       </div>
       <div style={{ padding: 3, textAlign: 'end' }}>
@@ -182,10 +235,10 @@ const Products = () => {
           onClose={handleDialogClose}
           errors={validationErrors}
         />
-      </div>
+      </div>    
     </div>
 
   );
 };
 
-export default Products;
+export default Product;

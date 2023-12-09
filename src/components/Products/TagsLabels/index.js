@@ -17,9 +17,9 @@ const TagsLabels = ({ onUpdate }) => {
     ecoFriendly: false,
     topRated: false,
   }); 
-  // useEffect(() => {
-  //   onUpdate(formData);
-  // }, [formData, onUpdate]);
+  useEffect(() => {
+    onUpdate(formData);
+  }, [formData, onUpdate]);
 
   const handleOptionChange = (option) => () => {
     const updatedOptions = selectedOptions.includes(option)

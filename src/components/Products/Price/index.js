@@ -40,6 +40,7 @@ const Price = ({ onUpdate }) => {
       <form>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={12}>
+          <InputLabel >Base Cost</InputLabel>
             <TextField
               fullWidth
               label="Base Cost"
@@ -51,6 +52,7 @@ const Price = ({ onUpdate }) => {
             />
           </Grid>
           <Grid item xs={12} sm={12}>
+          <InputLabel >Regular Price</InputLabel>
             <TextField
               fullWidth
               label="Regular Price"
@@ -62,6 +64,7 @@ const Price = ({ onUpdate }) => {
             />
           </Grid>
           <Grid item xs={12} sm={12}>
+          <InputLabel >Sale Price</InputLabel>
             <TextField
               fullWidth
               label="Sale Price"
@@ -73,6 +76,7 @@ const Price = ({ onUpdate }) => {
             />
           </Grid>        
           <Grid item xs={12} sm={12}>
+          <InputLabel >Tax</InputLabel>
           <Link href="https://your.tax.info" target="_blank" rel="noopener noreferrer">
             <TextField
               fullWidth
@@ -87,6 +91,7 @@ const Price = ({ onUpdate }) => {
               </Link>
           </Grid>
           <Grid item xs={6}>
+          <InputLabel >Is Taxable</InputLabel>
             <FormControl fullWidth variant="outlined">
               <InputLabel htmlFor="Is Taxable">Is Taxable</InputLabel>
               <Select
