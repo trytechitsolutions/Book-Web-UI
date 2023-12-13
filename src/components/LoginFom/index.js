@@ -26,8 +26,9 @@ const Login = (props) => {
       securedLocalStorage.remove('token');
       const resp = await apiRequest(paylaod, serverUrl + "/auth/signin/admin", 'post');
       setShowLoader(false);
-      if (resp?.data?.data) {
-        securedLocalStorage.set('token', resp?.data?.data.token)
+      console.log(resp.data.data, '*****resp****')
+      if (resp?.data) {
+        securedLocalStorage.set('token', resp?.data?.data?.token)
         setOpenSnackBar(true);
         const data = {
           type: "success",
@@ -48,10 +49,11 @@ const Login = (props) => {
         setSnackBarData(data);
       }
     } catch (err) {
+      console.log(err, '*****err***')
       setOpenSnackBar(true);
       const data = {
         type: "error",
-        message: 'Login failed.',
+        message: 'Login failed. !!',
         open: true,
       }
       setSnackBarData(data);

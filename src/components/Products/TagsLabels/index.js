@@ -10,12 +10,12 @@ const TagsLabels = ({ onUpdate }) => {
   const classes = useStyles();
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [formData, setFormData] = useState({
-    productTags: '',
-    bestSeller: false,
-    newArrival: false,
-    limitedEdition: false,
-    ecoFriendly: false,
-    topRated: false,
+    product_tags: '',
+    best_seller: false,
+    new_arrival: false,
+    limited_edition: false,
+    eco_friendly: false,
+    top_rated: false,
   }); 
   useEffect(() => {
     onUpdate(formData);
@@ -56,9 +56,9 @@ const TagsLabels = ({ onUpdate }) => {
             <TextField
               fullWidth
               label="Product Tags"
-              name="productTags"
+              name="product_tags"
               variant="outlined"
-              value={formData.productTags}
+              value={formData.product_tags}
               onChange={handleInputChange}
               required
             />
@@ -70,8 +70,8 @@ const TagsLabels = ({ onUpdate }) => {
                 <FormControlLabel
                   control={
                     <Checkbox
-                      checked={formData.bestSeller}
-                      onChange={handleOptionChange('bestSeller')}
+                      checked={formData.best_seller}
+                      onChange={handleOptionChange('best_seller')}
                     />
                   }
                   label="Best Seller"
@@ -79,8 +79,8 @@ const TagsLabels = ({ onUpdate }) => {
                 <FormControlLabel
                   control={
                     <Checkbox
-                      checked={formData.newArrival}
-                      onChange={handleOptionChange('newArrival')}
+                      checked={formData.new_arrival}
+                      onChange={handleOptionChange('new_arrival')}
                     />
                   }
                   label="New Arrival"
@@ -88,8 +88,8 @@ const TagsLabels = ({ onUpdate }) => {
                 <FormControlLabel
                   control={
                     <Checkbox
-                      checked={formData.limitedEdition}
-                      onChange={handleOptionChange('limitedEdition')}
+                      checked={formData.limited_edition}
+                      onChange={handleOptionChange('limited_edition')}
                     />
                   }
                   label="Limited Edition"
@@ -97,8 +97,8 @@ const TagsLabels = ({ onUpdate }) => {
                 <FormControlLabel
                   control={
                     <Checkbox
-                      checked={formData.ecoFriendly}
-                      onChange={handleOptionChange('ecoFriendly')}
+                      checked={formData.eco_friendly}
+                      onChange={handleOptionChange('eco_friendly')}
                     />
                   }
                   label="Eco-Friendly"
@@ -106,8 +106,8 @@ const TagsLabels = ({ onUpdate }) => {
                 <FormControlLabel
                   control={
                     <Checkbox
-                      checked={formData.topRated}
-                      onChange={handleOptionChange('topRated')}
+                      checked={formData.top_rated}
+                      onChange={handleOptionChange('top_rated')}
                     />
                   }
                   label="Top Rated"

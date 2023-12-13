@@ -13,11 +13,11 @@ import {
 
 const Price = ({ onUpdate }) => {
   const [formData, setFormData] = useState({
-    baseCost: '',
-    regularPrice: '',
-    salePrice: '',
-    tax: '',
-    taxClass: '',
+    base_cost_price: '',
+    regular_price: '',
+    sale_price: '',
+    tax_price: '',
+    tax_class: '',
   });
   useEffect(()=>{
     onUpdate(formData);
@@ -44,9 +44,9 @@ const Price = ({ onUpdate }) => {
             <TextField
               fullWidth
               label="Base Cost"
-              name="baseCost"
+              name="base_cost_price"
               variant="outlined"
-              value={formData.baseCost}
+              value={formData.base_cost_price}
               onChange={handleInputChange}
               required
             />
@@ -56,9 +56,9 @@ const Price = ({ onUpdate }) => {
             <TextField
               fullWidth
               label="Regular Price"
-              name="regularPrice"
+              name="regular_price"
               variant="outlined"
-              value={formData.regularPrice}
+              value={formData.regular_price}
               onChange={handleInputChange}
               required
             />
@@ -68,9 +68,9 @@ const Price = ({ onUpdate }) => {
             <TextField
               fullWidth
               label="Sale Price"
-              name="salePrice"
+              name="sale_price"
               variant="outlined"
-              value={formData.salePrice}
+              value={formData.sale_price}
               onChange={handleInputChange}
               required
             />
@@ -81,9 +81,9 @@ const Price = ({ onUpdate }) => {
             <TextField
               fullWidth
               label="Tax"
-              name="tax"
+              name="tax_price"
               variant="outlined"
-              value={formData.tax}
+              value={formData.tax_price}
               onChange={handleInputChange}
               required
               helperText="https://your.tax.info"
@@ -92,20 +92,16 @@ const Price = ({ onUpdate }) => {
           </Grid>
           <Grid item xs={6}>
           <InputLabel >Is Taxable</InputLabel>
-            <FormControl fullWidth variant="outlined">
-              <InputLabel htmlFor="Is Taxable">Is Taxable</InputLabel>
-              <Select
-                label="Is Taxable"
-                name="tax"
-                value={formData.tax}
-                onChange={handleInputChange}
-                required
-              >
-                <MenuItem value="Taxable">Taxable</MenuItem>
-                <MenuItem value="Non-Taxable">Non-Taxable</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
+            <TextField
+              fullWidth
+              label="Sale Price"
+              name="tax_class"
+              variant="outlined"
+              value={formData.tax_class}
+              onChange={handleInputChange}
+              required
+            />
+          </Grid> 
         </Grid>
       </form>
     </Container>

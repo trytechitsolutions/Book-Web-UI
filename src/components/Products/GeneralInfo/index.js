@@ -38,14 +38,14 @@ const GeneralInfo = ({ onUpdate }) => {
 
 
   const [formData, setFormData] = useState({
-    productName: '',
-    brand: '',
+    product_name: '',
+    brand_id: '',
     unit: '',
     weight: '',
-    minPurchaseQty: '',
+    min_purchase_qty: '',
     barcode: '',
-    productCategory: [],
-    productSummery: '',
+    product_category: '',
+    product_summary: '',
     description: '',
   });
 
@@ -79,30 +79,25 @@ const GeneralInfo = ({ onUpdate }) => {
             <TextField
               fullWidth
               label="Product Name"
-              name="productName"
+              name="product_name"
               placeholder="write product name"
               variant="outlined"
-              value={formData.productName}
+              value={formData.product_name}
               onChange={handleInputChange}
               required
             />
           </Grid>
           <Grid item xs={6}>
-          <InputLabel >Brand</InputLabel>
-            <FormControl fullWidth variant="outlined">
-              <InputLabel htmlFor="brand">Brand</InputLabel>
-              <Select
-                label="Brand"
-                name="brand"
-                value={formData.brand}
+          <InputLabel >Brand </InputLabel>
+            <TextField
+              fullWidth
+              label="Brand"
+              name="brand_id"
+              placeholder="unit (e.g KG etc )"
+              variant="outlined"
+              value={formData.brand_id}
              onChange={handleInputChange}
-                required
-              >
-                <MenuItem value="brand">brand</MenuItem>
-                <MenuItem value="sub-brand">Sub brand</MenuItem>
-                {/* Add more role options here */}
-              </Select>
-            </FormControl>
+            />
           </Grid>
           <Grid item xs={6} sm={6}>
           <InputLabel >Unit </InputLabel>
@@ -133,10 +128,10 @@ const GeneralInfo = ({ onUpdate }) => {
             <TextField
               fullWidth
               label="Minimum Purchase Qty"
-              name="minPurchaseQty"
+              name="min_purchase_qty"
               placeholder="1"
               variant="outlined"
-              value={formData.minPurQty}
+              value={formData.min_purchase_qty}
              onChange={handleInputChange}
               required
             />
@@ -155,23 +150,24 @@ const GeneralInfo = ({ onUpdate }) => {
         </Grid> 
         <Grid item xs={6} sm={6}>
         <InputLabel >Category</InputLabel>
-           <CheckboxTree
-            nodes={nodes}
-            checked={checked}
-            expanded={expanded}
-            onCheck={handleCheck}
-            onExpand={handleExpand}
-            onChange={handleCategoryChange}
-            />
-            </Grid>
-        <Grid item xs={6} sm={6}>
-        <InputLabel >Product Summery</InputLabel>
             <TextField
               fullWidth
-              label="Product Summery"
-              name="productSummery"
+              label="productCategory"
+              name="product_category"
+              placeholder="productCategory"
+              variant="outlined"
+              value={formData.product_category}
+             onChange={handleInputChange} 
+            />
+        </Grid> 
+        <Grid item xs={6} sm={6}>
+        <InputLabel >Product Summary</InputLabel>
+            <TextField
+              fullWidth
+              label="Product Summary"
+              name="product_summary"
                variant="outlined"
-              value={formData.productSummery}
+              value={formData.product_summary}
               onChange={handleInputChange}
               required
             />

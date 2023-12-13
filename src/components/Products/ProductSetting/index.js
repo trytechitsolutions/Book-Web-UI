@@ -1,4 +1,4 @@
-import { Container, FormControlLabel, Grid, Switch, TextField, Typography } from '@mui/material';
+import { Checkbox, Container, FormControl, FormControlLabel, FormGroup, Grid, Switch, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 // import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { DatePicker } from '@mui/x-date-pickers';
@@ -6,10 +6,10 @@ import { DatePicker } from '@mui/x-date-pickers';
 const ProductSetting = ({ onUpdate  }) => {
   const [cashOnDeliveryEnabled, setCashOnDeliveryEnabled] = useState(false);
   const [formData, setFormData] = useState({
-    stockQuantityWarning: '',
-    warrantyPeriod: '',
-    guaranteePeriod: '',
-    isRefundable: false,
+    stock_quantity_warning: '',
+    warranty_period: '',
+    guarantee_period: '',
+    is_refundable: false,
   });
   useEffect(()=>{
     onUpdate(formData);
@@ -22,6 +22,15 @@ const ProductSetting = ({ onUpdate  }) => {
       ...formData,
       [name]: value,
     });
+  };
+
+
+  const handleOptionChange = (option) => () => {
+    // Update form data
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [option]: !prevFormData[option],
+    }));
   };
 
   const handleSwitchChange = () => {
@@ -46,11 +55,11 @@ const ProductSetting = ({ onUpdate  }) => {
             <TextField
               fullWidth
               label="Stock Quantity Warning"
-              name="stockQuantityWarning"
+              name="stock_quantity_warning"
               placeholder="Enter stock quantity warning"
               //like few (some number) products left
               variant="outlined"
-              value={formData.stockQuantityWarning}
+              value={formData.stock_quantity_warning}
               onChange={handleInputChange}
             />
           </Grid>
@@ -58,11 +67,11 @@ const ProductSetting = ({ onUpdate  }) => {
             <TextField
               fullWidth
               label="Warranty Period"
-              name="warrantyPeriod"
+              name="warranty_period"
               variant="outlined"
               format="MM/dd/yyyy"
               placeholder="MM/dd/yyyy"
-              value={formData.warrantyPeriod}
+              value={formData.warranty_period}
               onChange={handleInputChange}
             />
           </Grid>
@@ -70,28 +79,43 @@ const ProductSetting = ({ onUpdate  }) => {
             <TextField
               fullWidth
               label="Guarantee period"
-              name="guaranteePeriod"
+              name="guarantee_period"
               variant="outlined"
               format="MM/dd/yyyy"
               placeholder="MM/dd/yyyy"
-              value={formData.guaranteePeriod}
+              value={formData.guarantee_period}
               onChange={handleInputChange}
             />
           </Grid>
           <Grid item xs={12} sm={12}>
+          <FormControl component="fieldset">
+          <FormGroup>              
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={formData.is_refundable}
+                      onChange={handleOptionChange('is_refundable')}
+                    />
+                  }
+                  label="is_refundable"
+                />
+                </FormGroup>
+                </FormControl>
+         </Grid>
+          {/* <Grid item xs={12} sm={12}>
             <FormControlLabel
               required
               control={
                 <Switch
-                  checked={formData.isRefundable}
+                  checked={formData.is_refundable}
                   onChange={handleSwitchChange}
                   inputProps={{ 'aria-label': 'Is Refundable' }}
                 />
               }
               label="Refundable"
             />
-          </Grid>
-          <Grid item xs={12} sm={12}>
+          </Grid> */}
+          {/* <Grid item xs={12} sm={12}>
             <FormControlLabel
               control={
                 <Switch
@@ -102,7 +126,7 @@ const ProductSetting = ({ onUpdate  }) => {
               }
               label="Cash on Delivery"
             />
-          </Grid>
+          </Grid> */}
         </Grid>
       </form>
     </Container>

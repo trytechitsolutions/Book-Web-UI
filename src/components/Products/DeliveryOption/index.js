@@ -20,12 +20,12 @@ const DeliveryOptions = ({ onUpdate }) => {
   const classes = useStyles();
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [formData, setFormData] = useState({
-    expressDelivery: false,
-    standardDelivery: false,
-    sameDayDelivery: false,
-    scheduledDelivery: false,
-    weekendDelivery: false,
-    eveningDelivery:false,
+    express_delivery: false,
+    standard_delivery: false,
+    same_day_delivery: false,
+    scheduled_delivery: false,
+    weekend_delivery: false,
+    evening_delivery:false,
   }); 
   useEffect(() => {
     onUpdate(formData);
@@ -35,7 +35,7 @@ const DeliveryOptions = ({ onUpdate }) => {
     // Update form data
     setFormData((prevFormData) => ({
       ...prevFormData,
-      [`${option}Delivery`]: !prevFormData[`${option}Delivery`],
+      [option]: !prevFormData[option],
     }));
   };
 
@@ -50,8 +50,8 @@ const DeliveryOptions = ({ onUpdate }) => {
                 <FormControlLabel
                   control={
                     <Checkbox
-                      checked={formData.expressDelivery}
-                      onChange={handleOptionChange('express')}
+                      checked={formData.express_delivery}
+                      onChange={handleOptionChange('express_delivery')}
                     />
                   }
                   label="Express Delivery"
@@ -59,8 +59,8 @@ const DeliveryOptions = ({ onUpdate }) => {
                 <FormControlLabel
                   control={
                     <Checkbox
-                      checked={formData.standardDelivery}
-                      onChange={handleOptionChange('standard')}
+                      checked={formData.standard_delivery}
+                      onChange={handleOptionChange('standard_delivery')}
                     />
                   }
                   label="Standard Delivery"
@@ -68,8 +68,8 @@ const DeliveryOptions = ({ onUpdate }) => {
                 <FormControlLabel
                   control={
                     <Checkbox
-                      checked={formData.sameDayDelivery}
-                      onChange={handleOptionChange('sameDay')}
+                      checked={formData.same_day_delivery}
+                      onChange={handleOptionChange('same_day_delivery')}
                     />
                   }
                   label="Same-Day Delivery"
@@ -77,8 +77,8 @@ const DeliveryOptions = ({ onUpdate }) => {
                 <FormControlLabel
                   control={
                     <Checkbox
-                      checked={formData.scheduledDelivery}
-                      onChange={handleOptionChange('scheduled')}
+                      checked={formData.scheduled_delivery}
+                      onChange={handleOptionChange('scheduled_delivery')}
                     />
                   }
                   label="Scheduled Delivery"
@@ -86,21 +86,21 @@ const DeliveryOptions = ({ onUpdate }) => {
                 <FormControlLabel
                   control={
                     <Checkbox
-                      checked={formData.weekendDelivery}
-                      onChange={handleOptionChange('weekend')}
+                      checked={formData.weekend_delivery}
+                      onChange={handleOptionChange('weekend_delivery')}
                     />
                   }
                   label="Weekend Delivery"
                 />
                 <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={formData.eveningDelivery}
-                      onChange={handleOptionChange('evening')}
-                    />
-                  }
-                  label="Evening Delivery"
+              control={
+                <Checkbox
+                  checked={formData.evening_delivery}
+                  onChange={handleOptionChange('evening_delivery')}
                 />
+              }
+              label="Evening Delivery"
+            />
               </FormGroup>
             </FormControl>
           </Grid>

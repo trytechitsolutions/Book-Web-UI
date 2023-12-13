@@ -68,7 +68,7 @@ const RegisterForm = () => {
       let paylaod = preparePayLoad(formData.fieldsArray)
       setShowLoader(true);
       paylaod.role = 1;
-      const resp = await apiRequest(paylaod, serverUrl + "/auth/register/admin ", 'post');
+      const resp = await apiRequest(paylaod, serverUrl + "auth/register/admin ", 'post');
       setShowLoader(false);
       if (resp?.data?.data) {
         setOpenSnackBar(true);
