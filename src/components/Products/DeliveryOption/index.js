@@ -16,28 +16,35 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DeliveryOptions = ({ onUpdate }) => {
+const DeliveryOptions = ({ inputData, onUpdate }) => {
   const classes = useStyles();
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [formData, setFormData] = useState({
-    express_delivery: false,
-    standard_delivery: false,
-    same_day_delivery: false,
-    scheduled_delivery: false,
-    weekend_delivery: false,
-    evening_delivery:false,
+    express_delivery: inputData?.express_delivery || false,
+    standard_delivery: inputData?.standard_delivery || false,
+    same_day_delivery: inputData?.same_day_delivery || false,
+    scheduled_delivery: inputData?.scheduled_delivery || false,
+    weekend_delivery: inputData?.weekend_delivery || false,
+    evening_delivery: inputData?.evening_delivery ||false,
   }); 
   useEffect(() => {
     onUpdate(formData);
   }, [formData, onUpdate]);
 
-  const handleOptionChange = (option) => () => {
+  const handleOptionChange = (field, value) => {
+    // Ensure that boolean fields receive a boolean value
+    const Value = typeof value === 'boolean' ? value : value === 'on';
+  
     // Update form data
     setFormData((prevFormData) => ({
       ...prevFormData,
-      [option]: !prevFormData[option],
+      [field]: Value,
     }));
+  
+    // Notify the parent component with the changed data
+    onUpdate({ ...formData, [field]: Value });
   };
+
 
   return (
     <Grid container spacing={2}>
@@ -51,7 +58,7 @@ const DeliveryOptions = ({ onUpdate }) => {
                   control={
                     <Checkbox
                       checked={formData.express_delivery}
-                      onChange={handleOptionChange('express_delivery')}
+                      onChange={(e) => handleOptionChange ('express_delivery' , e.target.value)}
                     />
                   }
                   label="Express Delivery"
@@ -60,7 +67,7 @@ const DeliveryOptions = ({ onUpdate }) => {
                   control={
                     <Checkbox
                       checked={formData.standard_delivery}
-                      onChange={handleOptionChange('standard_delivery')}
+                      onChange={(e) => handleOptionChange ('standard_delivery' , e.target.value)}
                     />
                   }
                   label="Standard Delivery"
@@ -69,7 +76,7 @@ const DeliveryOptions = ({ onUpdate }) => {
                   control={
                     <Checkbox
                       checked={formData.same_day_delivery}
-                      onChange={handleOptionChange('same_day_delivery')}
+                      onChange={(e) => handleOptionChange ('same_day_delivery' , e.target.value)}
                     />
                   }
                   label="Same-Day Delivery"
@@ -78,7 +85,7 @@ const DeliveryOptions = ({ onUpdate }) => {
                   control={
                     <Checkbox
                       checked={formData.scheduled_delivery}
-                      onChange={handleOptionChange('scheduled_delivery')}
+                      onChange={(e) => handleOptionChange ('scheduled_delivery' , e.target.value)}
                     />
                   }
                   label="Scheduled Delivery"
@@ -87,7 +94,7 @@ const DeliveryOptions = ({ onUpdate }) => {
                   control={
                     <Checkbox
                       checked={formData.weekend_delivery}
-                      onChange={handleOptionChange('weekend_delivery')}
+                      onChange={(e) => handleOptionChange ('weekend_delivery' , e.target.value)}
                     />
                   }
                   label="Weekend Delivery"
@@ -96,8 +103,8 @@ const DeliveryOptions = ({ onUpdate }) => {
               control={
                 <Checkbox
                   checked={formData.evening_delivery}
-                  onChange={handleOptionChange('evening_delivery')}
-                />
+                  onChange={(e) => handleOptionChange ('evening_delivery' , e.target.value)}
+                  />
               }
               label="Evening Delivery"
             />

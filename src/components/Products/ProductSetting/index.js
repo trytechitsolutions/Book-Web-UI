@@ -1,16 +1,16 @@
-import { Checkbox, Container, FormControl, FormControlLabel, FormGroup, Grid, Switch, TextField, Typography } from '@mui/material';
+import { Checkbox, Container, FormControl, FormControlLabel, FormGroup, Grid, InputLabel, Switch, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 // import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { DatePicker } from '@mui/x-date-pickers';
 
-const ProductSetting = ({ onUpdate  }) => {
+const ProductSetting = ({ inputData,onUpdate  }) => {
   const [cashOnDeliveryEnabled, setCashOnDeliveryEnabled] = useState(false);
   const [formData, setFormData] = useState({
-    stock_quantity_warning: '',
-    warranty_period: '',
-    guarantee_period: '',
-    is_refundable: false,
-  });
+    stock_quantity_warning: inputData?.stock_quantity_warning || '',
+    warranty_period: inputData?.warranty_period || '',
+    guarantee_period: inputData?.guarantee_period || '',
+    is_refundable: inputData?.is_refundable || false,
+  });;
   useEffect(()=>{
     onUpdate(formData);
   }, [formData, onUpdate])
@@ -52,9 +52,9 @@ const ProductSetting = ({ onUpdate  }) => {
       <form>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={12}>
+          <InputLabel>stock quantity</InputLabel>
             <TextField
               fullWidth
-              label="Stock Quantity Warning"
               name="stock_quantity_warning"
               placeholder="Enter stock quantity warning"
               //like few (some number) products left
@@ -64,9 +64,9 @@ const ProductSetting = ({ onUpdate  }) => {
             />
           </Grid>
           <Grid item xs={6} sm={6}>
+          <InputLabel>Warranty Period</InputLabel>
             <TextField
               fullWidth
-              label="Warranty Period"
               name="warranty_period"
               variant="outlined"
               format="MM/dd/yyyy"
@@ -76,9 +76,9 @@ const ProductSetting = ({ onUpdate  }) => {
             />
           </Grid>
           <Grid item xs={6} sm={6}>
+          <InputLabel>Guarantee Period</InputLabel>
             <TextField
               fullWidth
-              label="Guarantee period"
               name="guarantee_period"
               variant="outlined"
               format="MM/dd/yyyy"

@@ -1,4 +1,4 @@
-import { Checkbox, Container, FormControl, FormControlLabel, Grid, InputAdornment, InputLabel, FormLabel, FormGroup, TextField, Typography } from '@mui/material';
+import { Checkbox, Container, FormControl, FormControlLabel, Grid, InputLabel, FormLabel, FormGroup, TextField, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@mui/styles';
 
@@ -6,17 +6,18 @@ const useStyles = makeStyles((theme) => ({
   // Your styles here
 }));
 
-const TagsLabels = ({ onUpdate }) => {
+const TagsLabels = ({inputData, onUpdate }) => {
   const classes = useStyles();
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [formData, setFormData] = useState({
-    product_tags: '',
-    best_seller: false,
-    new_arrival: false,
-    limited_edition: false,
-    eco_friendly: false,
-    top_rated: false,
-  }); 
+    product_tags: inputData?.product_tags || '',
+    best_seller: inputData?.best_seller || false,
+    new_arrival: inputData?.new_arrival || false,
+    limited_edition: inputData?.limited_edition || false,
+    eco_friendly: inputData?.eco_friendly || false,
+    top_rated: inputData?.top_rated || false,
+  });
+
   useEffect(() => {
     onUpdate(formData);
   }, [formData, onUpdate]);
@@ -53,9 +54,9 @@ const TagsLabels = ({ onUpdate }) => {
       <form>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={12}>
+          <InputLabel>Product Tags</InputLabel>
             <TextField
               fullWidth
-              label="Product Tags"
               name="product_tags"
               variant="outlined"
               value={formData.product_tags}

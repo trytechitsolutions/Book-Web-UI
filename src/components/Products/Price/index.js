@@ -11,25 +11,34 @@ import {
   Typography,
 } from '@mui/material';
 
-const Price = ({ onUpdate }) => {
+const Price = ({ inputData, onUpdate }) => {
   const [formData, setFormData] = useState({
-    base_cost_price: '',
-    regular_price: '',
-    sale_price: '',
-    tax_price: '',
-    tax_class: '',
+    base_cost_price: inputData?.base_cost_price || '',
+    regular_price: inputData?.regular_price || '',
+    sale_price: inputData?.sale_price || '',
+    tax_price: inputData?.tax_price || '',
+    tax_class: inputData?.tax_class || '',
   });
+  const handleFormChange = (field, value) => {
+    setFormData(prevFormData => ({
+      ...prevFormData,
+      [field]: value,
+    }));
+
+    onUpdate({ ...formData, [field]: value });
+  };
+
   useEffect(()=>{
     onUpdate(formData);
   }, [formData, onUpdate])
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
+  // const handleInputChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setFormData({
+  //     ...formData,
+  //     [name]: value,
+  //   });
+  // };
   
 
   return (
@@ -43,11 +52,10 @@ const Price = ({ onUpdate }) => {
           <InputLabel >Base Cost</InputLabel>
             <TextField
               fullWidth
-              label="Base Cost"
               name="base_cost_price"
               variant="outlined"
               value={formData.base_cost_price}
-              onChange={handleInputChange}
+              onChange={(e) => handleFormChange('base_cost_price', e.target.value)}
               required
             />
           </Grid>
@@ -55,11 +63,10 @@ const Price = ({ onUpdate }) => {
           <InputLabel >Regular Price</InputLabel>
             <TextField
               fullWidth
-              label="Regular Price"
               name="regular_price"
               variant="outlined"
               value={formData.regular_price}
-              onChange={handleInputChange}
+              onChange={(e) => handleFormChange('regular_price', e.target.value)}
               required
             />
           </Grid>
@@ -67,11 +74,10 @@ const Price = ({ onUpdate }) => {
           <InputLabel >Sale Price</InputLabel>
             <TextField
               fullWidth
-              label="Sale Price"
               name="sale_price"
               variant="outlined"
               value={formData.sale_price}
-              onChange={handleInputChange}
+              onChange={(e) => handleFormChange('sale_price' , e.target.value)}
               required
             />
           </Grid>        
@@ -80,11 +86,10 @@ const Price = ({ onUpdate }) => {
           <Link href="https://your.tax.info" target="_blank" rel="noopener noreferrer">
             <TextField
               fullWidth
-              label="Tax"
               name="tax_price"
               variant="outlined"
               value={formData.tax_price}
-              onChange={handleInputChange}
+              onChange={(e) => handleFormChange('tax_price', e.target.value)}
               required
               helperText="https://your.tax.info"
               />
@@ -94,11 +99,10 @@ const Price = ({ onUpdate }) => {
           <InputLabel >Is Taxable</InputLabel>
             <TextField
               fullWidth
-              label="Sale Price"
               name="tax_class"
               variant="outlined"
               value={formData.tax_class}
-              onChange={handleInputChange}
+              onChange={(e) => handleFormChange('tax_class', e.target.value)}
               required
             />
           </Grid> 

@@ -75,7 +75,7 @@ const Products = () => {
 
 const columns = [
 
-  { id: 'p.id', label: 'ID' },
+  { id: 'id', label: 'ID' },
   { id: 'product_type', label: 'product_type' },
   { id: 'product_name', label: 'product_name' },
   { id: 'regular_price', label: 'regular_price' },
@@ -84,19 +84,19 @@ const columns = [
 
 const tabsConfig = {
   digital: [
-    { label: 'General Info', component: <GeneralInfo onUpdate={(data) => updateFormData('generalInfo', data)} /> },
-    { label: 'Price', component: <Price onUpdate={(data) => updateFormData('productPrice', data)} /> },
-    { label: 'Tags & Label', component: <TagsLabels onUpdate={(data) => updateFormData('productTagsAndLabels', data)} /> },
-    { label: 'productSetting', component: <ProductSetting onUpdate={(data) => updateFormData('productSetting', data)} /> },
+    { label: 'General Info', component: <GeneralInfo inputData={formData.generalInfo}   onUpdate={(data) => updateFormData('generalInfo', data)} /> },
+    { label: 'Price', component: <Price inputData={formData.productPrice} onUpdate={(data) => updateFormData('productPrice', data)} /> },
+    { label: 'Tags & Label', component: <TagsLabels inputData={formData.productTagsAndLabels} onUpdate={(data) => updateFormData('productTagsAndLabels', data)} /> },
+    { label: 'productSetting', component: <ProductSetting  inputData={formData.productSetting} onUpdate={(data) => updateFormData('productSetting', data)} /> },
  
     // Add other tabs specific to digital products
   ],
   physical: [
-    { label: 'General Info', component: <GeneralInfo onUpdate={(data) => updateFormData('generalInfo', data)} /> },
-    { label: 'Price', component: <Price onUpdate={(data) => updateFormData('productPrice', data)} /> },
-    { label: 'Tags & Label', component: <TagsLabels onUpdate={(data) => updateFormData('productTagsAndLabels', data)} /> },
-    { label: 'Delivery Option', component: <DeliveryOptions onUpdate={(data) => updateFormData('productDeliveryOptions', data)} /> },
-    { label: 'productSetting', component: <ProductSetting onUpdate={(data) => updateFormData('productSetting', data)} /> },
+    { label: 'General Info', component: <GeneralInfo inputData={formData.generalInfo} onUpdate={(data) => updateFormData('generalInfo', data)} /> },
+    { label: 'Price', component: <Price inputData={formData.productPrice} onUpdate={(data) => updateFormData('productPrice', data)} /> },
+    { label: 'Tags & Label', component: <TagsLabels inputData={formData.productTagsAndLabels} onUpdate={(data) => updateFormData('productTagsAndLabels', data)} /> },
+    { label: 'Delivery Option', component: <DeliveryOptions inputData={formData.productDeliveryOptions} onUpdate={(data) => updateFormData('productDeliveryOptions', data)} /> },
+    { label: 'productSetting', component: <ProductSetting  inputData={formData.productSetting} onUpdate={(data) => updateFormData('productSetting', data)} /> },
     // Add other tabs specific to physical products
   ],
   // Add more product types if needed
@@ -129,19 +129,6 @@ const selectedTabs = tabsConfig[productType] || [];
     })
     setFormData(formData);
   };
-  useEffect(() => {
-    // Fetch data from the Redux store once when the component mounts
-    // setShowLoader(true);
-    async function fetchData() {
-      const resp = await apiRequest(null, serverUrl + "product", 'get');
-      setShowLoader(false);
-      if (resp?.data?.data) {
-        setData(resp.data.data);
-      }
-    }
-    fetchData()
-  }, [showForm]);
-
       const isFormValid=()=>{
         const errors = validateErrors();
         if(errors.generalInfo?.length > 0){
@@ -194,15 +181,20 @@ const selectedTabs = tabsConfig[productType] || [];
             }
           });
         }
-        if (formData.productDeliveryOptions) {
-          errors.productDeliveryOptions = [];
-          Object.keys(formData.productDeliveryOptions).forEach((f) => {
-            const value = formData.productDeliveryOptions[f];
-            if (!value || (typeof value === 'string' && value.trim() === '')) {
-              errors.productDeliveryOptions.push(`${f} is required`);
-            }
-          });
+        
+        if (productType === "physical") {
+          if (formData.productDeliveryOptions) {
+            errors.productDeliveryOptions = [];
+            Object.keys(formData.productDeliveryOptions).forEach((f) => {
+              const value = formData.productDeliveryOptions[f];
+              if (!value || (typeof value === 'string' && value.trim() === '')) {
+                errors.productDeliveryOptions.push(`${f} is required`);
+              }
+            });
+          }
+          
         }
+
         if (formData.productSetting) {
           errors.productSetting = [];
           Object.keys(formData.productSetting).forEach((f) => {
@@ -236,8 +228,20 @@ const selectedTabs = tabsConfig[productType] || [];
         setOpenSnackBar(false)
       }
 
+      useEffect(() => {
+        // Fetch data from the Redux store once when the component mounts
+        // setShowLoader(true);
+        async function fetchData() {
+          const resp = await apiRequest(null, serverUrl + "product", 'get');
+          setShowLoader(false);
+          if (resp?.data?.data) {
+            setData(resp.data.data);
+          }
+        }
+        fetchData()
+      }, [showForm]);
       
-const handleSubmit = async () =>{
+  const handleSubmit = async () =>{
   const errors = validateErrors();
   console.log(errors, 'errors****');
   if (isFormValid()) {
@@ -256,7 +260,7 @@ const handleSubmit = async () =>{
         productInfo: {product_type: productType} 
       };
       // Make API request
-      // setShowLoader(true);
+      setShowLoader(true);
       const resp = await apiRequest(payload, serverUrl + "product ", 'post');
       setShowLoader(false);
       if(resp?.data?.data){
@@ -296,20 +300,38 @@ const handleSubmit = async () =>{
     console.error('Form is not valid. Please check the sections.');
   }
 }
-function onChange(data) {
-  onChangeValueBind(formData, data);
-}
-const onEdit = (product_id) => {
-  setSelectedId(product_id);
-  const selectedRecord = data.find((d) => d.product_id === product_id);
-  const updateForm = mapValuesToForm(selectedRecord, formData);
+  // setShowLoader(true)
+  // const resp = await apiRequest(null, `${serverUrl}product/${id}`, 'get');
+  // setShowLoader(false);
+  // const selectedRecord = resp?.data?.data;
+
+const onEdit = async (id) => {
+  console.log(id)
+  const selectedRecord = data.find((d) => d.id === id);
+  console.log(selectedRecord, 'selectedRecord')
+    const resp = await apiRequest(null, serverUrl + "product/"+id, 'get');
+    console.log(resp, '***resp')
+    // const updateForm = mapValuesToForm(resp.data, formData);
+  console.log(resp.data.data, 'updateForm')
+  if(resp.data?.data){
+    const productData = resp.data.data;
+    setProductType(productData.product_info.product_type)
+    setFormData({generalInfo: resp.data.data.general_info,
+      productPrice: resp.data.data.price_component, 
+      productTagsAndLabels: resp.data.data.tags_and_labels,  
+      productSetting: resp.data.data.product_setting,
+      productDeliveryOptions: resp.data.data.delivery_options, })
+  }
   setFormData((prevFormData) => {
-    return updateForm;
+    return resp;
   });
+  setSelectedId(id);
   setShowForm(true);
+//  }
 }
 const onDelete = async (id) => {
   setShowLoader(true)
+
   const resp = await apiRequest(null, serverUrl + "product/" + id, 'delete');
   setShowLoader(false);
   if (resp?.data?.data) {
@@ -333,8 +355,13 @@ const onDelete = async (id) => {
     setSnackBarData(data);
   }
 }
+function onChange(data) {
+  onChangeValueBind(formData, data);
+}
 const handleAddNewItem = () => {
   setShowForm(true);
+  // setFormData({}); // Reset form data
+
 };
  
   return (

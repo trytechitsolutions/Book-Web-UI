@@ -3,7 +3,9 @@ import React, { useEffect, useState } from 'react'
 import CheckboxTree from 'react-checkbox-tree';
 import 'react-checkbox-tree/lib/react-checkbox-tree.css';
 import './index.css';
-
+import { Editor } from 'react-draft-wysiwyg';
+import { EditorState, convertToRaw } from 'draft-js';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 const nodes = [
   {
@@ -24,31 +26,42 @@ const nodes = [
     ],
   },
 ];
-const GeneralInfo = ({ onUpdate }) => {
+const GeneralInfo = ({ inputData, onUpdate }) => {
+  // console.log(inputData, '***inputData')
+  const [brandDialogOpen, setBrandDialogOpen] = useState(false);
   const [checked, setChecked] = useState([]);
   const [expanded, setExpanded] = useState([]);
+  const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
-  const handleCheck = (newChecked) => {
-    setChecked(newChecked);
+  const handleEditorChange = (editorState) => {
+    setEditorState(editorState);
+    const contentState = editorState.getCurrentContent();
+    const rawContentState = convertToRaw(contentState);
+    const description = JSON.stringify(rawContentState);
+    handleFormChange('description', description);
   };
-
-  const handleExpand = (newExpanded) => {
-    setExpanded(newExpanded);
-  };
-
 
   const [formData, setFormData] = useState({
-    product_name: '',
-    brand_id: '',
-    unit: '',
-    weight: '',
-    min_purchase_qty: '',
-    barcode: '',
-    product_category: '',
-    product_summary: '',
-    description: '',
+    product_name: inputData?.product_name || '' ,
+    brand_id: inputData?.brand_id || '' ,
+    unit: inputData?.unit || '' ,
+    weight: inputData?.weight || '' ,
+    min_purchase_qty: inputData?.min_purchase_qty || '' ,
+    barcode: inputData?.barcode || '' ,
+    product_category: inputData?.product_category || '' ,
+    product_summary: inputData?.product_summary  || '' ,
+    description: inputData?.description || '' ,
   });
 
+  const handleFormChange = (field, value) => {
+    setFormData(prevFormData => ({
+      ...prevFormData,
+      [field]: value,
+    }));
+
+    // Update parent component with the changed data
+    onUpdate({ ...formData, [field]: value });
+  };
 
   useEffect(()=>{
     onUpdate(formData);
@@ -78,61 +91,71 @@ const GeneralInfo = ({ onUpdate }) => {
            <InputLabel >Product Name</InputLabel>
             <TextField
               fullWidth
-              label="Product Name"
               name="product_name"
               placeholder="write product name"
               variant="outlined"
               value={formData.product_name}
-              onChange={handleInputChange}
+              onChange={(e) => handleFormChange('product_name', e.target.value)}
               required
             />
           </Grid>
           <Grid item xs={6}>
-          <InputLabel >Brand </InputLabel>
+            <InputLabel>Brand</InputLabel>
             <TextField
               fullWidth
-              label="Brand"
               name="brand_id"
               placeholder="unit (e.g KG etc )"
               variant="outlined"
               value={formData.brand_id}
-             onChange={handleInputChange}
+              onChange={(e) => handleFormChange('brand_id', e.target.value)}
             />
+            {/* <Select
+              fullWidth
+              label="Brand"
+               name="brand_id"
+               value={formData.brand_id}
+              onClick={() => setBrandDialogOpen(true)}
+                variant="outlined"
+            >
+           {brandsData.map((brand) => (
+         <MenuItem key={brand.id} value={brand.id}>
+           {brand.name}
+         </MenuItem>
+            ))}
+             </Select> */}
           </Grid>
+
           <Grid item xs={6} sm={6}>
           <InputLabel >Unit </InputLabel>
             <TextField
               fullWidth
-              label="Unit"
               name="unit"
               placeholder="unit (e.g KG etc )"
               variant="outlined"
               value={formData.unit}
-             onChange={handleInputChange}
+              onChange={(e) => handleFormChange('unit', e.target.value)}
             />
         </Grid> 
         <Grid item xs={6} sm={6}>
         <InputLabel >Weight</InputLabel>
             <TextField
               fullWidth
-              label="Weight"
               name="weight"
               placeholder="0.00"
               variant="outlined"
               value={formData.weight}
-             onChange={handleInputChange}
+              onChange={(e) => handleFormChange('weight', e.target.value)}
             />
         </Grid>
         <Grid item xs={6} sm={6}>
         <InputLabel >Minimum Purchase Qty</InputLabel>
             <TextField
               fullWidth
-              label="Minimum Purchase Qty"
               name="min_purchase_qty"
               placeholder="1"
               variant="outlined"
               value={formData.min_purchase_qty}
-             onChange={handleInputChange}
+              onChange={(e) => handleFormChange('min_purchase_qty', e.target.value)}
               required
             />
         </Grid>    
@@ -140,52 +163,45 @@ const GeneralInfo = ({ onUpdate }) => {
         <InputLabel >Barcode</InputLabel>
             <TextField
               fullWidth
-              label="Barcode"
               name="barcode"
               placeholder="Barcode"
               variant="outlined"
               value={formData.barcode}
-             onChange={handleInputChange} 
+              onChange={(e) => handleFormChange('barcode', e.target.value)}
             />
         </Grid> 
         <Grid item xs={6} sm={6}>
         <InputLabel >Category</InputLabel>
             <TextField
               fullWidth
-              label="productCategory"
               name="product_category"
               placeholder="productCategory"
               variant="outlined"
               value={formData.product_category}
-             onChange={handleInputChange} 
+              onChange={(e) => handleFormChange('product_category', e.target.value)}
             />
         </Grid> 
         <Grid item xs={6} sm={6}>
         <InputLabel >Product Summary</InputLabel>
             <TextField
               fullWidth
-              label="Product Summary"
               name="product_summary"
                variant="outlined"
               value={formData.product_summary}
-              onChange={handleInputChange}
+              onChange={(e) => handleFormChange('product_summary', e.target.value)}
               required
             />
           </Grid>
-        <Grid item xs={12} sm={12 }>
-        <InputLabel >Description</InputLabel>
-            <TextField
-              fullWidth
-              label="Description"
-              name="description"
-              variant="outlined"
-              value={formData.description}
-              onChange={handleInputChange}
-              multiline
-              rows={4}
-              required
-            />
-          </Grid>
+          <Grid item xs={12} sm={12}>
+      <InputLabel>Description</InputLabel>
+      <Editor
+        editorState={editorState}
+        onEditorStateChange={handleEditorChange}
+        wrapperClassName="wrapper-class"
+        editorClassName="editor-class"
+        toolbarClassName="toolbar-class"
+      />
+    </Grid>
           {/* <Grid item xs={12} sm={12}>
           <FormControl fullWidth variant="outlined">
             <TextField
